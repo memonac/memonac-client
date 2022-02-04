@@ -1,9 +1,6 @@
 import { all, call, put, takeEvery } from "redux-saga/effects";
 import { getMemoRoomSuccess, getMemoRoomFailure, getMemoRoomFetch } from "./memoRoomSlice"
 
-//saga 추가 예정..
-
-
 function* getMemoRoom() {
   try {
     const memoRoomData = yield call();

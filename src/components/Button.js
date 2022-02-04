@@ -4,12 +4,14 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 const ButtonContainer = styled.button`
+  margin: 10px;
   padding: 10px;
   width: ${(props) => `${props.width}px`};
-  height: 30px;
+  height: 40px;
   border: none;
   background-color: ${(props) => props.color || "#cecece"};
-  line-height: 30px;
+  font-size: 16px;
+  cursor: pointer;
 `;
 
 const noop = () => {};

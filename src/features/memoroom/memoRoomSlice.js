@@ -16,7 +16,6 @@ export const memoRoomSlice = createSlice({
     */
     memos: {},
     /* memoId: {
-      // authorId: "12412341234" <- 필요?
       formType: "text",
       content: "abcdefg",
       location: [x, y],

@@ -5,14 +5,13 @@ import PropTypes from "prop-types";
 
 import Button from "./Button";
 import { initiateErrorState } from "../features/auth/authSlice";
-import ROUTES from "../constants/routes";
 
 function Error({ text = "Error has been ocurred!", error = {} }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   function handleHomeButtonClick() {
-    navigate(ROUTES.home);
+    navigate(-1);
     dispatch(initiateErrorState());
   }
 

@@ -12,6 +12,9 @@ export const slice = createSlice({
     initiateErrorState: (state) => {
       state.hasError = false;
     },
+    signupRequest: (state, action) => {
+      state.isLogin = false;
+    },
     loginRequest: (state) => {
       state.isLogin = false;
     },
@@ -34,19 +37,16 @@ export const slice = createSlice({
       state.email = "";
       state.name = "";
     },
-    signup: () => {
-
-    }
   }
 });
 
 export const { 
   initiateErrorState,
+  signupRequest,
   loginRequest,
   loginSuccess,
   loginFailure,
   logout,
-  signup,
 } = slice.actions;
 
 export default slice.reducer;

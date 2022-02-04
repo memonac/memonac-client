@@ -11,7 +11,6 @@ import Signup from "../features/auth/Signup";
 function App() {
   const loginStatus = useSelector((state) => state.auth.isLogin);
 
-
   return (
     <Routes>
       {loginStatus && <Route path={ROUTES.home} element={<Main />} />}
