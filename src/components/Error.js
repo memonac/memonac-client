@@ -1,14 +1,16 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
 
 import Button from "./Button";
 import { initiateErrorState } from "../features/auth/authSlice";
 
-function Error({ text = "Error has been ocurred!", error = {} }) {
+function Error({ text = "Error has been ocurred!" }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const errorMessage = useSelector((state) => state.auth.error);
 
   function handleHomeButtonClick() {
     navigate(-1);
@@ -18,10 +20,9 @@ function Error({ text = "Error has been ocurred!", error = {} }) {
   return (
     <>
       <div>{text}</div>
-      <p>{error.message}</p>
-      <p>{error.status}</p>
+      <p>{errorMessage}</p>
       <Button 
-        text="Home"
+        text="Back"
         onClick={handleHomeButtonClick}
         width="200"
       />

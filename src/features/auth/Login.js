@@ -31,19 +31,18 @@ const LoginContainer = styled.div`
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
-  const userError = useSelector((state) => state.auth.hasError);
+
+  const userError = useSelector((state) => state.auth.error);
   const userAuth = useSelector((state) => state.auth.isLogin);
-  
+
   useEffect(() => {
     if (userAuth) {
       navigate(ROUTES.main);
     }
 
-    if (userError) {
+    if (userError.length) {
       navigate(ROUTES.error);
     }
-
   }, [userError, userAuth]);
 
   function handleLoginWithGoogleBtnClick() {
@@ -52,38 +51,37 @@ function Login() {
 
   function handleLoginWithEmailBtnSubmit(event) {
     event.preventDefault();
-    
+
     const { email, password } = event.target;
 
-    dispatch(loginRequest({
-      email: email.value,
-      password: password.value,
-    }));
+    dispatch(
+      loginRequest({
+        email: email.value,
+        password: password.value,
+      })
+    );
   }
 
   return (
-    <LoginContainer> 
+    <LoginContainer>
       <div className="login-title">MEMONA-C</div>
-      <form 
+      <form
         className="login-form-container"
         onSubmit={handleLoginWithEmailBtnSubmit}
       >
-        <TextInput 
+        <TextInput
           type="email"
           name="email"
           placeholder="Please Enter Email Address"
           width="300"
         />
-        <TextInput 
+        <TextInput
           type="password"
           name="password"
           placeholder="Please Enter Password"
           width="300"
         />
-        <Button
-          text="Login"
-          width="300"
-        />
+        <Button text="Login" width="300" />
       </form>
       <Button
         text="Login With Google"

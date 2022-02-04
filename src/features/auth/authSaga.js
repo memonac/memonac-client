@@ -1,4 +1,4 @@
-import { put, call, takeLatest } from "redux-saga/effects";
+import { put, call, takeLatest, all, fork } from "redux-saga/effects";
 
 import { authenication } from "../../configs/firebase";
 import {
@@ -25,12 +25,16 @@ function* userLogin({ payload }) {
   try {
     if (payload) {
       const { email, password } = payload;
-      const response = yield signInWithEmailAndPassword(authenication, email, password);
+      const response = yield signInWithEmailAndPassword(
+        authenication,
+        email,
+        password
+      );
       const { accessToken: token } = response.user;
 
-      const { result } = yield call(userApi.getlogin, token);
+      const apiResult = yield call(userApi.getlogin, token);
 
-      if (result === "success") {
+      if (apiResult.result === "success") {
         yield put(
           loginSuccess({
             email: response.user.email,
@@ -38,16 +42,16 @@ function* userLogin({ payload }) {
           })
         );
       } else {
-        yield put(loginFailure());
+        yield put(loginFailure(apiResult.error));
       }
     } else {
       const provider = new GoogleAuthProvider();
       const response = yield signInWithPopup(authenication, provider);
       const { accessToken: token } = response.user;
 
-      const { result } = yield call(userApi.getlogin, token);
+      const apiResult = yield call(userApi.getlogin, token);
 
-      if (result === "success") {
+      if (apiResult.result === "success") {
         yield put(
           loginSuccess({
             email: response.user.email,
@@ -55,11 +59,11 @@ function* userLogin({ payload }) {
           })
         );
       } else {
-        yield put(loginFailure());
+        yield put(loginFailure(apiResult.error));
       }
     }
   } catch (err) {
-    yield put(loginFailure());
+    yield put(loginFailure(err));
   }
 }
 
@@ -73,11 +77,11 @@ function* userSignup(action) {
       password
     );
     yield updateProfile(authenication.currentUser, { displayName: name });
-    
-    const { accessToken: token } = response.user;
-    const { result } = yield call(userApi.getlogin, token);
 
-    if (result === "success") {
+    const { accessToken: token } = response.user;
+    const apiResult = yield call(userApi.getlogin, token);
+
+    if (apiResult.result === "success") {
       yield put(
         loginSuccess({
           email,
@@ -85,10 +89,10 @@ function* userSignup(action) {
         })
       );
     } else {
-      yield put(loginFailure());
+      yield put(loginFailure(apiResult.error));
     }
   } catch (err) {
-    yield put(loginFailure());
+    yield put(loginFailure(err));
   }
 }
 
@@ -96,20 +100,27 @@ function* userLogout() {
   try {
     yield signOut(authenication);
 
-    const { result } = yield call(userApi.getlogout);
+    const apiResult = yield call(userApi.getlogout);
 
-    if (result === "success") {
+    if (apiResult.result === "success") {
       yield put(logoutSuccess());
     } else {
-      yield put(logoutFailure());
+      yield put(logoutFailure(apiResult));
     }
   } catch (err) {
-    yield put(logoutFailure());
+    yield put(logoutFailure(err));
   }
 }
 
-export function* watchUserLoginStatus() {
+function* watchUserLogin() {
   yield takeLatest(loginRequest, userLogin);
   yield takeLatest(signupRequest, userSignup);
+}
+
+function* watchUserLogout() {
   yield takeLatest(logoutRequest, userLogout);
+}
+
+export function* userSaga() {
+  yield all([fork(watchUserLogin), fork(watchUserLogout)]);
 }

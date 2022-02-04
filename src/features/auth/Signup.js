@@ -28,14 +28,14 @@ const SignupContainer = styled.div`
   }
 
   .error-message {
-    color: "red",
+    color: red;
   }
 `;
 
 function Signup() {
   const [inputError, setInputError] = useState("");
 
-  const userError = useSelector((state) => state.auth.hasError);
+  const userError = useSelector((state) => state.auth.error);
   const userAuth = useSelector((state) => state.auth.isLogin);
 
   const dispatch = useDispatch();
@@ -46,7 +46,7 @@ function Signup() {
     setInputError("");
 
     const { email, name, password, checkPassword } = event.target;
-    
+
     if (password.value.length < 8) {
       setInputError("Password length cannot be less than 8.");
       return;
@@ -57,60 +57,58 @@ function Signup() {
       return;
     }
 
-    dispatch(signupRequest({
-      email: email.value,
-      name: name.value,
-      password: password.value,
-    }));
+    dispatch(
+      signupRequest({
+        email: email.value,
+        name: name.value,
+        password: password.value,
+      })
+    );
   }
 
   useEffect(() => {
-    if (userError) {
+    if (userError.length) {
       navigate(ROUTES.error);
     }
 
     if (userAuth) {
       navigate(ROUTES.home);
     }
-
-  }, [userError])
+  }, [userError, userAuth]);
 
   return (
     <SignupContainer>
       <div className="signup-title">Sign Up</div>
-      <form 
+      <form
         className="signup-form-container"
         onSubmit={handleSignupSubmitClick}
       >
-        <TextInput 
+        <TextInput
           type="email"
           name="email"
           placeholder="Please Enter Email Address"
           width="300"
         />
-        <TextInput 
+        <TextInput
           type="text"
           name="name"
           placeholder="Please Enter Username"
           width="300"
         />
-        <TextInput 
+        <TextInput
           type="password"
           name="password"
           placeholder="Please Enter Password"
           width="300"
         />
-        <TextInput 
+        <TextInput
           type="password"
           name="checkPassword"
           placeholder="Re-enter Password"
           width="300"
         />
         {inputError && <div className="error-message">{inputError}</div>}
-        <Button
-          text="Sign Up"
-          width="300"
-        />
+        <Button text="Sign Up" width="300" />
       </form>
       <Link to={ROUTES.login}>
         <div>Back</div>

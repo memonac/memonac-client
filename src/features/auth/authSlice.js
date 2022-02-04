@@ -4,13 +4,13 @@ export const slice = createSlice({
   name: "auth",
   initialState: {
     isLogin: false,
-    hasError: false,
+    error: "",
     email: "",
     name: "",
   },
   reducers: {
     initiateErrorState: (state) => {
-      state.hasError = false;
+      state.error = "";
     },
     signupRequest: (state, action) => {
       state.isLogin = false;
@@ -22,32 +22,38 @@ export const slice = createSlice({
       const { email, name } = action.payload;
 
       state.isLogin = true;
-      state.hasError = false;
+      state.error = "";
       state.email = email;
       state.name = name;
     },
-    loginFailure: (state) => {
+    loginFailure: (state, action) => {
+      const { message } = action.payload;
+
+      console.log(action.payload.message);
       state.isLogin = false;
-      state.hasError = true;
+      state.error = message;
       state.email = "";
       state.name = "";
     },
     logoutRequest: (state) => {
       state.isLogin = true;
     },
-    logoutFailure: (state) => {
+    logoutFailure: (state, action) => {
+      const { message } = action.payload;
+
       state.isLogin = true;
-      state.hasError = true;
+      state.error = message;
     },
     logoutSuccess: (state) => {
       state.isLogin = false;
+      state.error = "";
       state.email = "";
       state.name = "";
     },
-  }
+  },
 });
 
-export const { 
+export const {
   initiateErrorState,
   signupRequest,
   loginRequest,
