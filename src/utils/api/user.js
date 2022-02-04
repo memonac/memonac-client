@@ -1,0 +1,19 @@
+import axios from "axios";
+
+const userApi = {};
+
+userApi.getlogin = async (token) => {
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  const response = await axios.get(
+    "/login",
+    headers,
+    { withCredentials: true }
+  );
+
+  return response;
+};
+
+export default userApi;

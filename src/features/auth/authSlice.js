@@ -4,30 +4,49 @@ export const slice = createSlice({
   name: "auth",
   initialState: {
     isLogin: false,
+    hasError: false,
     email: "",
     name: "",
   },
   reducers: {
-    login: (state, action) => {
+    initiateErrorState: (state) => {
+      state.hasError = false;
+    },
+    loginRequest: (state) => {
+      state.isLogin = false;
+    },
+    loginSuccess: (state, action) => {
       const { email, name } = action.payload;
+
       state.isLogin = true;
+      state.hasError = false;
       state.email = email;
       state.name = name;
+    },
+    loginFailure: (state) => {
+      state.isLogin = false;
+      state.hasError = true;
+      state.email = "";
+      state.name = "";
     },
     logout: (state) => {
       state.isLogin = false;
       state.email = "";
       state.name = "";
     },
-    signup: () => {},
-    getAll: (state, action) => {
-      const { memoRoom, tags } = action.payload;
-      state.memoRoom = memoRoom;
-      state.tags = tags;
-    },
-  },
+    signup: () => {
+
+    }
+  }
 });
 
-export const { login, logout } = slice.actions;
+export const { 
+  initiateErrorState,
+  loginRequest,
+  loginSuccess,
+  loginFailure,
+  logout,
+  signup,
+} = slice.actions;
 
 export default slice.reducer;

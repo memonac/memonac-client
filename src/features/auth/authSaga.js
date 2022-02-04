@@ -1,50 +1,35 @@
-import { put, call, takeEvery, all } from "redux-saga/effects";
-import axios from "axios";
+import { put, call, takeLatest } from "redux-saga/effects";
 
-import { login } from "./authSlice";
-
-// import { authenication } from "../../configs/firebase";
+import { authenication } from "../../configs/firebase";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
-// 예시 추후엔 별도의 모듈로 관리...
-const loginApi = ({ token }) => {
-  axios.post("/login", { token: token }, { withCredentials: true });
-};
+import { loginRequest, loginSuccess, loginFailure } from "./authSlice";
+import userApi from "../../utils/api/user";
 
 function* userLogin() {
   const provider = new GoogleAuthProvider();
 
   try {
-    const response = yield signInWithPopup("/*인증*/", provider);
+    const response = yield signInWithPopup(authenication, provider);
     const { accessToken: token } = response.user;
 
-    // const { result, user, error }  = yield axios.post("/login", { token: token }, { withCredentials: true });
+    const { result } = yield call(userApi.getlogin, token);
 
-    const { result, user } = yield call(loginApi, token);
-
-    if (result === "ok") {
-      yield put(login({ email: user.email, name: user.name }));
+    if (result === "success") {
+      yield put(
+        loginSuccess({
+          email: response.user.email,
+          name: response.user.displayName,
+        })
+      );
+    } else {
+      yield put(loginFailure());
     }
   } catch (err) {
-    // 에러 처리
+    yield put(loginFailure());
   }
 }
 
-function* userSginup() {}
-
-// react 컴포너트
-// dipatch("USER_LOGIN")
-
-function* watchUserLogin() {
-  yield takeEvery("USER_LOGIN", userLogin);
+export function* watchUserLogin() {
+  yield takeLatest(loginRequest, userLogin);
 }
-
-function* watchUserSignup() {
-  yield takeEvery("USER_SIGNUP", userSginup);
-}
-
-export default function* authSaga() {
-  yield all([watchUserLogin(), watchUserSignup()]);
-}
-
-//https://react.vlpt.us/redux-middleware/11-redux-saga-with-promise.html 참고
