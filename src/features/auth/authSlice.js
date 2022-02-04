@@ -12,10 +12,10 @@ export const slice = createSlice({
     initiateErrorState: (state) => {
       state.error = "";
     },
-    signupRequest: (state, action) => {
+    signupRequest: (state) => {
       state.isLogin = false;
     },
-    loginRequest: (state, action) => {
+    loginRequest: (state) => {
       state.isLogin = false;
     },
     loginSuccess: (state, action) => {

@@ -1,12 +1,30 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import PropTypes from "prop-types";
+import styled from "styled-components";
 
 import Button from "./Button";
 import { initiateErrorState } from "../features/auth/authSlice";
 
-function Error({ text = "Error has been ocurred!" }) {
+const ErrorContainer = styled.div`
+  top: 50%;
+  transform: translateY(50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .error-title {
+    font-size: 50px;
+    font-weight: 700;
+  }
+
+  .error-detail {
+    padding: 20px;
+    font-size: 30px;
+  }
+`;
+
+function Error() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -18,22 +36,16 @@ function Error({ text = "Error has been ocurred!" }) {
   }
 
   return (
-    <>
-      <div>{text}</div>
-      <p>{errorMessage}</p>
+    <ErrorContainer>
+      <div className="error-title">An error has been occurred!</div>
+      <div className="error-detail">{errorMessage}</div>
       <Button 
         text="Back"
         onClick={handleHomeButtonClick}
         width="200"
       />
-    </>
-  )
+    </ErrorContainer>
+  );
 }
 
 export default Error;
-
-Error.propTypes = {
-  text: PropTypes.string,
-  error: PropTypes.object,
-  route: PropTypes.string,
-};
