@@ -20,6 +20,12 @@ const LoginContainer = styled.div`
     margin: 5px;
     font-size: 80px;
   }
+
+  .login-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 function Login() {
@@ -44,14 +50,24 @@ function Login() {
     dispatch(loginRequest());
   }
 
-  // function handleLoginWithEmailBtnClick() {
-  //   dispatch(loginRequest())
-  // }
+  function handleLoginWithEmailBtnSubmit(event) {
+    event.preventDefault();
+    
+    const { email, password } = event.target;
+
+    dispatch(loginRequest({
+      email: email.value,
+      password: password.value,
+    }));
+  }
 
   return (
     <LoginContainer> 
       <div className="login-title">MEMONA-C</div>
-      <form>
+      <form 
+        className="login-form-container"
+        onSubmit={handleLoginWithEmailBtnSubmit}
+      >
         <TextInput 
           type="email"
           name="email"
@@ -66,7 +82,6 @@ function Login() {
         />
         <Button
           text="Login"
-          onClick={handleLoginWithGoogleBtnClick}
           width="300"
         />
       </form>

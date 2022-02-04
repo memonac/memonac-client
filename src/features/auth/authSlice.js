@@ -15,7 +15,7 @@ export const slice = createSlice({
     signupRequest: (state, action) => {
       state.isLogin = false;
     },
-    loginRequest: (state) => {
+    loginRequest: (state, action) => {
       state.isLogin = false;
     },
     loginSuccess: (state, action) => {
@@ -32,7 +32,14 @@ export const slice = createSlice({
       state.email = "";
       state.name = "";
     },
-    logout: (state) => {
+    logoutRequest: (state) => {
+      state.isLogin = true;
+    },
+    logoutFailure: (state) => {
+      state.isLogin = true;
+      state.hasError = true;
+    },
+    logoutSuccess: (state) => {
       state.isLogin = false;
       state.email = "";
       state.name = "";
@@ -46,7 +53,9 @@ export const {
   loginRequest,
   loginSuccess,
   loginFailure,
-  logout,
+  logoutRequest,
+  logoutFailure,
+  logoutSuccess,
 } = slice.actions;
 
 export default slice.reducer;

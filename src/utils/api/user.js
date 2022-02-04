@@ -16,4 +16,13 @@ userApi.getlogin = async (token) => {
   return response;
 };
 
+userApi.getlogout = async () => {
+  const response = await axios.get(
+    "/logout",
+    { withCredentials: true }
+  );
+
+  return response;
+};
+
 export default userApi;
