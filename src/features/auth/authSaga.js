@@ -1,50 +1,126 @@
-import { put, call, takeEvery, all } from "redux-saga/effects";
-import axios from "axios";
+import { put, call, takeLatest, all, fork } from "redux-saga/effects";
 
-import { login } from "./authSlice";
+import { authenication } from "../../configs/firebase";
+import {
+  signOut,
+  signInWithPopup,
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 
-// import { authenication } from "../../configs/firebase";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import {
+  signupRequest,
+  loginRequest,
+  loginSuccess,
+  loginFailure,
+  logoutRequest,
+  logoutSuccess,
+  logoutFailure,
+} from "./authSlice";
+import userApi from "../../utils/api/user";
 
-// 예시 추후엔 별도의 모듈로 관리...
-const loginApi = ({ token }) => {
-  axios.post("/login", { token: token }, { withCredentials: true });
-};
-
-function* userLogin() {
-  const provider = new GoogleAuthProvider();
-
+function* userLogin({ payload }) {
   try {
-    const response = yield signInWithPopup("/*인증*/", provider);
-    const { accessToken: token } = response.user;
+    if (payload) {
+      const { email, password } = payload;
+      const response = yield signInWithEmailAndPassword(
+        authenication,
+        email,
+        password
+      );
+      const { accessToken: token } = response.user;
 
-    // const { result, user, error }  = yield axios.post("/login", { token: token }, { withCredentials: true });
+      const apiResult = yield call(userApi.getlogin, token);
 
-    const { result, user } = yield call(loginApi, token);
+      if (apiResult.result === "success") {
+        yield put(
+          loginSuccess({
+            email: response.user.email,
+            name: response.user.displayName,
+          })
+        );
+      } else {
+        yield put(loginFailure(apiResult.error));
+      }
+    } else {
+      const provider = new GoogleAuthProvider();
+      const response = yield signInWithPopup(authenication, provider);
+      const { accessToken: token } = response.user;
 
-    if (result === "ok") {
-      yield put(login({ email: user.email, name: user.name }));
+      const apiResult = yield call(userApi.getlogin, token);
+
+      if (apiResult.result === "success") {
+        yield put(
+          loginSuccess({
+            email: response.user.email,
+            name: response.user.displayName,
+          })
+        );
+      } else {
+        yield put(loginFailure(apiResult.error));
+      }
     }
   } catch (err) {
-    // 에러 처리
+    yield put(loginFailure(err));
   }
 }
 
-function* userSginup() {}
+function* userSignup(action) {
+  const { email, name, password } = action.payload;
 
-// react 컴포너트
-// dipatch("USER_LOGIN")
+  try {
+    const response = yield createUserWithEmailAndPassword(
+      authenication,
+      email,
+      password
+    );
+    yield updateProfile(authenication.currentUser, { displayName: name });
+
+    const { accessToken: token } = response.user;
+    const apiResult = yield call(userApi.getlogin, token);
+
+    if (apiResult.result === "success") {
+      yield put(
+        loginSuccess({
+          email,
+          name,
+        })
+      );
+    } else {
+      yield put(loginFailure(apiResult.error));
+    }
+  } catch (err) {
+    yield put(loginFailure(err));
+  }
+}
+
+function* userLogout() {
+  try {
+    yield signOut(authenication);
+
+    const apiResult = yield call(userApi.getlogout);
+
+    if (apiResult.result === "success") {
+      yield put(logoutSuccess());
+    } else {
+      yield put(logoutFailure(apiResult));
+    }
+  } catch (err) {
+    yield put(logoutFailure(err));
+  }
+}
 
 function* watchUserLogin() {
-  yield takeEvery("USER_LOGIN", userLogin);
+  yield takeLatest(loginRequest, userLogin);
+  yield takeLatest(signupRequest, userSignup);
 }
 
-function* watchUserSignup() {
-  yield takeEvery("USER_SIGNUP", userSginup);
+function* watchUserLogout() {
+  yield takeLatest(logoutRequest, userLogout);
 }
 
-export default function* authSaga() {
-  yield all([watchUserLogin(), watchUserSignup()]);
+export function* userSaga() {
+  yield all([fork(watchUserLogin), fork(watchUserLogout)]);
 }
-
-//https://react.vlpt.us/redux-middleware/11-redux-saga-with-promise.html 참고
