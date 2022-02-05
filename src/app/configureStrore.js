@@ -13,20 +13,18 @@ const reducer = combineReducers({
 const sagaMiddleware = createSagaMiddleware();
 
 function* rootSaga() {
-  yield all([
-    userSaga()
-  ]);
+  yield all([userSaga()]);
 }
 
 const createStore = () => {
   const store = configureStore({
     reducer: reducer,
-    middleware: [sagaMiddleware, logger]
+    middleware: [sagaMiddleware, logger],
   });
 
   sagaMiddleware.run(rootSaga);
 
   return store;
-}
+};
 
 export default createStore;

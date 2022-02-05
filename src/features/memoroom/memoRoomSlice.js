@@ -32,7 +32,7 @@ export const memoRoomSlice = createSlice({
     },
     getMemoRoomSuccess: (state, action) => {
       const { participants, memos, slackToken, name } = action.payload;
-      
+
       state.name = name;
       state.participants = participants;
       state.memos = memos;
@@ -42,10 +42,11 @@ export const memoRoomSlice = createSlice({
     getMemoRoomFailure: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
-    }
-  }
+    },
+  },
 });
 
-export const { getMemoRoomFetch, getMemoRoomSuccess, getMemoRoomFailure } = memoRoomSlice.actions;
+export const { getMemoRoomFetch, getMemoRoomSuccess, getMemoRoomFailure } =
+  memoRoomSlice.actions;
 
 export default memoRoomSlice.reducer;

@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 import FIREBASE_CONFIG_INFO from "./firebaseEnv";

@@ -45,11 +45,11 @@ function Login() {
     }
   }, [userError, userAuth]);
 
-  function handleLoginWithGoogleBtnClick() {
+  function handleLoginWithGoogleButtonClick() {
     dispatch(loginRequest());
   }
 
-  function handleLoginWithEmailBtnSubmit(event) {
+  function handleLoginWithEmailButtonSubmit(event) {
     event.preventDefault();
 
     const { email, password } = event.target;
@@ -67,7 +67,7 @@ function Login() {
       <div className="login-title">MEMONA-C</div>
       <form
         className="login-form-container"
-        onSubmit={handleLoginWithEmailBtnSubmit}
+        onSubmit={handleLoginWithEmailButtonSubmit}
       >
         <TextInput
           type="email"
@@ -85,7 +85,7 @@ function Login() {
       </form>
       <Button
         text="Login With Google"
-        onClick={handleLoginWithGoogleBtnClick}
+        onClick={handleLoginWithGoogleButtonClick}
         width="300"
       />
       <Link to={ROUTES.signup}>

@@ -20,6 +20,7 @@ const TextInput = ({ type, name, placeholder, width }) => {
       name={name}
       placeholder={placeholder}
       width={width}
+      required
     />
   );
 };

@@ -1,5 +1,5 @@
 import { all, call, put, takeEvery } from "redux-saga/effects";
-import { getMemoRoomSuccess, getMemoRoomFailure, getMemoRoomFetch } from "./memoRoomSlice"
+import { getMemoRoomSuccess, getMemoRoomFailure } from "./memoRoomSlice";
 
 function* getMemoRoom() {
   try {
