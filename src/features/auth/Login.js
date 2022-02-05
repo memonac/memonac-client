@@ -37,7 +37,7 @@ function Login() {
 
   useEffect(() => {
     if (userAuth) {
-      navigate(ROUTES.main);
+      navigate(ROUTES.home);
     }
 
     if (userError.length) {

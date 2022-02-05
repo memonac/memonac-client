@@ -7,7 +7,6 @@ import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  updateProfile,
 } from "firebase/auth";
 
 import {
@@ -24,7 +23,7 @@ import userApi from "../../utils/api/user";
 function* userLogin({ payload }) {
   try {
     if (payload) {
-      const { email, password } = payload;
+      const { email, name, password } = payload;
       const firebaseResponse = yield signInWithEmailAndPassword(
         authenication,
         email,
@@ -32,14 +31,11 @@ function* userLogin({ payload }) {
       );
       const { accessToken: token } = firebaseResponse.user;
 
-      const serverResponse = yield call(userApi.getlogin, token);
+      const serverResponse = yield call(userApi.postsignup, { token, email, name });
 
       if (serverResponse.result === "success") {
         yield put(
-          loginSuccess({
-            email: firebaseResponse.user.email,
-            name: firebaseResponse.user.displayName,
-          })
+          loginSuccess({ email, name })
         );
       } else {
         yield put(loginFailure(serverResponse.error));
@@ -76,7 +72,6 @@ function* userSignup(action) {
       email,
       password
     );
-    yield updateProfile(authenication.currentUser, { displayName: name });
 
     const { accessToken: token } = firebaseResponse.user;
     const serverResponse = yield call(userApi.getlogin, token);
