@@ -7,7 +7,7 @@ import { noop } from "lodash";
 const ButtonContainer = styled.button`
   margin: 10px;
   padding: 10px;
-  width: ${(props) => `${props.width}px`};
+  width: ${(props) => props.width}px;
   height: 40px;
   border: none;
   background-color: ${(props) => props.color || "#cecece"};
@@ -29,5 +29,5 @@ Button.propTypes = {
   text: PropTypes.string.isRequired,
   onClick: PropTypes.func,
   color: PropTypes.string,
-  width: PropTypes.string.isRequired,
+  width: PropTypes.number.isRequired,
 };

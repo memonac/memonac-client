@@ -73,20 +73,20 @@ function Login() {
           type="email"
           name="email"
           placeholder="Please Enter Email Address"
-          width="300"
+          width={300}
         />
         <TextInput
           type="password"
           name="password"
           placeholder="Please Enter Password"
-          width="300"
+          width={300}
         />
-        <Button text="Login" width="300" />
+        <Button text="Login" width={300} />
       </form>
       <Button
         text="Login With Google"
         onClick={handleLoginWithGoogleButtonClick}
-        width="300"
+        width={300}
       />
       <Link to={ROUTES.signup}>
         <div>Dont Have Account? Sign Up Now!</div>

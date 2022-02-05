@@ -87,28 +87,28 @@ function Signup() {
           type="email"
           name="email"
           placeholder="Please Enter Email Address"
-          width="300"
+          width={300}
         />
         <TextInput
           type="text"
           name="name"
           placeholder="Please Enter Username"
-          width="300"
+          width={300}
         />
         <TextInput
           type="password"
           name="password"
           placeholder="Please Enter Password"
-          width="300"
+          width={300}
         />
         <TextInput
           type="password"
           name="checkPassword"
           placeholder="Re-enter Password"
-          width="300"
+          width={300}
         />
         {inputError && <div className="error-message">{inputError}</div>}
-        <Button text="Sign Up" width="300" />
+        <Button text="Sign Up" width={300} />
       </form>
       <Link to={ROUTES.login}>
         <div>Back</div>
