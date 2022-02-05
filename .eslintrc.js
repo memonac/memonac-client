@@ -19,7 +19,7 @@ module.exports = {
   },
   plugins: ["react", "prettier"],
   rules: {
-    "prettier/prettier": "warn",
+    "prettier/prettier": "error",
     "no-console": ["error", { allow: ["warn", "error"] }],
     "no-var": "error",
     "no-unused-vars": "error",

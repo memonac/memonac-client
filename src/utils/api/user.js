@@ -3,21 +3,47 @@ import axios from "axios";
 const userApi = {};
 
 userApi.getlogin = async (token) => {
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
+  const response = await axios.get(
+    "http://localhost:8000/login",
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+    {
+      withCredentials: true,
+    }
+  );
 
-  const response = await axios.get("/login", headers, {
-    withCredentials: true,
-  });
+  return response.data;
+};
 
-  return response;
+userApi.postsignup = async ({ token, email, name }) => {
+  const response = await axios.post(
+    "http://localhost:8000/signup",
+    {
+      email,
+      name,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
 };
 
 userApi.getlogout = async () => {
-  const response = await axios.get("/logout", { withCredentials: true });
+  const response = await axios.get("http://localhost:8000/logout", {
+    withCredentials: true,
+  });
 
-  return response;
+  return response.data;
 };
 
 export default userApi;
