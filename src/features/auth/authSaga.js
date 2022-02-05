@@ -31,12 +31,14 @@ function* userLogin({ payload }) {
       );
       const { accessToken: token } = firebaseResponse.user;
 
-      const serverResponse = yield call(userApi.postsignup, { token, email, name });
+      const serverResponse = yield call(userApi.postsignup, {
+        token,
+        email,
+        name,
+      });
 
       if (serverResponse.result === "success") {
-        yield put(
-          loginSuccess({ email, name })
-        );
+        yield put(loginSuccess({ email, name }));
       } else {
         yield put(loginFailure(serverResponse.error));
       }
