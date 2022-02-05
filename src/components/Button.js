@@ -2,6 +2,7 @@ import React from "react";
 
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { noop } from "lodash";
 
 const ButtonContainer = styled.button`
   margin: 10px;
@@ -14,15 +15,9 @@ const ButtonContainer = styled.button`
   cursor: pointer;
 `;
 
-const noop = () => {};
-
 const Button = ({ text, onClick = noop, color, width }) => {
   return (
-    <ButtonContainer
-      width={width}
-      color={color}
-      onClick={onClick}
-    >
+    <ButtonContainer width={width} color={color} onClick={onClick}>
       {text}
     </ButtonContainer>
   );

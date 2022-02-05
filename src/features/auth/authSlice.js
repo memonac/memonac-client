@@ -29,14 +29,13 @@ export const slice = createSlice({
     loginFailure: (state, action) => {
       const { message } = action.payload;
 
-      console.log(action.payload.message);
       state.isLogin = false;
       state.error = message;
       state.email = "";
       state.name = "";
     },
     logoutRequest: (state) => {
-      state.isLogin = true;
+      state.error = "";
     },
     logoutFailure: (state, action) => {
       const { message } = action.payload;

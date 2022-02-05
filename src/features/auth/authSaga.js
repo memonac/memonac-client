@@ -25,41 +25,41 @@ function* userLogin({ payload }) {
   try {
     if (payload) {
       const { email, password } = payload;
-      const response = yield signInWithEmailAndPassword(
+      const firebaseResponse = yield signInWithEmailAndPassword(
         authenication,
         email,
         password
       );
-      const { accessToken: token } = response.user;
+      const { accessToken: token } = firebaseResponse.user;
 
-      const apiResult = yield call(userApi.getlogin, token);
+      const serverResponse = yield call(userApi.getlogin, token);
 
-      if (apiResult.result === "success") {
+      if (serverResponse.result === "success") {
         yield put(
           loginSuccess({
-            email: response.user.email,
-            name: response.user.displayName,
+            email: firebaseResponse.user.email,
+            name: firebaseResponse.user.displayName,
           })
         );
       } else {
-        yield put(loginFailure(apiResult.error));
+        yield put(loginFailure(serverResponse.error));
       }
     } else {
       const provider = new GoogleAuthProvider();
-      const response = yield signInWithPopup(authenication, provider);
-      const { accessToken: token } = response.user;
+      const firebaseResponse = yield signInWithPopup(authenication, provider);
+      const { accessToken: token } = firebaseResponse.user;
 
-      const apiResult = yield call(userApi.getlogin, token);
+      const serverResponse = yield call(userApi.getlogin, token);
 
-      if (apiResult.result === "success") {
+      if (serverResponse.result === "success") {
         yield put(
           loginSuccess({
-            email: response.user.email,
-            name: response.user.displayName,
+            email: firebaseResponse.user.email,
+            name: firebaseResponse.user.displayName,
           })
         );
       } else {
-        yield put(loginFailure(apiResult.error));
+        yield put(loginFailure(serverResponse.error));
       }
     }
   } catch (err) {
@@ -71,17 +71,17 @@ function* userSignup(action) {
   const { email, name, password } = action.payload;
 
   try {
-    const response = yield createUserWithEmailAndPassword(
+    const firebaseResponse = yield createUserWithEmailAndPassword(
       authenication,
       email,
       password
     );
     yield updateProfile(authenication.currentUser, { displayName: name });
 
-    const { accessToken: token } = response.user;
-    const apiResult = yield call(userApi.getlogin, token);
+    const { accessToken: token } = firebaseResponse.user;
+    const serverResponse = yield call(userApi.getlogin, token);
 
-    if (apiResult.result === "success") {
+    if (serverResponse.result === "success") {
       yield put(
         loginSuccess({
           email,
@@ -89,7 +89,7 @@ function* userSignup(action) {
         })
       );
     } else {
-      yield put(loginFailure(apiResult.error));
+      yield put(loginFailure(serverResponse.error));
     }
   } catch (err) {
     yield put(loginFailure(err));
@@ -100,12 +100,12 @@ function* userLogout() {
   try {
     yield signOut(authenication);
 
-    const apiResult = yield call(userApi.getlogout);
+    const serverResponse = yield call(userApi.getlogout);
 
-    if (apiResult.result === "success") {
+    if (serverResponse.result === "success") {
       yield put(logoutSuccess());
     } else {
-      yield put(logoutFailure(apiResult));
+      yield put(logoutFailure(serverResponse));
     }
   } catch (err) {
     yield put(logoutFailure(err));

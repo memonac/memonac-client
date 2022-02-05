@@ -39,11 +39,7 @@ function Error() {
     <ErrorContainer>
       <div className="error-title">An error has been occurred!</div>
       <div className="error-detail">{errorMessage}</div>
-      <Button 
-        text="Back"
-        onClick={handleHomeButtonClick}
-        width="200"
-      />
+      <Button text="Back" onClick={handleHomeButtonClick} width="200" />
     </ErrorContainer>
   );
 }

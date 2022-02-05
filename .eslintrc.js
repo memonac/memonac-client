@@ -20,9 +20,9 @@ module.exports = {
   plugins: ["react", "prettier"],
   rules: {
     "prettier/prettier": "warn",
-    "no-console": ["warn", { allow: ["warn", "error"] }],
+    "no-console": ["error", { allow: ["warn", "error"] }],
     "no-var": "error",
-    "no-unused-vars": "warn",
+    "no-unused-vars": "error",
     "func-style": ["error", "declaration", { allowArrowFunctions: true }],
   },
   settings: {
