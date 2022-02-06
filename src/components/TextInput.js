@@ -2,6 +2,8 @@ import React from "react";
 
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import { noop } from "lodash";
+
 
 const TextInputContainer = styled.input`
   margin: 10px;
@@ -13,13 +15,15 @@ const TextInputContainer = styled.input`
   font-size: 16px;
 `;
 
-const TextInput = ({ type, name, placeholder, width }) => {
+const TextInput = ({ type, name, placeholder, width, inputText, onInputTextChange = noop }) => {
   return (
     <TextInputContainer
       type={type}
       name={name}
       placeholder={placeholder}
       width={width}
+      onChange={onInputTextChange}
+      value={inputText}
       required
     />
   );
@@ -32,4 +36,6 @@ TextInput.propTypes = {
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
   width: PropTypes.string.isRequired,
+  onInputTextChange: PropTypes.func,
+  inputText: PropTypes.string,
 };
