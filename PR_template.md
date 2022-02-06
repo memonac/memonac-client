@@ -1,12 +1,12 @@
-# [1001] {fix: 서버 연결 이후 로직 버그 수정}
+# [1006] {feature: 모달 컴포넌트 작업}
 
 ## 노션 칸반 링크
 ​
-- [front-](https://www.notion.so/vanillacoding/9bd990ceba744f2bbf3697ee30e36461?v=c2b08290b0ba4dc7b55e750ae4fcf979&p=d45c40db48254971bb16e637d76ae8ed)
+- [모달 컴포넌트 작업](https://www.notion.so/vanillacoding/9bd990ceba744f2bbf3697ee30e36461?v=c2b08290b0ba4dc7b55e750ae4fcf979&p=4b326194dc5445ef89dafa3667eae91e)
 ​
 ## 카드에서 구현 혹은 해결하려는 내용
-- 서버 연결 이후 발생하는 에러 처리
-- signup get에서 post로 로직 수정
+- react-modal 라이브러리를 통해 모달 컴포넌트 구현 
+  - 모달이 렌더링되는 각 컴포넌트에서 모달 open 여부와 관련된 local state를 가지고 있어야 함.
 ​
 ## 기타 사항
 - 그 외 코드 내용에서 읽는 사람이 이해하기 어렵거나, 이렇게 구현하는게 맞는지 고민되는 부분이 있으면 코멘트 달기

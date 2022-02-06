@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 const TextInputContainer = styled.input`
   margin: 10px;
   padding: 10px;
-  width: ${(props) => `${props.width}px`};
+  width: ${(props) => props.width}px;
   height: 30px;
   border: none;
   border-bottom: 1px solid #000000;
@@ -31,5 +31,5 @@ TextInput.propTypes = {
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
-  width: PropTypes.string.isRequired,
+  width: PropTypes.number.isRequired,
 };
