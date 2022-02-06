@@ -4,11 +4,8 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 const HeaderContainer = styled.div`
-  background-image: url(backgroudImg);
-
   display: flex;
   justify-content: center;
-
   border: 1px solid black;
 
   .title-box {
@@ -22,8 +19,8 @@ const HeaderContainer = styled.div`
   }
 
   .right-box {
-    flex: 1 2 0;
     display: flex;
+    flex: 1 2 0;
   }
 `;
 

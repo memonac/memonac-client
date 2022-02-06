@@ -6,7 +6,7 @@ function* getMemoRoomList(action) {
   const { userId } = action.payload;
 
   try {
-    const memoRoomList = yield call(mainApi, userId);
+    const memoRoomList = yield call(mainApi.getMemoRoomList, userId);
 
     yield put(getMemoRoomListSuccess(memoRoomList));
   } catch (err) {
