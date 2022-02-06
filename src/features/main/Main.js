@@ -7,21 +7,21 @@ import Tag from "../../components/Tag";
 import Nav from "../../components/Nav";
 
 import { getMemoRoomListRequest } from "./mainSlice";
-import { logoutRequest } from "../auth/authSlice";
 
 function Main() {
   const displayedTags = useSelector((state) => state.main.displayedTags);
   const tagInfo = useSelector((state) => state.main.tagInfo);
+  const userId = useSelector((state) => state.auth.id);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getMemoRoomListRequest());
+    dispatch(getMemoRoomListRequest({ userId }));
   }, []);
 
   return (
     <>
-      <Header />
+      <Header title="memona" />
       <Nav />
       <Sidebar >
         {displayedTags.map((value, key) => {
