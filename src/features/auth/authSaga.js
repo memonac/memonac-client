@@ -73,7 +73,11 @@ function* userSignup(action) {
     );
 
     const { accessToken: token } = firebaseResponse.user;
-    const serverResponse = yield call(userApi.postsignup, { token, email, name });
+    const serverResponse = yield call(userApi.postsignup, {
+      token,
+      email,
+      name,
+    });
 
     if (serverResponse.result === "success") {
       yield put(

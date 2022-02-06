@@ -8,7 +8,7 @@ import { noop } from "lodash";
 const TextInputContainer = styled.input`
   margin: 10px;
   padding: 10px;
-  width: ${(props) => `${props.width}px`};
+  width: ${(props) => props.width}px;
   height: 30px;
   border: none;
   border-bottom: 1px solid #000000;

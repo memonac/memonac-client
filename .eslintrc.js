@@ -19,12 +19,10 @@ module.exports = {
   },
   plugins: ["react", "prettier"],
   rules: {
-    "prettier/prettier": "warn",
+    "prettier/prettier": "error",
     "no-console": ["error", { allow: ["warn", "error"] }],
     "no-var": "error",
     "no-unused-vars": "warn",
-    "react/prop-types": "warn",
-    "no-dupe-keys": "warn",
     "func-style": ["error", "declaration", { allowArrowFunctions: true }],
   },
   settings: {

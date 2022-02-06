@@ -3,15 +3,12 @@ import axios from "./axiosInstance";
 const userApi = {};
 
 userApi.getlogin = async (token) => {
-  const response = await axios.get(
-    "/login",
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      withCredentials: true,
+  const response = await axios.get("/login", {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-  );
+    withCredentials: true,
+  });
 
   return response.data;
 };
@@ -28,7 +25,7 @@ userApi.postsignup = async ({ token, email, name }) => {
         Authorization: `Bearer ${token}`,
       },
       withCredentials: true,
-    },
+    }
   );
 
   return response.data;
