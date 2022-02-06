@@ -6,7 +6,6 @@ import styled from "styled-components";
 import Button from "../components/Button";
 import TextInput from "./TextInput";
 import { logoutRequest } from "../features/auth/authSlice";
-
 import { setDisplayedTag } from "../features/main/mainSlice";
 
 const NavContainer = styled.div`
@@ -23,7 +22,7 @@ function Nav() {
   }
 
   useEffect(() => {
-    dispatch(setDisplayedTag({ searchedText: inputText}));
+    dispatch(setDisplayedTag({ searchedText: inputText }));
   }, [inputText]);
 
   return (
@@ -32,7 +31,7 @@ function Nav() {
         type="text"
         name="tagname"
         placeholder="검색할 태그를 입력해주세요."
-        width="260"
+        width={260}
         onInputTextChange={handleInputTextChange}
         inputText={inputText}
       />
