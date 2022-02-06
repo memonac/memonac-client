@@ -5,6 +5,7 @@ export const slice = createSlice({
   initialState: {
     isLogin: false,
     error: "",
+    id: "",
     email: "",
     name: "",
   },
@@ -19,10 +20,11 @@ export const slice = createSlice({
       state.isLogin = false;
     },
     loginSuccess: (state, action) => {
-      const { email, name } = action.payload;
+      const { email, name, id } = action.payload;
 
       state.isLogin = true;
       state.error = "";
+      state.id = id;
       state.email = email;
       state.name = name;
     },
@@ -31,6 +33,7 @@ export const slice = createSlice({
 
       state.isLogin = false;
       state.error = message;
+      state.id = "";
       state.email = "";
       state.name = "";
     },
@@ -46,6 +49,7 @@ export const slice = createSlice({
     logoutSuccess: (state) => {
       state.isLogin = false;
       state.error = "";
+      state.id = "";
       state.email = "";
       state.name = "";
     },

@@ -27,7 +27,7 @@ export const memoRoomSlice = createSlice({
     slackToken: "",
   },
   reducers: {
-    getMemoRoomFetch: (state) => {
+    getMemoRoomRequest: (state) => {
       state.isLoading = true;
     },
     getMemoRoomSuccess: (state, action) => {
