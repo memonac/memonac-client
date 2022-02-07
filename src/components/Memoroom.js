@@ -5,12 +5,12 @@ import PropTypes from "prop-types";
 
 const MemoRoomContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   width: 300px;
   height: 300px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  border: 1px solid black;
+  border: 1px solid #000000;
 
   img {
     width: 30px;
@@ -19,16 +19,9 @@ const MemoRoomContainer = styled.div`
 
   .image-wrapper {
     display: flex;
+    justify-content: flex-end;
     visibility: visible;
     width: 300px;
-    justify-content: flex-end;
-  }
-
-  .image-wrapper.hide {
-    display: flex;
-    visibility: hidden;
-    width: 300px;
-    justify-content: flex-end;
   }
 
   .room-name {
@@ -46,16 +39,6 @@ const MemoRoomContainer = styled.div`
 
 const MemoRoom = ({ id, roomName, tags }) => {
   const [hide, setHide] = useState(true);
-
-  function onMouseEnter() {
-    setHide(false);
-    console.log("hide");
-  }
-
-  function onMouseLeave() {
-    setHide(true);
-    console.log("leave");
-  }
 
   return (
     <MemoRoomContainer>
