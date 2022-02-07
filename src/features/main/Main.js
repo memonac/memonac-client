@@ -16,6 +16,7 @@ import { addNewMemoRoomRequest, getMemoRoomListRequest } from "./mainSlice";
 
 function Main() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTags, setSelectedTags] = useState([]);
 
   const displayedTags = useSelector((state) => state.main.displayedTags);
   const tagInfo = useSelector((state) => state.main.tagInfo);
@@ -25,7 +26,19 @@ function Main() {
   const dispatch = useDispatch();
   // const navigate = useNavigate();
 
-  console.log(memoRooms);
+  useEffect(() => {
+    const clickedTags = [];
+
+    Object.entries(tagInfo).forEach(([tagName, tagStatus]) => {
+      if (tagStatus.isSelected) {
+        clickedTags.push(tagName);
+      }
+    });
+
+    setSelectedTags(clickedTags);
+
+    return () => setSelectedTags([]);
+  }, [tagInfo]);
 
   useEffect(() => {
     dispatch(getMemoRoomListRequest({ userId }));
@@ -40,7 +53,7 @@ function Main() {
     const { name } = event.target;
 
     dispatch(addNewMemoRoomRequest({ userId, name: name.value }));
-    // navigate(`${}`)
+    //navigate("/error");
   }
 
   return (
@@ -76,16 +89,21 @@ function Main() {
             <Button text="SAVE" width={100}  />
             </form>
           </ModalContainer>
-          {Object.entries(memoRooms).map(([roomId, memoRoom]) => {
-            console.log(roomId, memoRoom);
+          {Object.entries(memoRooms).map(([roomId, room]) => {
+            const filteredTagsLength = new Set([...room.tags, ...selectedTags]).size;
+
+            if (room.tags.length === filteredTagsLength) {
+              return (
+                <MemoRoom
+                  key={roomId}
+                  roomName={room.name}
+                  tags={room.tags}
+                />
+              );
+            } else {
+              return;
+            }
             
-            return (
-              <MemoRoom
-                key={roomId}
-                roomName={memoRoom.name}
-                tags={memoRoom.tags}
-              />
-            );
           })}
         </RoomList>
       </MainWrapper>

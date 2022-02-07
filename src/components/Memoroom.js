@@ -58,5 +58,5 @@ export default MemoRoom;
 MemoRoom.propTypes = {
   // id: PropTypes.string.isRequired,
   roomName: PropTypes.string.isRequired,
-  tags: PropTypes.string,
+  tags: PropTypes.array,
 };

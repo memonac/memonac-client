@@ -25,7 +25,6 @@ function* addNewMemoRoom({ payload }) {
     if (payload) {
       const { name } = payload;
       const serverResponse = yield call(mainApi.postNewMemoRoom, payload);
-      console.log("server worked!", serverResponse.result);
 
       if (serverResponse.result === "success") {
         yield put(addNewMemoRoomSuccess(name));
