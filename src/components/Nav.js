@@ -38,7 +38,9 @@ function Nav() {
       <Button
         text="logout"
         width="200"
-        onClick={() => { dispatch(logoutRequest()) }}
+        onClick={() => {
+          dispatch(logoutRequest());
+        }}
       />
     </NavContainer>
   );

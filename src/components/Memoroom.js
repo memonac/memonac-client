@@ -54,7 +54,7 @@ const MemoRoom = ({ id, roomName, tags }) => {
 
   function onMouseLeave() {
     setHide(true);
-    console.log("leave")
+    console.log("leave");
   }
 
   return (

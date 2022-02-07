@@ -25,9 +25,7 @@ const SidebarContainer = styled.div`
 function Sidebar({ children }) {
   return (
     <SidebarContainer>
-      <div className="tags-wrapper">
-        {children}
-      </div>
+      <div className="tags-wrapper">{children}</div>
     </SidebarContainer>
   );
 }

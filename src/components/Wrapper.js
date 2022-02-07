@@ -8,12 +8,8 @@ const Wrapper = styled.div`
 `;
 
 function MainWrapper({ children }) {
-  return (
-    <Wrapper>
-      {children}
-    </Wrapper>
-  );
-};
+  return <Wrapper>{children}</Wrapper>;
+}
 
 export default MainWrapper;
 

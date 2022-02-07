@@ -16,7 +16,7 @@ function* getMemoRoomList(action) {
     const memoRoomList = yield call(mainApi.getMemoRoomList, userId);
     yield put(getMemoRoomListSuccess(memoRoomList));
   } catch (err) {
-    yield put(getMemoRoomListFailure());
+    yield put(getMemoRoomListFailure(err));
   }
 }
 
@@ -24,7 +24,6 @@ function* addNewMemoRoom({ payload }) {
   try {
     if (payload) {
       const { name } = payload;
-
       const serverResponse = yield call(mainApi.postNewMemoRoom, name);
 
       if (serverResponse.result === "success") {

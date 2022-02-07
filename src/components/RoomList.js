@@ -16,9 +16,7 @@ const RoomListContainer = styled.div`
 function RoomList({ children }) {
   return (
     <RoomListContainer>
-      <div className="room-list-wrapper">
-        {children}
-      </div>
+      <div className="room-list-wrapper">{children}</div>
     </RoomListContainer>
   );
 }

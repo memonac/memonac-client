@@ -1,7 +1,7 @@
-import React from "react"
+import React from "react";
 import { useDispatch } from "react-redux";
 
-import styled from "styled-components"
+import styled from "styled-components";
 
 import { setTagInfo } from "../features/main/mainSlice";
 
@@ -13,8 +13,8 @@ const TagContainer = styled.div`
     font-size: 20px;
     text-align: center;
     word-break: break-all;
-    background-color: ${(props) => props.isSelected ? "#fde333" : "#ffffff"};
-    color: ${(props) => props.isSelected ? "#0000ff" : "#000000"};
+    background-color: ${(props) => (props.isSelected ? "#fde333" : "#ffffff")};
+    color: ${(props) => (props.isSelected ? "#0000ff" : "#000000")};
   }
 
   .tag:hover {

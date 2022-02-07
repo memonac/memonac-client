@@ -5,7 +5,7 @@ const memoRoomList = createSlice({
   initialState: {
     isLoading: false,
     error: "",
-    memoRoom: {},
+    memoRooms: {},
 
     // memoRooms: {
     //   "61fd36ea8d8b208a2f9c4d5e": { name: "room name1", tags: ["123", "788"] },

@@ -5,14 +5,13 @@ import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import Tag from "../../components/Tag";
 import Nav from "../../components/Nav";
-
-import { addNewMemoRoomRequest, getMemoRoomListRequest } from "./mainSlice";
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
 import RoomList from "../../components/RoomList";
 import ModalContainer from "../../components/Modal";
 import MemoRoom from "../../components/Memoroom";
 import MainWrapper from "../../components/Wrapper";
+import { addNewMemoRoomRequest, getMemoRoomListRequest } from "./mainSlice";
 
 function Main() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -70,13 +69,7 @@ function Main() {
             <Button text="SAVE" width="100" onClick={handleTitleInputSubmit} />
           </ModalContainer>
           {Object.entries(memoRooms).map(([id, data]) => {
-            return (
-              <MemoRoom
-                key={id}
-                roomName={data.name}
-                tags={data.tags}
-              />
-            );
+            return <MemoRoom key={id} roomName={data.name} tags={data.tags} />;
           })}
         </RoomList>
       </MainWrapper>
