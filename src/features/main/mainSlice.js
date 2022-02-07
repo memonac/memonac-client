@@ -25,10 +25,10 @@ const memoRoomList = createSlice({
       state.isLoading = true;
     },
     getMemoRoomListSuccess: (state, action) => {
-      const { memoRoom, tags } = action.payload;
+      const { memoRooms, tags } = action.payload;
 
       state.isLoading = false;
-      state.memoRooms = memoRoom;
+      state.memoRooms = memoRooms;
       state.tags = tags;
       state.tags.forEach((value) => {
         state.tagInfo[value] = { isSelected: false };

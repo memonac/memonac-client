@@ -43,18 +43,18 @@ function Main() {
       <Nav />
       <MainWrapper>
         <Sidebar>
-          {displayedTags.map((value, key) => {
+          {displayedTags.map((tagName) => {
             return (
               <Tag
-                key={value}
-                text={`${value}`}
-                isSelected={tagInfo[value].isSelected}
+                key={tagName}
+                text={`${tagName}`}
+                isSelected={tagInfo[tagName].isSelected}
               />
             );
           })}
         </Sidebar>
         <RoomList>
-          <Button text="+" width="300" onClick={handleAddMemoRoomButtonClick} />
+          <Button text="+" width={300} onClick={handleAddMemoRoomButtonClick} />
           <ModalContainer
             isOpen={isModalOpen}
             title="Memo Room Name"
@@ -66,10 +66,16 @@ function Main() {
               placeholder="Please Enter Name"
               width={300}
             />
-            <Button text="SAVE" width="100" onClick={handleTitleInputSubmit} />
+            <Button text="SAVE" width={100} onClick={handleTitleInputSubmit} />
           </ModalContainer>
-          {Object.entries(memoRooms).map(([id, data]) => {
-            return <MemoRoom key={id} roomName={data.name} tags={data.tags} />;
+          {Object.entries(memoRooms).map(([roomId, memoRoom]) => {
+            return (
+              <MemoRoom
+                key={roomId}
+                roomName={memoRoom.name}
+                tags={memoRoom.tags}
+              />
+            );
           })}
         </RoomList>
       </MainWrapper>

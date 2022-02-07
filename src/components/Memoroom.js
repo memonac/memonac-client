@@ -38,14 +38,11 @@ const MemoRoomContainer = styled.div`
 `;
 
 const MemoRoom = ({ id, roomName, tags }) => {
-  const [hide, setHide] = useState(true);
-
   return (
     <MemoRoomContainer>
       <div className="image-wrapper">
-        <img src="https://images.velog.io/images/leesuin212/post/a02ab989-4040-4a60-8d7f-26699b2a6bae/menu.png" />
-        <img src="https://images.velog.io/images/leesuin212/post/5d5869a4-aef2-43bd-9a81-835bf0f61b2d/bin.png" />
-        <img src="https://images.velog.io/images/leesuin212/post/1c9b7d50-c8fa-47e2-9215-35bf63c88788/pen.png" />
+        <img src="../assets/image/wastebasket" />
+        <img src="../assets/image/menu" />
       </div>
       <div className="room-name">{roomName}</div>
       <div className="tags">{tags}</div>
