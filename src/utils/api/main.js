@@ -13,4 +13,14 @@ mainApi.getMemoRoomList = async (userId) => {
   return response.data;
 };
 
+mainApi.addNewMemoRoom = async ({ userId, name }) => {
+	const response = await axios.post(
+    `/users/${userId}/memorroms/new`,
+    { name },
+    { withCredentials: true }
+    );
+
+	return response.data;
+};
+
 export default mainApi;
