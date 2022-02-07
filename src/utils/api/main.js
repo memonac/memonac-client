@@ -13,7 +13,7 @@ mainApi.getMemoRoomList = async (userId) => {
   return response.data;
 };
 
-mainApi.addNewMemoRoom = async ({ userId, name }) => {
+mainApi.postNewMemoRoom = async ({ userId, name }) => {
 	const response = await axios.post(
     `/users/${userId}/memorroms/new`,
     { name },

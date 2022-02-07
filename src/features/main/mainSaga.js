@@ -1,10 +1,12 @@
-import { all, put, call, takeEvery } from "redux-saga/effects";
-import { 
+import { all, put, call, takeEvery, fork } from "redux-saga/effects";
+import {
   getMemoRoomListRequest,
   getMemoRoomListSuccess,
   getMemoRoomListFailure,
   addNewMemoRoomRequest,
- } from "./mainSlice";
+  addNewMemoRoomSuccess,
+  addNewMemoRoomFailure,
+} from "./mainSlice";
 import mainApi from "../../utils/api/main";
 
 function* getMemoRoomList(action) {
@@ -12,7 +14,6 @@ function* getMemoRoomList(action) {
 
   try {
     const memoRoomList = yield call(mainApi.getMemoRoomList, userId);
-console.log(memoRoomList)
     yield put(getMemoRoomListSuccess(memoRoomList));
   } catch (err) {
     yield put(getMemoRoomListFailure());
@@ -24,10 +25,10 @@ function* addNewMemoRoom({ payload }) {
     if (payload) {
       const { name } = payload;
 
-      const serverResponse = yield call(mainApi.putMemoRoom, name);
+      const serverResponse = yield call(mainApi.postNewMemoRoom, name);
 
       if (serverResponse.result === "success") {
-        yield put(addNewMEmoRoomSuccess(name));
+        yield put(addNewMemoRoomSuccess(name));
       } else {
         yield put(addNewMemoRoomFailure(serverResponse.error));
       }

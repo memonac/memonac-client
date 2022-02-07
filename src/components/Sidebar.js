@@ -34,6 +34,6 @@ function Sidebar({ children }) {
 
 export default Sidebar;
 
-SidebarContainer.propTypes = {
+Sidebar.propTypes = {
   children: PropTypes.element,
 };

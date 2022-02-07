@@ -5,12 +5,12 @@ const memoRoomList = createSlice({
   initialState: {
     isLoading: false,
     error: "",
-    // memoRoom: {},
+    memoRoom: {},
 
-    memoRooms: {
-      "61fd36ea8d8b208a2f9c4d5e": { name: "room name1", tags: ["123", "788"] },
-      "61fd36ea8d8b208a2f9c4d5f": { name: "room name2", tags: ["123", "788"] },
-    },
+    // memoRooms: {
+    //   "61fd36ea8d8b208a2f9c4d5e": { name: "room name1", tags: ["123", "788"] },
+    //   "61fd36ea8d8b208a2f9c4d5f": { name: "room name2", tags: ["123", "788"] },
+    // },
     // 리덕스 상태 예시
     // tags: ["1yu", "2yu", "3yu", "09", "4$1", "124", "090", "4$", "1245", "a", "b", "c", "aa", "vv", "cc", "dd", "a1", "b2", "c4", "aa3", "vv5", "cc6", "dd7"],
     // displayedTags: [],

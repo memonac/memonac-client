@@ -20,10 +20,8 @@ function Main() {
   const tagInfo = useSelector((state) => state.main.tagInfo);
   const memoRooms = useSelector((state) => state.main.memoRooms);
   const userId = useSelector((state) => state.auth.id);
-console.log(userId)
+
   const dispatch = useDispatch();
-console.log("memoroom>>>>", memoRooms)
-console.log("key>>>", memoRooms.key)
   useEffect(() => {
     dispatch(getMemoRoomListRequest({ userId }));
   }, []);
@@ -36,7 +34,8 @@ console.log("key>>>", memoRooms.key)
     event.preventDefault();
     const name = event.target.value;
 
-    dispatch(addNewMemoRoomRequest(name));
+    dispatch(addNewMemoRoomRequest({ userId, name }));
+    // 이후 메모상세로 이동
   }
 
   return (
@@ -73,9 +72,9 @@ console.log("key>>>", memoRooms.key)
           {Object.entries(memoRooms).map(([id, data]) => {
             return (
               <MemoRoom
-               key={id}
-               roomName={data.name}
-               tags={data.tags}
+                key={id}
+                roomName={data.name}
+                tags={data.tags}
               />
             );
           })}
