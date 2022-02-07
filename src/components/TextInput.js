@@ -4,7 +4,6 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { noop } from "lodash";
 
-
 const TextInputContainer = styled.input`
   margin: 10px;
   padding: 10px;
@@ -15,7 +14,14 @@ const TextInputContainer = styled.input`
   font-size: 16px;
 `;
 
-const TextInput = ({ type, name, placeholder, width, inputText, onInputTextChange = noop }) => {
+const TextInput = ({
+  type,
+  name,
+  placeholder,
+  width,
+  inputText,
+  onInputTextChange = noop,
+}) => {
   return (
     <TextInputContainer
       type={type}

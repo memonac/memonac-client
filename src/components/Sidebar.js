@@ -25,15 +25,13 @@ const SidebarContainer = styled.div`
 function Sidebar({ children }) {
   return (
     <SidebarContainer>
-      <div className="tags-wrapper">
-        {children}
-      </div>
+      <div className="tags-wrapper">{children}</div>
     </SidebarContainer>
   );
 }
 
 export default Sidebar;
 
-SidebarContainer.propTypes = {
+Sidebar.propTypes = {
   children: PropTypes.element,
 };

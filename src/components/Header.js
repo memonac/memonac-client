@@ -24,21 +24,17 @@ const HeaderContainer = styled.div`
   }
 `;
 
-function Header ({ title, left, right }) {
+function Header({ title, left, right }) {
   return (
     <HeaderContainer>
-      <div className="left-box">
-        {left}
-      </div>
+      <div className="left-box">{left}</div>
       <div className="title-box">
         <h1>{title}</h1>
       </div>
-      <div className="right-box">
-        {right}
-      </div>
+      <div className="right-box">{right}</div>
     </HeaderContainer>
   );
-};
+}
 
 export default Header;
 
