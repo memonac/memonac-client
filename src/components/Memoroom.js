@@ -2,6 +2,9 @@ import React, { useState } from "react";
 
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import hashtag from "../assets/images/hashtag.png";
+import menu from "../assets/images/menu.png";
+import wastebasket from "../assets/images/wastebasket.png";
 
 const MemoRoomContainer = styled.div`
   display: flex;
@@ -13,14 +16,13 @@ const MemoRoomContainer = styled.div`
   border: 1px solid #000000;
 
   img {
-    width: 30px;
-    margin: 5px;
+    width: 20px;
+    margin: 7px;
   }
 
   .image-wrapper {
     display: flex;
     justify-content: flex-end;
-    visibility: visible;
     width: 300px;
   }
 
@@ -41,8 +43,8 @@ const MemoRoom = ({ id, roomName, tags }) => {
   return (
     <MemoRoomContainer>
       <div className="image-wrapper">
-        <img src="../assets/image/wastebasket" />
-        <img src="../assets/image/menu" />
+        <img src={hashtag} />
+        <img src={menu} />
       </div>
       <div className="room-name">{roomName}</div>
       <div className="tags">{tags}</div>
