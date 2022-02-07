@@ -5,17 +5,20 @@ import logger from "redux-logger";
 
 import authReducer from "../features/auth/authSlice";
 import mainReducer from "../features/main/mainSlice";
+import memoroomReducer from "../features/memoroom/memoRoomSlice";
 import { userSaga } from "../features/auth/authSaga";
+import { memoListSaga } from "../features/main/mainSaga";
 
 const reducer = combineReducers({
   auth: authReducer,
   main: mainReducer,
+  memoroom: memoroomReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();
 
 function* rootSaga() {
-  yield all([userSaga()]);
+  yield all([userSaga(), memoListSaga()]);
 }
 
 const createStore = () => {

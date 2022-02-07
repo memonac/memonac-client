@@ -50,7 +50,7 @@ function* userLogin({ payload }) {
           loginSuccess({
             email: firebaseResponse.user.email,
             name: firebaseResponse.user.displayName,
-            id: serverResponse.userId,
+            id: serverResponse.data.userId,
           })
         );
       } else {

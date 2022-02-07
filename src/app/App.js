@@ -5,9 +5,10 @@ import { ThemeProvider } from "styled-components";
 
 import ROUTES from "../constants/routes";
 import Login from "../features/auth/Login";
-import Error from "../components/Error";
-import Main from "../features/main/Main";
 import Signup from "../features/auth/Signup";
+import Main from "../features/main/Main";
+import MemoRoom from "../features/memoroom/MemoRoom";
+import Error from "../components/Error";
 import theme from "../utils/theme";
 
 function App() {
@@ -16,7 +17,12 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Routes>
-        {loginStatus && <Route path={ROUTES.home} element={<Main />} />}
+        {loginStatus && (
+          <>
+            <Route path={ROUTES.home} element={<Main />} />
+            <Route path={ROUTES.detail} element={<MemoRoom />} />
+          </>
+        )}
         {!loginStatus && (
           <Route
             path={ROUTES.home}

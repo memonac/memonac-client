@@ -41,7 +41,7 @@ TextInput.propTypes = {
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
-  width: PropTypes.string.isRequired,
+  width: PropTypes.number.isRequired,
   onInputTextChange: PropTypes.func,
   inputText: PropTypes.string,
 };

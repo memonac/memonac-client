@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import hashtag from "../assets/images/hashtag.png";
 import menu from "../assets/images/menu.png";
-import wastebasket from "../assets/images/wastebasket.png";
+// import wastebasket from "../assets/images/wastebasket.png";
 
 const MemoRoomContainer = styled.div`
   display: flex;
@@ -39,7 +39,8 @@ const MemoRoomContainer = styled.div`
   }
 `;
 
-const MemoRoom = ({ id, roomName, tags }) => {
+// { id, roomName, tags } 
+const MemoRoom = ({ roomName, tags }) => {
   return (
     <MemoRoomContainer>
       <div className="image-wrapper">
@@ -55,7 +56,7 @@ const MemoRoom = ({ id, roomName, tags }) => {
 export default MemoRoom;
 
 MemoRoom.propTypes = {
-  id: PropTypes.string.isRequired,
+  // id: PropTypes.string.isRequired,
   roomName: PropTypes.string.isRequired,
   tags: PropTypes.string,
 };

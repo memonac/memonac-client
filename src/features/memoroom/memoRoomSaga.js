@@ -15,5 +15,5 @@ function* getMemoRoomWatcher() {
 }
 
 export default function* memoRoomSaga() {
-  yield all([getMemoRoomWatcher()]);
+  yield all([fork(getMemoRoomWatcher)]);
 }

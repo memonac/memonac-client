@@ -9,12 +9,12 @@ import {
 } from "./mainSlice";
 import mainApi from "../../utils/api/main";
 
-function* getMemoRoomList(action) {
-  const { userId } = action.payload;
+function* getMemoRoomList({ payload }) {
+  const { userId } = payload;
 
   try {
     const memoRoomList = yield call(mainApi.getMemoRoomList, userId);
-    yield put(getMemoRoomListSuccess(memoRoomList));
+    yield put(getMemoRoomListSuccess(memoRoomList.data));
   } catch (err) {
     yield put(getMemoRoomListFailure(err));
   }
@@ -24,7 +24,8 @@ function* addNewMemoRoom({ payload }) {
   try {
     if (payload) {
       const { name } = payload;
-      const serverResponse = yield call(mainApi.postNewMemoRoom, name);
+      const serverResponse = yield call(mainApi.postNewMemoRoom, payload);
+      console.log("server worked!", serverResponse.result);
 
       if (serverResponse.result === "success") {
         yield put(addNewMemoRoomSuccess(name));
@@ -45,6 +46,6 @@ function* watchAddNewMemoRoom() {
   yield takeEvery(addNewMemoRoomRequest, addNewMemoRoom);
 }
 
-export default function* memoListSaga() {
+export function* memoListSaga() {
   yield all([fork(watchGetMemoList), fork(watchAddNewMemoRoom)]);
 }

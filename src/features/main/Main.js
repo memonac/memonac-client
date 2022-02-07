@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+// import { useNavigate } from "react-router";
 
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
@@ -15,12 +16,17 @@ import { addNewMemoRoomRequest, getMemoRoomListRequest } from "./mainSlice";
 
 function Main() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const displayedTags = useSelector((state) => state.main.displayedTags);
   const tagInfo = useSelector((state) => state.main.tagInfo);
   const memoRooms = useSelector((state) => state.main.memoRooms);
   const userId = useSelector((state) => state.auth.id);
 
   const dispatch = useDispatch();
+  // const navigate = useNavigate();
+
+  console.log(memoRooms);
+
   useEffect(() => {
     dispatch(getMemoRoomListRequest({ userId }));
   }, []);
@@ -31,10 +37,10 @@ function Main() {
 
   function handleTitleInputSubmit(event) {
     event.preventDefault();
-    const name = event.target.value;
+    const { name } = event.target;
 
-    dispatch(addNewMemoRoomRequest({ userId, name }));
-    // 이후 메모상세로 이동
+    dispatch(addNewMemoRoomRequest({ userId, name: name.value }));
+    // navigate(`${}`)
   }
 
   return (
@@ -60,15 +66,19 @@ function Main() {
             title="Memo Room Name"
             onClose={setIsModalOpen}
           >
+            <form onSubmit={handleTitleInputSubmit}>
             <TextInput
               type="text"
               name="name"
               placeholder="Please Enter Name"
               width={300}
             />
-            <Button text="SAVE" width={100} onClick={handleTitleInputSubmit} />
+            <Button text="SAVE" width={100}  />
+            </form>
           </ModalContainer>
           {Object.entries(memoRooms).map(([roomId, memoRoom]) => {
+            console.log(roomId, memoRoom);
+            
             return (
               <MemoRoom
                 key={roomId}
