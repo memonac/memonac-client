@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
+import { debounce } from "lodash";
 
 import Button from "../components/Button";
 import TextInput from "./TextInput";
@@ -15,15 +16,25 @@ const NavContainer = styled.div`
 
 function Nav() {
   const [inputText, setInputText] = useState("");
+  const [debounceInput, setDebounceInput] = useState("");
+
   const dispatch = useDispatch();
 
   function handleInputTextChange({ target }) {
     setInputText(target.value);
+    printvalue(target.value);
   }
 
   useEffect(() => {
     dispatch(setDisplayedTag({ searchedText: inputText }));
-  }, [inputText]);
+  }, [debounceInput]);
+
+  const printvalue = useCallback(
+    debounce((val) => 
+      setDebounceInput(val)
+    , 300), 
+    []
+  );
 
   return (
     <NavContainer>

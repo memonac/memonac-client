@@ -1,4 +1,4 @@
-import { all, put, call, takeEvery, fork } from "redux-saga/effects";
+import { all, put, call, takeLatest, fork } from "redux-saga/effects";
 import {
   getMemoRoomListRequest,
   getMemoRoomListSuccess,
@@ -23,11 +23,10 @@ function* getMemoRoomList({ payload }) {
 function* addNewMemoRoom({ payload }) {
   try {
     if (payload) {
-      const { name } = payload;
       const serverResponse = yield call(mainApi.postNewMemoRoom, payload);
 
       if (serverResponse.result === "success") {
-        yield put(addNewMemoRoomSuccess(name));
+        yield put(addNewMemoRoomSuccess(serverResponse.data));
       } else {
         yield put(addNewMemoRoomFailure(serverResponse.error));
       }
@@ -38,11 +37,11 @@ function* addNewMemoRoom({ payload }) {
 }
 
 function* watchGetMemoList() {
-  yield takeEvery(getMemoRoomListRequest, getMemoRoomList);
+  yield takeLatest(getMemoRoomListRequest, getMemoRoomList);
 }
 
 function* watchAddNewMemoRoom() {
-  yield takeEvery(addNewMemoRoomRequest, addNewMemoRoom);
+  yield takeLatest(addNewMemoRoomRequest, addNewMemoRoom);
 }
 
 export function* memoListSaga() {
