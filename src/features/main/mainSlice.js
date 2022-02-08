@@ -74,6 +74,15 @@ export const slice = createSlice({
     resetNewMemoRoomId: (state) => {
       state.newMemoRoomId = "";
     },
+    resetMemoRoom: (state) => {
+      state.isLoading = false;
+      state.error = "";
+      state.memoRooms = {};
+      state.tags = [];
+      state.displayedTags = [];
+      state.tagInfo = {};
+      state.newMemoRoomId = "";
+    },
   },
 });
 
@@ -87,6 +96,7 @@ export const {
   addNewMemoRoomSuccess,
   addNewMemoRoomFailure,
   resetNewMemoRoomId,
+  resetMemoRoom,
 } = slice.actions;
 
 export default slice.reducer;

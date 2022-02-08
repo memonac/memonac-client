@@ -8,7 +8,7 @@ const RoomListContainer = styled.div`
 
   .room-list-wrapper {
     display: grid;
-    grid-template-columns: repeat(3, 2fr);
+    grid-template-columns: repeat(5, 2fr);
     column-gap: 20px;
   }
 `;

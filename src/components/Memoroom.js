@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import styled from "styled-components";
 import PropTypes from "prop-types";
@@ -16,6 +16,7 @@ const MemoRoomContainer = styled.div`
   position: relative;
   width: 300px;
   height: 300px;
+  margin:0 10px 20px 0;
   border: 1px solid #000000;
   background: #ffc300;
 
@@ -56,7 +57,7 @@ const MemoRoomContainer = styled.div`
     justify-content: center;
     width: 300px;
     height: 50px;
-    border-top: 1px solid black;
+    border-top: 1px solid #000000;
     background: #fefbf2;
     font-size: 15px;
   }
@@ -71,7 +72,7 @@ const MemoRoomContainer = styled.div`
 
   .tag {
     margin: 3px;
-    color: white;
+    color: #ffffff;
   }
 
   .menu-click {
@@ -89,16 +90,16 @@ const MemoRoomContainer = styled.div`
   }
 `;
 
-const MemoRoom = ({ id, roomName, tags }) => {
-  const [clickMenu, setClickMenu] = useState(false);
-  const [clickHashtag, setClickHashtag] = useState(false);
+const MemoRoom = ({ roomName, tags }) => {
+  const [clickMemoRoomMenu, setClickMemoRoomMenu] = useState(false);
+  const [clickMemoRoomHashTag, setClickMemoRoomHashTag] = useState(false);
 
   function handleMenuClick() {
-    setClickMenu(!clickMenu);
+    setClickMemoRoomMenu(!clickMemoRoomMenu);
   }
 
   function handleHashtagClick() {
-    setClickHashtag(!clickHashtag);
+    setClickMemoRoomHashTag(!clickMemoRoomHashTag);
   }
 
   return (
@@ -117,7 +118,7 @@ const MemoRoom = ({ id, roomName, tags }) => {
           <div className="participant"></div>
         </div>
       </div>
-      {clickMenu && (
+      {clickMemoRoomMenu && (
         <div className="menu-click">
           <div className="menu-bar">
             <img src={hashtag} className="menu-icon" />
@@ -133,7 +134,7 @@ const MemoRoom = ({ id, roomName, tags }) => {
           </div>
         </div>
       )}
-      {clickHashtag && (
+      {clickMemoRoomHashTag && (
         <div className="menu-click">
           <div className="menu-bar">
             <img
@@ -147,7 +148,7 @@ const MemoRoom = ({ id, roomName, tags }) => {
             <div className="tags">
               {tags.map((tag) => {
                 return (
-                  <div className="tag">{tag}</div>
+                  <div key={tag} className="tag">{tag}</div>
                 );
               })}
             </div>
@@ -161,7 +162,6 @@ const MemoRoom = ({ id, roomName, tags }) => {
 export default MemoRoom;
 
 MemoRoom.propTypes = {
-  // id: PropTypes.string.isRequired,
   roomName: PropTypes.string.isRequired,
   tags: PropTypes.array,
 };

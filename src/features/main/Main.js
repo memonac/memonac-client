@@ -9,19 +9,16 @@ import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import Tag from "../../components/Tag";
 import Nav from "../../components/Nav";
-import Button from "../../components/Button";
-import TextInput from "../../components/TextInput";
 import RoomList from "../../components/RoomList";
-import ModalContainer from "../../components/Modal";
 import MemoRoom from "../../components/Memoroom";
-import { addNewMemoRoomRequest, getMemoRoomListRequest } from "./mainSlice";
+import { getMemoRoomListRequest } from "./mainSlice";
 
 const MainWrapper = styled.div`
   display: flex;
+  justify-content: space-between;
 `;
 
 function Main() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
 
   const displayedTags = useSelector((state) => state.main.displayedTags);
@@ -54,22 +51,8 @@ function Main() {
   }, [tagInfo]);
 
   useEffect(() => {
-    if (!isModalOpen) {
       dispatch(getMemoRoomListRequest({ userId }));
-    }
-  }, [isModalOpen]);
-
-  function handleAddMemoRoomButtonClick() {
-    setIsModalOpen(true);
-  }
-
-  function handleTitleInputSubmit(event) {
-    event.preventDefault();
-    const { name } = event.target;
-
-    dispatch(addNewMemoRoomRequest({ userId, name: name.value }));
-    setIsModalOpen(false);
-  }
+  }, []);
 
   return (
     <>
@@ -88,22 +71,6 @@ function Main() {
           })}
         </Sidebar>
         <RoomList>
-          <Button text="+" width={300} onClick={handleAddMemoRoomButtonClick} />
-          <ModalContainer
-            isOpen={isModalOpen}
-            title="Memo Room Name"
-            onClose={setIsModalOpen}
-          >
-            <form onSubmit={handleTitleInputSubmit}>
-              <TextInput
-                type="text"
-                name="name"
-                placeholder="Please Enter Name"
-                width={300}
-              />
-              <Button text="SAVE" width={100} />
-            </form>
-          </ModalContainer>
           {Object.entries(memoRooms).map(([roomId, room]) => {
             const filteredTagsLength = new Set([...room.tags, ...selectedTags])
               .size;
