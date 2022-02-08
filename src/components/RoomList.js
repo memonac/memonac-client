@@ -4,19 +4,17 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 const RoomListContainer = styled.div`
-  display: flex;
-
-  .room-list-wrapper {
-    display: grid;
-    grid-template-columns: repeat(5, 2fr);
-    column-gap: 20px;
-  }
+  display: grid;
+  margin: 0 60px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 3fr));
+  width: 100%;
+  column-gap: 20px;
 `;
 
 function RoomList({ children }) {
   return (
     <RoomListContainer>
-      <div className="room-list-wrapper">{children}</div>
+      {children}
     </RoomListContainer>
   );
 }

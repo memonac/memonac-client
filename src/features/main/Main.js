@@ -14,8 +14,10 @@ import MemoRoom from "../../components/Memoroom";
 import { getMemoRoomListRequest } from "./mainSlice";
 
 const MainWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(1, 300px 2fr);
+  padding: 0 20px;
+  margin: 0 50px;
 `;
 
 function Main() {

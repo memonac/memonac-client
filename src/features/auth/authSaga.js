@@ -34,7 +34,11 @@ function* userLogin({ payload }) {
       const serverResponse = yield call(userApi.getlogin, token);
 
       if (serverResponse.result === "success") {
-        yield put(loginSuccess({ email, name, id: serverResponse.data.userId  }));
+        yield put(loginSuccess({ 
+          email, 
+          name: name ? name : serverResponse.data.name,
+          id: serverResponse.data.userId
+        }));
       } else {
         yield put(loginFailure(serverResponse.error));
       }
