@@ -43,6 +43,10 @@ export const memoRoomSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
+    joinRoom: (state, action) => {
+      // 유저가 방에 참가 했을때
+      // 해당 상태로 관리
+    }
   },
 });
 

@@ -6,6 +6,7 @@ import logger from "redux-logger";
 import authReducer from "../features/auth/authSlice";
 import mainReducer from "../features/main/mainSlice";
 import { userSaga } from "../features/auth/authSaga";
+import { socketSagas } from "../features/memoroom/socketSaga";
 
 const reducer = combineReducers({
   auth: authReducer,
@@ -15,7 +16,7 @@ const reducer = combineReducers({
 const sagaMiddleware = createSagaMiddleware();
 
 function* rootSaga() {
-  yield all([userSaga()]);
+  yield all([userSaga(), socketSagas()]);
 }
 
 const createStore = () => {
