@@ -12,7 +12,7 @@ function createSocketChannel (socket) {
     });
 
     socket.on("join", (userId) => {
-      // userId 가 입장 하였습니다.
+      // userId 가 입장 하였습니다. 
       // 해당 액션은 아직 생성하지 않음
       // emit(addUser(user));
     });
