@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
+import styled from "styled-components";
+import propTypes from "prop-types";
+
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import Tag from "../../components/Tag";
@@ -10,8 +13,11 @@ import TextInput from "../../components/TextInput";
 import RoomList from "../../components/RoomList";
 import ModalContainer from "../../components/Modal";
 import MemoRoom from "../../components/Memoroom";
-import MainWrapper from "../../components/Wrapper";
 import { addNewMemoRoomRequest, getMemoRoomListRequest } from "./mainSlice";
+
+const MainWrapper = styled.div`
+  display: flex;
+`;
 
 function Main() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -84,3 +90,7 @@ function Main() {
 }
 
 export default Main;
+
+MainWrapper.propTypes = {
+  children: propTypes.element.isRequired,
+};
