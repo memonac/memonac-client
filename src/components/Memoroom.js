@@ -146,9 +146,7 @@ const MemoRoom = ({ id, roomName, tags }) => {
           <div className="menu-click-content">
             <div className="tags">
               {tags.map((tag) => {
-                return (
-                  <div className="tag">{tag}</div>
-                );
+                return <div className="tag">{tag}</div>;
               })}
             </div>
           </div>
