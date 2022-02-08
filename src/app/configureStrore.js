@@ -5,12 +5,14 @@ import logger from "redux-logger";
 
 import authReducer from "../features/auth/authSlice";
 import mainReducer from "../features/main/mainSlice";
+import memoRoomReducer from "../features/memoroom/memoRoomSlice";
 import { userSaga } from "../features/auth/authSaga";
 import { socketSagas } from "../features/memoroom/socketSaga";
 
 const reducer = combineReducers({
   auth: authReducer,
   main: mainReducer,
+  memoRoom: memoRoomReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

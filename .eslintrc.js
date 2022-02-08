@@ -19,8 +19,8 @@ module.exports = {
   },
   plugins: ["react", "prettier"],
   rules: {
-    "prettier/prettier": "error",
-    "no-console": ["error", { allow: ["warn", "error"] }],
+    "prettier/prettier": "warn",
+    // "no-console": ["error", { allow: ["warn", "error"] }],
     "no-var": "error",
     "no-unused-vars": "warn",
     "func-style": ["error", "declaration", { allowArrowFunctions: true }],
