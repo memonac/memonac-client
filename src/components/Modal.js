@@ -22,7 +22,11 @@ const ModalContent = styled.div`
   }
 
   .modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 10px 20px;
+    margin: 20px 0;
   }
 
   .modal-close-button {

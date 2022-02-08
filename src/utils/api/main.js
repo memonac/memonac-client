@@ -24,4 +24,33 @@ mainApi.postNewMemoRoom = async ({ userId, name }) => {
   return response.data;
 };
 
+mainApi.putMemoRoomTitle = async ({ userId, memoRoomId, name }) => {
+  const response = await axios.put(
+    `/users/${userId}/memorooms/${memoRoomId}`,
+    {
+      memoRoomId,
+      name,
+    },
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};
+
+mainApi.deleteMemoRoomTitle = async ({ userId, memoRoomId }) => {
+  const response = await axios.delete(
+    `/users/${userId}/memorooms/${memoRoomId}`,
+    {
+      memoRoomId,
+    },
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};
+
 export default mainApi;

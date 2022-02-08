@@ -9,6 +9,7 @@ import Signup from "../features/auth/Signup";
 import Main from "../features/main/Main";
 import MemoRoom from "../features/memoroom/MemoRoom";
 import Error from "../components/Error";
+import GlobalStyles from "../utils/GlobalStyles";
 import theme from "../utils/theme";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      <GlobalStyles />
       <Routes>
         {loginStatus && (
           <>

@@ -1,12 +1,18 @@
 import React, { useState } from "react";
-
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+
+import { editMemoRoomTitleRequest, removeMemoRoomRequest } from "../features/main/mainSlice";
+
 import hashtag from "../assets/images/hashtag.png";
 import menu from "../assets/images/menu.png";
 import clickedMenu from "../assets/images/click-menu.png";
 import pen from "../assets/images/pen.png";
 import wastebasket from "../assets/images/wastebasket.png";
+import ModalContainer from "./Modal";
+import TextInput from "./TextInput";
+import Button from "./Button";
 
 const MemoRoomContainer = styled.div`
   display: flex;
@@ -16,8 +22,8 @@ const MemoRoomContainer = styled.div`
   position: relative;
   width: 300px;
   height: 300px;
-  margin:0 10px 20px 0;
-  border: 1px solid #000000;
+  margin: 0 10px 20px 0;
+  border-radius: 20px;
   background: #ffc300;
 
   img {
@@ -49,7 +55,7 @@ const MemoRoomContainer = styled.div`
 
   .room-name {
     border: none;
-    font-size: 25px;
+    font-size: 60px;
   }
 
   .participant {
@@ -57,7 +63,7 @@ const MemoRoomContainer = styled.div`
     justify-content: center;
     width: 300px;
     height: 50px;
-    border-top: 1px solid #000000;
+    border-top: 1px solid #cecece;
     background: #fefbf2;
     font-size: 15px;
   }
@@ -77,6 +83,8 @@ const MemoRoomContainer = styled.div`
 
   .menu-click {
     display: flex;
+    top: 0;
+    right: 0;
     flex-direction: column;
     align-items: center;
     position: absolute;
@@ -90,9 +98,15 @@ const MemoRoomContainer = styled.div`
   }
 `;
 
-const MemoRoom = ({ roomName, tags }) => {
+const MemoRoomBox = ({ id, roomName, tags }) => {
   const [clickMemoRoomMenu, setClickMemoRoomMenu] = useState(false);
   const [clickMemoRoomHashTag, setClickMemoRoomHashTag] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const currentUserId = useSelector((state) => state.auth.id);
+
+  const dispatch = useDispatch();
 
   function handleMenuClick() {
     setClickMemoRoomMenu(!clickMemoRoomMenu);
@@ -100,6 +114,38 @@ const MemoRoom = ({ roomName, tags }) => {
 
   function handleHashtagClick() {
     setClickMemoRoomHashTag(!clickMemoRoomHashTag);
+  }
+
+  function handleWasteBasketButtonClick() {
+    setIsDeleteModalOpen(!isDeleteModalOpen);
+  }
+
+  function handlePenButtonClick() {
+    setIsEditModalOpen(!isEditModalOpen);
+  }
+
+  function handleTitleInputEditSubmit(event) {
+    event.preventDefault();
+    const { name } = event.target;
+
+    dispatch(
+      editMemoRoomTitleRequest({
+        userId: currentUserId,
+        memoRoomId: id,
+        name: name.value,
+      })
+    );
+    setIsEditModalOpen(false);
+    setClickMemoRoomMenu(false);
+  }
+
+  function handleDeleteButtonClick() {
+    dispatch(removeMemoRoomRequest({ 
+      userId: currentUserId,
+      memoRoomId: id 
+    }));
+    setIsDeleteModalOpen(false);
+    setClickMemoRoomMenu(false);
   }
 
   return (
@@ -119,20 +165,49 @@ const MemoRoom = ({ roomName, tags }) => {
         </div>
       </div>
       {clickMemoRoomMenu && (
-        <div className="menu-click">
-          <div className="menu-bar">
-            <img src={hashtag} className="menu-icon" />
-            <img
-              src={clickedMenu}
-              className="menu-icon"
-              onClick={handleMenuClick}
-            />
+        <>
+          <div className="menu-click">
+            <div className="menu-bar">
+              <img src={hashtag} className="menu-icon" />
+              <img
+                src={clickedMenu}
+                className="menu-icon"
+                onClick={handleMenuClick}
+              />
+            </div>
+            <div className="menu-click-content">
+              <img src={wastebasket} onClick={handleWasteBasketButtonClick} />
+              <img src={pen} onClick={handlePenButtonClick} />
+            </div>
           </div>
-          <div className="menu-click-content">
-            <img src={wastebasket} />
-            <img src={pen} />
-          </div>
-        </div>
+          <ModalContainer
+            isOpen={isEditModalOpen}
+            title="Edit Room Name"
+            onClose={setIsEditModalOpen}
+          >
+            <form onSubmit={handleTitleInputEditSubmit}>
+              <TextInput
+                type="text"
+                name="name"
+                defaultValue={roomName}
+                placeholder="Please Enter Name"
+                width={200}
+              />
+              <Button text="EDIT" width={100} />
+            </form>
+          </ModalContainer>
+          <ModalContainer
+            isOpen={isDeleteModalOpen}
+            title="Delete Room"
+            onClose={setIsDeleteModalOpen}
+            height={200}
+          >
+            <div>
+              ARE YOU GONNA DELETE THIS ROOM?
+            </div>
+              <Button text="DELETE" width={100} onClick={handleDeleteButtonClick} />
+          </ModalContainer>
+        </>
       )}
       {clickMemoRoomHashTag && (
         <div className="menu-click">
@@ -148,7 +223,9 @@ const MemoRoom = ({ roomName, tags }) => {
             <div className="tags">
               {tags.map((tag) => {
                 return (
-                  <div key={tag} className="tag">{tag}</div>
+                  <div key={tag} className="tag">
+                    {tag}
+                  </div>
                 );
               })}
             </div>
@@ -159,9 +236,10 @@ const MemoRoom = ({ roomName, tags }) => {
   );
 };
 
-export default MemoRoom;
+export default MemoRoomBox;
 
-MemoRoom.propTypes = {
+MemoRoomBox.propTypes = {
+  id: PropTypes.string.isRequired,
   roomName: PropTypes.string.isRequired,
   tags: PropTypes.array,
 };

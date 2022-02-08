@@ -10,9 +10,16 @@ const ButtonContainer = styled.button`
   width: ${(props) => props.width}px;
   height: 40px;
   border: none;
-  background-color: ${(props) => props.color || "#cecece"};
+  background-color: ${(props) => props.color || "#f03c3c"};
+  color: #ffffff;
   font-size: 16px;
   cursor: pointer;
+  
+  &:hover {
+    border-radius: 10px;
+    background-color: #f57878;
+    transition: 0.5s;
+  }
 `;
 
 const Button = ({ text, onClick = noop, color, width }) => {

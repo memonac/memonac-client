@@ -83,6 +83,42 @@ export const slice = createSlice({
       state.tagInfo = {};
       state.newMemoRoomId = "";
     },
+    editMemoRoomTitleRequest: (state) => {
+      state.isLoading = true;
+    },
+    editMemoRoomTitleSuccess: (state, action) => {
+      const { memoRoomId, name } = action.payload;
+
+      state.isLoading = false;
+      state.memoRooms[memoRoomId].name = name;
+    },
+    editMemoRoomTitleFailure: (state, action) => {
+      const { message } = action.payload;
+
+      state.isLoading = false;
+      state.error = message;
+    },
+    removeMemoRoomRequest: (state) => {
+      state.isLoading = true;
+    },
+    removeMemoRoomSuccess: (state, action) => {
+      const { memoRooms, tags } = action.payload;
+      
+      state.isLoading = false;
+      state.memoRooms = memoRooms;
+      state.tags = tags;
+      state.displayedTags = tags;
+      state.tags.forEach((value) => {
+        state.tagInfo[value] = { isSelected: false };
+      });
+      state.newMemoRoomId = "";
+    },
+    removeMemoRoomFailure: (state, action) => {
+      const { message } = action.payload;
+
+      state.isLoading = false;
+      state.error = message;
+    },
   },
 });
 
@@ -97,6 +133,12 @@ export const {
   addNewMemoRoomFailure,
   resetNewMemoRoomId,
   resetMemoRoom,
+  editMemoRoomTitleRequest,
+  editMemoRoomTitleSuccess,
+  editMemoRoomTitleFailure,
+  removeMemoRoomRequest,
+  removeMemoRoomSuccess,
+  removeMemoRoomFailure,
 } = slice.actions;
 
 export default slice.reducer;

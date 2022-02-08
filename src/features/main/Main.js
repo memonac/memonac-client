@@ -10,7 +10,7 @@ import Sidebar from "../../components/Sidebar";
 import Tag from "../../components/Tag";
 import Nav from "../../components/Nav";
 import RoomList from "../../components/RoomList";
-import MemoRoom from "../../components/Memoroom";
+import MemoRoomBox from "../../components/MemoroomBox";
 import { getMemoRoomListRequest } from "./mainSlice";
 
 const MainWrapper = styled.div`
@@ -36,7 +36,7 @@ function Main() {
     if (newMemoRoomId) {
       navigate(`/${newMemoRoomId}`);
     }
-  }, [newMemoRoomId])
+  }, [newMemoRoomId]);
 
   useEffect(() => {
     const clickedTags = [];
@@ -53,12 +53,12 @@ function Main() {
   }, [tagInfo]);
 
   useEffect(() => {
-      dispatch(getMemoRoomListRequest({ userId }));
+    dispatch(getMemoRoomListRequest({ userId }));
   }, []);
 
   return (
     <>
-      <Header title="memona" />
+      <Header title="MEMONA C" />
       <Nav />
       <MainWrapper>
         <Sidebar>
@@ -79,7 +79,12 @@ function Main() {
 
             if (room.tags.length === filteredTagsLength) {
               return (
-                <MemoRoom key={roomId} roomName={room.name} tags={room.tags} />
+                <MemoRoomBox
+                  key={roomId}
+                  id={roomId}
+                  roomName={room.name}
+                  tags={room.tags}
+                />
               );
             }
           })}

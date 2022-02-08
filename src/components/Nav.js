@@ -14,6 +14,7 @@ const NavContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 10px;
+  padding: 0 20px 0 45px;
 `;
 
 function Nav() {

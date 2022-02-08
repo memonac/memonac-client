@@ -10,11 +10,13 @@ import TextInput from "../../components/TextInput";
 import { loginRequest } from "../auth/authSlice";
 
 const LoginContainer = styled.div`
-  top: 50%;
-  transform: translateY(50%);
   display: flex;
   flex-direction: column;
   align-items: center;
+  top: 50%;
+  transform: translateY(50%);
+  padding: 70px 0;
+  background-color: #ffffff;
 
   .login-title {
     margin: 5px;
@@ -64,7 +66,7 @@ function Login() {
 
   return (
     <LoginContainer>
-      <div className="login-title">MEMONA-C</div>
+      <div className="login-title">MEMONA C</div>
       <form
         className="login-form-container"
         onSubmit={handleLoginWithEmailButtonSubmit}
