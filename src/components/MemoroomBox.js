@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-import { editMemoRoomTitleRequest, removeMemoRoomRequest } from "../features/main/mainSlice";
+import {
+  editMemoRoomTitleRequest,
+  removeMemoRoomRequest,
+} from "../features/main/mainSlice";
 
 import hashtag from "../assets/images/hashtag.png";
 import menu from "../assets/images/menu.png";
@@ -33,6 +37,7 @@ const MemoRoomContainer = styled.div`
   .menu-icon {
     width: 20px;
     margin: 7px;
+    cursor: pointer;
   }
 
   .menu-bar {
@@ -51,11 +56,19 @@ const MemoRoomContainer = styled.div`
     align-items: center;
     height: 220px;
     margin-top: 80px;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   .room-name {
+    width: 200px;
     border: none;
-    font-size: 60px;
+    font-size: 40px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .participant {
@@ -90,11 +103,17 @@ const MemoRoomContainer = styled.div`
     position: absolute;
     width: 300px;
     height: 300px;
+    border-radius: 20px;
     background: rgba(0, 0, 0, 0.6);
   }
 
   .menu-click-content {
     margin-top: 100px;
+  }
+
+  .title-edit-button,
+  .delete-button {
+    cursor: pointer;
   }
 `;
 
@@ -107,6 +126,11 @@ const MemoRoomBox = ({ id, roomName, tags }) => {
   const currentUserId = useSelector((state) => state.auth.id);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  function handleMemoroomBoxClick() {
+    navigate(`/${id}`);
+  }
 
   function handleMenuClick() {
     setClickMemoRoomMenu(!clickMemoRoomMenu);
@@ -140,10 +164,12 @@ const MemoRoomBox = ({ id, roomName, tags }) => {
   }
 
   function handleDeleteButtonClick() {
-    dispatch(removeMemoRoomRequest({ 
-      userId: currentUserId,
-      memoRoomId: id 
-    }));
+    dispatch(
+      removeMemoRoomRequest({
+        userId: currentUserId,
+        memoRoomId: id,
+      })
+    );
     setIsDeleteModalOpen(false);
     setClickMemoRoomMenu(false);
   }
@@ -159,7 +185,7 @@ const MemoRoomBox = ({ id, roomName, tags }) => {
           />
           <img src={menu} className="menu-icon" onClick={handleMenuClick} />
         </div>
-        <div className="memoroom-content">
+        <div onClick={handleMemoroomBoxClick} className="memoroom-content">
           <div className="room-name">{roomName}</div>
           <div className="participant"></div>
         </div>
@@ -176,8 +202,16 @@ const MemoRoomBox = ({ id, roomName, tags }) => {
               />
             </div>
             <div className="menu-click-content">
-              <img src={wastebasket} onClick={handleWasteBasketButtonClick} />
-              <img src={pen} onClick={handlePenButtonClick} />
+              <img
+                className="delete-button"
+                src={wastebasket}
+                onClick={handleWasteBasketButtonClick}
+              />
+              <img
+                className="title-edit-button"
+                src={pen}
+                onClick={handlePenButtonClick}
+              />
             </div>
           </div>
           <ModalContainer
@@ -202,10 +236,12 @@ const MemoRoomBox = ({ id, roomName, tags }) => {
             onClose={setIsDeleteModalOpen}
             height={200}
           >
-            <div>
-              ARE YOU GONNA DELETE THIS ROOM?
-            </div>
-              <Button text="DELETE" width={100} onClick={handleDeleteButtonClick} />
+            <div>ARE YOU GONNA DELETE THIS ROOM?</div>
+            <Button
+              text="DELETE"
+              width={100}
+              onClick={handleDeleteButtonClick}
+            />
           </ModalContainer>
         </>
       )}

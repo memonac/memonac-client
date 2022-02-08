@@ -14,7 +14,7 @@ const ButtonContainer = styled.button`
   color: #ffffff;
   font-size: 16px;
   cursor: pointer;
-  
+
   &:hover {
     border-radius: 10px;
     background-color: #f57878;

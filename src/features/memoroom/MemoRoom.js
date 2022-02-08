@@ -6,7 +6,7 @@ import { resetNewMemoRoomId } from "../main/mainSlice";
 
 function MemoRoom() {
   const { memoroomId } = useParams();
-  
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

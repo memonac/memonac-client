@@ -2,11 +2,11 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
   html {
-    background-color: #ffe291;
+    background-color: #ffefa0;
     font-family: 'Gochi Hand', cursive;
   }
 
-  button {
+  button, input {
     font-family: 'Gochi Hand', cursive;
   }
 `;

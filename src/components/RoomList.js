@@ -12,11 +12,7 @@ const RoomListContainer = styled.div`
 `;
 
 function RoomList({ children }) {
-  return (
-    <RoomListContainer>
-      {children}
-    </RoomListContainer>
-  );
+  return <RoomListContainer>{children}</RoomListContainer>;
 }
 
 export default RoomList;

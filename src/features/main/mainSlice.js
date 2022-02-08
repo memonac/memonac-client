@@ -18,7 +18,7 @@ export const slice = createSlice({
     },
     getMemoRoomListSuccess: (state, action) => {
       const { memoRooms, tags } = action.payload;
-      
+
       state.isLoading = false;
       state.memoRooms = memoRooms;
       state.tags = tags;
@@ -103,7 +103,7 @@ export const slice = createSlice({
     },
     removeMemoRoomSuccess: (state, action) => {
       const { memoRooms, tags } = action.payload;
-      
+
       state.isLoading = false;
       state.memoRooms = memoRooms;
       state.tags = tags;

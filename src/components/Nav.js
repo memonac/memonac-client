@@ -8,7 +8,11 @@ import Button from "./Button";
 import TextInput from "./TextInput";
 import ModalContainer from "./Modal";
 import { logoutRequest } from "../features/auth/authSlice";
-import { addNewMemoRoomRequest, setDisplayedTag, resetMemoRoom } from "../features/main/mainSlice";
+import {
+  addNewMemoRoomRequest,
+  setDisplayedTag,
+  resetMemoRoom,
+} from "../features/main/mainSlice";
 
 const NavContainer = styled.div`
   display: flex;
@@ -36,9 +40,7 @@ function Nav() {
   }, [debounceInput]);
 
   const printvalue = useCallback(
-    debounce((val) => 
-      setDebounceInput(val)
-    , 300), 
+    debounce((val) => setDebounceInput(val), 300),
     []
   );
 
@@ -59,28 +61,28 @@ function Nav() {
       <TextInput
         type="text"
         name="tagname"
-        placeholder="검색할 태그를 입력해주세요."
+        placeholder="Search with Tags"
         width={260}
         onInputTextChange={handleInputTextChange}
         inputText={inputText}
       />
       <div>
         <Button text="New" width={200} onClick={handleAddMemoRoomButtonClick} />
-          <ModalContainer
-            isOpen={isModalOpen}
-            title="Memo Room Name"
-            onClose={setIsModalOpen}
-          >
-            <form onSubmit={handleTitleInputSubmit}>
-              <TextInput
-                type="text"
-                name="name"
-                placeholder="Please Enter Name"
-                width={200}
-              />
-              <Button text="SAVE" width={100} />
-            </form>
-          </ModalContainer>
+        <ModalContainer
+          isOpen={isModalOpen}
+          title="Memo Room Name"
+          onClose={setIsModalOpen}
+        >
+          <form onSubmit={handleTitleInputSubmit}>
+            <TextInput
+              type="text"
+              name="name"
+              placeholder="Please Enter Name"
+              width={200}
+            />
+            <Button text="SAVE" width={100} />
+          </form>
+        </ModalContainer>
         <Button
           text="logout"
           width={200}

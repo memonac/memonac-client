@@ -17,8 +17,6 @@ const SidebarContainer = styled.div`
     overflow-y: scroll;
     width: 260px;
     height: 500px;
-    margin-top: 20px;
-    padding: 20px;
   }
 `;
 
