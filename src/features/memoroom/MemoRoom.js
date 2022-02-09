@@ -10,7 +10,6 @@ import { postSendMailRequest } from "./memoRoomSlice";
 function MemoRoom() {
   const { memoroomId } = useParams();
   const userId = useSelector((state) => state.auth.id);
-  console.log("userID:::::::", userId)
 
   const navigate = useNavigate();
   const dispatch = useDispatch();

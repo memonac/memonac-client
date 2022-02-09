@@ -1,4 +1,11 @@
-import { all, call, put, takeEvery, fork, takeLatest } from "redux-saga/effects";
+import {
+  all,
+  call,
+  put,
+  takeEvery,
+  fork,
+  takeLatest,
+} from "redux-saga/effects";
 import {
   getMemoRoomSuccess,
   getMemoRoomFailure,
@@ -18,14 +25,12 @@ function* getMemoRoom() {
 }
 
 function* postSendMail({ payload }) {
-console.log("saga>>>>>", payload);
   try {
     const serverResponse = yield call(nodemailerApi.postSendMail, payload);
-console.log("sagaRes>>>>>>", serverResponse)
+
     if (serverResponse.result === "success") {
       yield put(postSendMailSuccess());
     } else {
-      console.log("err::::", serverResponse.error)
       yield put(postSendMailFailure(serverResponse.error));
     }
   } catch (err) {

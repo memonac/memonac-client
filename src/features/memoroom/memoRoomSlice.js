@@ -44,7 +44,6 @@ export const slice = createSlice({
       state.error = action.payload;
     },
     postSendMailRequest: (state) => {
-      console.log("hello");
       state.isLoading = true;
     },
     postSendMailSuccess: (state) => {
@@ -63,7 +62,7 @@ export const slice = createSlice({
   },
 });
 
-export const { 
+export const {
   getMemoRoomRequest,
   getMemoRoomSuccess,
   getMemoRoomFailure,
