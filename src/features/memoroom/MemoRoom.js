@@ -22,16 +22,16 @@ function MemoRoom() {
     setIsModalOpen(true);
   }
 
-  // function handleModalCloseClick() {
-  //   setIsModalOpen(false);
-  // }
+  function handleModalCloseClick() {
+    setIsModalOpen(false);
+  }
 
   return (
     <>
       <div>This is MemoRoom {memoroomId}</div>
-      {isModalOpen && <NewMemoModal isOpen={isModalOpen} setIsOpen={() => console.log("here")} />}
-      <Button text="New" width={300} onClick={handleNewMemoModalClick} />
-      <Button text="Back" width={300} onClick={handleBackButtonClick} />
+      <Button text="New" onClick={handleNewMemoModalClick}/>
+      {isModalOpen && <NewMemoModal isOpen={isModalOpen} setIsOpen={handleModalCloseClick} />}
+      <Button onClick={handleBackButtonClick} text="Back" />
     </>
   );
 }

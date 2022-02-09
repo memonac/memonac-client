@@ -48,6 +48,7 @@ function Login() {
   }, [userError, userAuth]);
 
   function handleLoginWithGoogleButtonClick() {
+    console.log("hello")
     dispatch(loginRequest());
   }
 

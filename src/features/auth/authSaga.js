@@ -21,6 +21,8 @@ import {
 import userApi from "../../utils/api/user";
 
 function* userLogin({ payload }) {
+  console.log("saga login~~~");
+  
   try {
     if (payload) {
       const { email, name, password } = payload;
@@ -75,7 +77,7 @@ function* userSignup(action) {
     const firebaseResponse = yield createUserWithEmailAndPassword(
       authenication,
       email,
-      password
+      password,
     );
 
     const { accessToken: token } = firebaseResponse.user;
