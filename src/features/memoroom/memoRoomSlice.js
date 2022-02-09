@@ -47,9 +47,20 @@ export const slice = createSlice({
       state.isLoading = true;
     },
     addNewMemoSuccess: (state, action) => {
-      const { memos } = action.payload;
+      const { newMemo } = action.payload;
 
-      state.memos = memos;
+      state.memos = {
+        ...state.memos,
+        [newMemo._id] : {
+          formType: newMemo.formType,
+          content: newMemo.content,
+          location: newMemo.location,
+          size: newMemo.size,
+          color: newMemo.color,
+          alarmDate: newMemo.alarmDate,
+          tags: newMemo.tags,
+        }
+      };
       state.isLoading = false;
     },
     addNewMemoFailure: (state, action) => {

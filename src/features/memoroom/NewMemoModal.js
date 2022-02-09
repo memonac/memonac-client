@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
+import AWS from "aws-sdk";
 
 import ModalContainer from "../../components/Modal";
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
 import { addNewMemoRequest } from "./memoRoomSlice";
+import changeIntoAwsUrl from "../../utils/changeIntoAwsUrl";
 
 const NewMemoFormContainer = styled.form`
   display: flex;
@@ -70,9 +72,36 @@ const SubmitButtonContainer = styled.div`
 function NewMemoModal({ isOpen, setIsOpen, roomId }) {
   const [isImageType, setIsImageType] = useState("");
   const [hasInputError, setHasInputError] = useState(false);
+  const [imageFileName, setImageFileName] = useState("");
 
   const currentUserId = useSelector((state) => state.auth.id);
   const dispatch = useDispatch();
+
+  AWS.config.update({
+    region: process.env.REACT_APP_AWS_BUCKET_REGION,
+    credentials: new AWS.CognitoIdentityCredentials({
+      IdentityPoolId: process.env.REACT_APP_AWS_BUCKET_IDENTITY_POOL_ID,
+    }),
+  });
+
+  async function handleImageUploadClick(event) {
+    const Imagefile = event.target.files[0];
+
+    try {
+      const upload = new AWS.S3.ManagedUpload({
+        params: {
+          Bucket: "okongee-project",
+          Key: Imagefile.name,
+          Body: Imagefile,
+        },
+      });
+  
+      const result = await upload.promise();
+      setImageFileName(changeIntoAwsUrl(result));
+    } catch (err) {
+      setHasInputError(err);
+    }
+  }
 
   function handleNewMemoSubmit(event) {
     event.preventDefault();
@@ -98,7 +127,7 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
         memoRoomId: roomId,
         author: currentUserId,
         memoType: memoType.value,
-        imageFile: imageFile?.value,
+        imageFile: imageFileName,
         memoColor: memoColor.value,
         alarmDate: alarmDate?.value,
         alarmTime: alarmTime?.value,
@@ -153,7 +182,7 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
             />
             voice
           </div>
-          <div>{isImageType && <input type="file" name="imageFile" />}</div>
+          <div>{isImageType && <input type="file" name="imageFile" onChange={handleImageUploadClick} required/>}</div>
         </MemoOptionContainer>
         <MemoOptionContainer>
           <div className="memo-option-title">COLORS : </div>

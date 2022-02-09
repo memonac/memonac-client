@@ -25,10 +25,9 @@ function* getMemoRoom() {
 }
 
 function* addNewMemo({ payload }) {
-  console.log(payload);
-
   try {
     const serverResponse = yield call(memoApi.addNewMemo, payload);
+    console.log(serverResponse.data);
 
     if (serverResponse.result === "success") {
       yield put(addNewMemoSuccess(serverResponse.data));

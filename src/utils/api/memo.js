@@ -20,10 +20,13 @@ memoApi.addNewMemo = async ({
   memoTags,
   memoType,
 }) => {
+
+  console.log(new Date(`${alarmDate} ${alarmTime}`));
+
   const response = await axios.post(
     `users/${author}/memorooms/${memoRoomId}/memo/`,
     {
-      alarmDateInfo: new Date(`${alarmDate.value} ${alarmTime.value}`),
+      alarmDateInfo: new Date(`${alarmDate} ${alarmTime}`),
       imageFile,
       memoColor,
       memoTags,
