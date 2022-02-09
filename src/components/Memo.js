@@ -1,53 +1,55 @@
 import React, { useState } from "react";
 
-import PropTypes from "prop-types"
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import close from "../assets/images/close.png";
 
 const MemoContainer = styled.div`
-  position: absolute;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  position: absolute;
   top: ${(props) => props.top}px;
   left: ${(props) => props.left}px;
-  background-color: ${(props) => props.color};
+  width: ${(props) => props.width}px;
+  height: ${(props) => props.height}px;
   min-width: 250px;
   min-height: 250px;
   max-width: 500px;
   max-height: 500px;
-
-  box-shadow: 10px 10px 24px 0px rgba(0,0,0,0.75);
-  overflow: hidden;
+  background-color: ${(props) => props.color};
+  box-shadow: 10px 10px 24px 0px rgba(0, 0, 0, 0.75);
   resize: both;
-  width: ${(props) => props.width}px;
-  height: ${(props) => props.height}px;
 
   .close {
+    float: right;
+    width: 10px;
     margin-top: 10px;
     margin-right: 10px;
-    width: 10px;
-    float: right;
     cursor: pointer;
   }
 
   textarea {
-    outline: none;
-    border: none;
     width: 100%;
     height: 100%;
     padding-left: 15px;
+    outline: none;
+    border: none;
+    box-sizing: border-box;
     background-color: ${(props) => props.color};
     font-size: 20px;
     resize: none;
-    box-sizing: border-box;
   }
 
-  .main-image {
-    width: ${(props) => props.width}px;
-    height: ${(props) => props.height}px;
-    box-shadow: 10px 10px 24px 0px rgba(0,0,0,0.75);
-    background-color: white;
-    margin: 30px;
+  .image {
+    width: 300px;
+    height: 300px;
+    background-image: url(${(props) => props.imageUrl});
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: "#ffffff";
+    resize: none;
   }
 
   .memo-info-wrapper {
@@ -85,24 +87,23 @@ function Memo({ info, tag }) {
       width={info.size[0]}
       height={info.size[1]}
       color={info.color}
+      imageUrl={close}
     >
       <div>
         <img className="close" src={close} />
       </div>
-      {info.formType === "text"
-        && <div className="textarea-wrapper">
-            <textarea
-              placeholder="Write.."
-              value={text}
-              onChange={handleTextChange}
-            />
-          </div>
-      }
-      {info.formType === "image"
-        && <div className="textarea-wrapper">
-            <img className="main-image" src={close} />
-           </div>
-      }
+      {info.formType === "text" && (
+        <div className="textarea-wrapper">
+          <textarea
+            placeholder="Write.."
+            value={text}
+            onChange={handleTextChange}
+          />
+        </div>
+      )}
+      {info.formType === "image" && (
+        <div className="textarea-wrapper image"></div>
+      )}
       <div className="memo-info-wrapper">
         <p>#(Tag): {tag}</p>
         <p>{info.alarmDate}</p>
@@ -112,7 +113,15 @@ function Memo({ info, tag }) {
 }
 
 Memo.propTypes = {
-
+  info: PropTypes.shape({
+    location: PropTypes.array.isRequired,
+    size: PropTypes.array.isRequired,
+    color: PropTypes.string.isRequired,
+    formType: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
+    alarmDate: PropTypes.string.isRequired,
+  }).isRequired,
+  tag: PropTypes.string.isRequired,
 };
 
 export default Memo;
