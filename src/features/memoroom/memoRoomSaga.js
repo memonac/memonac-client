@@ -1,5 +1,19 @@
-import { all, call, put, takeEvery, fork } from "redux-saga/effects";
-import { getMemoRoomSuccess, getMemoRoomFailure } from "./memoRoomSlice";
+import {
+  all,
+  call,
+  put,
+  takeEvery,
+  takeLatest,
+  fork,
+} from "redux-saga/effects";
+import memoApi from "../../utils/api/memo";
+import {
+  getMemoRoomSuccess,
+  getMemoRoomFailure,
+  addNewMemoRequest,
+  addNewMemoSuccess,
+  addNewMemoFailure,
+} from "./memoRoomSlice";
 
 function* getMemoRoom() {
   try {
@@ -10,10 +24,30 @@ function* getMemoRoom() {
   }
 }
 
+function* addNewMemo({ payload }) {
+  console.log(payload);
+
+  try {
+    const serverResponse = yield call(memoApi.addNewMemo, payload);
+
+    if (serverResponse.result === "success") {
+      yield put(addNewMemoSuccess(serverResponse.data));
+    } else {
+      yield put(addNewMemoFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(addNewMemoFailure(err));
+  }
+}
+
 function* getMemoRoomWatcher() {
   yield takeEvery("memorooms/getMemoRoomFetch", getMemoRoom);
 }
 
-export default function* memoRoomSaga() {
-  yield all([fork(getMemoRoomWatcher)]);
+function* addNewMemoWatcher() {
+  yield takeLatest(addNewMemoRequest, addNewMemo);
+}
+
+export function* memoRoomSaga() {
+  yield all([fork(getMemoRoomWatcher), fork(addNewMemoWatcher)]);
 }

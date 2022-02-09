@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
 import ModalContainer from "../../components/Modal";
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
+import { addNewMemoRequest } from "./memoRoomSlice";
 
 const NewMemoFormContainer = styled.form`
   display: flex;
@@ -14,6 +16,10 @@ const NewMemoFormContainer = styled.form`
   padding: 15px;
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.5);
+
+  .error-message {
+    color: #dd4a48;
+  }
 `;
 
 const MemoOptionContainer = styled.div`
@@ -21,6 +27,7 @@ const MemoOptionContainer = styled.div`
   align-items: center;
   height: 30px;
   padding: 20px;
+  line-height: 25px;
 
   .memo-type-container {
     display: flex;
@@ -28,11 +35,11 @@ const MemoOptionContainer = styled.div`
   }
 
   .memo-option-title {
-    font-size: 20px;
+    font-size: 25px;
   }
 
   .red-color {
-    color: #EA907A;
+    color: #ea907a;
   }
 
   .blue-color {
@@ -60,8 +67,12 @@ const SubmitButtonContainer = styled.div`
   margin: 0 auto;
 `;
 
-function NewMemoModal({ isOpen, setIsOpen }) {
-  const [isImageType, setIsImageType] = useState(false);
+function NewMemoModal({ isOpen, setIsOpen, roomId }) {
+  const [isImageType, setIsImageType] = useState("");
+  const [hasInputError, setHasInputError] = useState(false);
+
+  const currentUserId = useSelector((state) => state.auth.id);
+  const dispatch = useDispatch();
 
   function handleNewMemoSubmit(event) {
     event.preventDefault();
@@ -69,13 +80,30 @@ function NewMemoModal({ isOpen, setIsOpen }) {
     const { memoType, imageFile, memoColor, alarmDate, alarmTime, memoTags } =
       event.target;
 
-    console.log(
-      memoType.value,
-      imageFile.value,
-      memoColor.value,
-      alarmDate.value,
-      alarmTime.value,
-      memoTags.value
+    if (memoType.value === "image" && !imageFile?.value) {
+      setHasInputError("You should upload an image file.");
+      return;
+    }
+
+    if (
+      alarmDate?.value &&
+      new Date(`${alarmDate.value} ${alarmTime.value}`) <= new Date()
+    ) {
+      setHasInputError("Alarm Date cannot be later then now.");
+      return;
+    }
+
+    dispatch(
+      addNewMemoRequest({
+        memoRoomId: roomId,
+        author: currentUserId,
+        memoType: memoType.value,
+        imageFile: imageFile?.value,
+        memoColor: memoColor.value,
+        alarmDate: alarmDate?.value,
+        alarmTime: alarmTime?.value,
+        memoTags: memoTags.value,
+      })
     );
   }
 
@@ -107,6 +135,7 @@ function NewMemoModal({ isOpen, setIsOpen }) {
               name="memoType"
               value="text"
               onClick={handleNotImageButtonClick}
+              required
             />
             text
             <input
@@ -128,21 +157,21 @@ function NewMemoModal({ isOpen, setIsOpen }) {
         </MemoOptionContainer>
         <MemoOptionContainer>
           <div className="memo-option-title">COLORS : </div>
-          <input type="radio" name="memoColor" value="red" />
+          <input type="radio" name="memoColor" value="#ea907a" required />
           <div className="red-color">RED</div>
-          <input type="radio" name="memoColor" value="blue" />
+          <input type="radio" name="memoColor" value="#b5eaea" />
           <div className="blue-color">BLUE</div>
-          <input type="radio" name="memoColor" value="green" />
+          <input type="radio" name="memoColor" value="#c9e4c5" />
           <div className="green-color">GREEN</div>
-          <input type="radio" name="memoColor" value="purple" />
+          <input type="radio" name="memoColor" value="#f7dbf0" />
           <div className="purple-color">PURPLE</div>
-          <input type="radio" name="memoColor" value="white" />
+          <input type="radio" name="memoColor" value="#ffffff" />
           <div className="white-color">WHITE</div>
-          <input type="radio" name="memoColor" value="orange" />
+          <input type="radio" name="memoColor" value="#ffdcb8" />
           <div className="orange-color">ORANGE</div>
         </MemoOptionContainer>
         <MemoOptionContainer>
-          <div className="memo-option-title">ALARM-DATE : </div>
+          <div className="memo-option-title">ALARM-DATE (SELECT) : </div>
           <input type="date" name="alarmDate" />
           <input type="time" name="alarmTime" />
         </MemoOptionContainer>
@@ -151,11 +180,14 @@ function NewMemoModal({ isOpen, setIsOpen }) {
           <TextInput
             type="text"
             name="memoTags"
-            placeholder="Please Enter Tags"
-            width={300}
+            placeholder="Please Enter Tags (Make a space between different tags)"
+            width={400}
           />
         </MemoOptionContainer>
         <SubmitButtonContainer>
+          {hasInputError && (
+            <div className="error-message">{hasInputError}</div>
+          )}
           <Button text="SAVE" width={200} />
         </SubmitButtonContainer>
       </NewMemoFormContainer>
@@ -168,4 +200,5 @@ export default NewMemoModal;
 NewMemoModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,
+  roomId: PropTypes.string.isRequired,
 };

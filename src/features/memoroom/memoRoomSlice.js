@@ -21,7 +21,7 @@ export const slice = createSlice({
       location: [x, y],
       size: [120, 100],
       color: "red",
-      alarmDate: "2022-02-03",
+      alarmDate: "2022-02-03 00:00",
       tags: ["good", "hello"]
     } */
     slackToken: "",
@@ -43,6 +43,19 @@ export const slice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
+    addNewMemoRequest: (state) => {
+      state.isLoading = true;
+    },
+    addNewMemoSuccess: (state, action) => {
+      const { memos } = action.payload;
+
+      state.memos = memos;
+      state.isLoading = false;
+    },
+    addNewMemoFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
     joinRoom: (state, action) => {
       // 유저가 방에 참가 했을때
       // 해당 상태로 관리
@@ -50,7 +63,13 @@ export const slice = createSlice({
   },
 });
 
-export const { getMemoRoomRequest, getMemoRoomSuccess, getMemoRoomFailure } =
-  slice.actions;
+export const {
+  getMemoRoomRequest,
+  getMemoRoomSuccess,
+  getMemoRoomFailure,
+  addNewMemoRequest,
+  addNewMemoSuccess,
+  addNewMemoFailure,
+} = slice.actions;
 
 export default slice.reducer;

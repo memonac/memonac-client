@@ -21,8 +21,6 @@ import {
 import userApi from "../../utils/api/user";
 
 function* userLogin({ payload }) {
-  console.log("saga login~~~");
-  
   try {
     if (payload) {
       const { email, name, password } = payload;
