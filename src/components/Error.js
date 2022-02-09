@@ -7,10 +7,10 @@ import Button from "./Button";
 import { initiateErrorState } from "../features/auth/authSlice";
 
 const ErrorContainer = styled.div`
-  top: 50%;
-  transform: translateY(50%);
   display: flex;
   flex-direction: column;
+  top: 50%;
+  transform: translateY(50%);
   align-items: center;
 
   .error-title {
@@ -39,7 +39,7 @@ function Error() {
     <ErrorContainer>
       <div className="error-title">An error has been occurred!</div>
       <div className="error-detail">{errorMessage}</div>
-      <Button text="Back" onClick={handleHomeButtonClick} width="200" />
+      <Button text="Back" onClick={handleHomeButtonClick} width={200} />
     </ErrorContainer>
   );
 }

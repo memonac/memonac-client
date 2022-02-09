@@ -6,12 +6,16 @@ import PropTypes from "prop-types";
 const HeaderContainer = styled.div`
   display: flex;
   justify-content: center;
-  border: 1px solid black;
+  height: 100px;
+  background-color: #ffa70f;
+  font-size: 25px;
+  color: #ffffff;
 
   .title-box {
     flex: 2 1 0;
     display: flex;
     justify-content: center;
+    line-height: 35px;
   }
 
   .left-box {

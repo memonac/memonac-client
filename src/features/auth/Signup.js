@@ -10,11 +10,13 @@ import ROUTES from "../../constants/routes";
 import { signupRequest } from "../auth/authSlice";
 
 const SignupContainer = styled.div`
-  top: 50%;
-  transform: translateY(50%);
   display: flex;
   flex-direction: column;
   align-items: center;
+  top: 50%;
+  transform: translateY(50%);
+  padding: 70px 0;
+  background-color: #ffffff;
 
   .signup-form-container {
     display: flex;

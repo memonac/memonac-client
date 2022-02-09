@@ -1,28 +1,20 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-const memoRoomList = createSlice({
+export const slice = createSlice({
   name: "memoRoomList",
   initialState: {
     isLoading: false,
     error: "",
-    // memoRooms: {},
-
-    memoRooms: {
-      "61fd36ea8d8b208a2f9c4d5e": { name: "room name1", tags: ["123", "788"] },
-      "61fd36ea8d8b208a2f9c4d5f": { name: "room name2", tags: ["123", "788"] },
-    },
-    // 리덕스 상태 예시
-    // tags: ["1yu", "2yu", "3yu", "09", "4$1", "124", "090", "4$", "1245", "a", "b", "c", "aa", "vv", "cc", "dd", "a1", "b2", "c4", "aa3", "vv5", "cc6", "dd7"],
-    // displayedTags: [],
-    // tagInfo: { "1yu": { isSelected: false }, "2yu": { isSelected: false }, "3yu": { isSelected: false }, "09": { isSelected: false }, "4$1": { isSelected: false }, "124": { isSelected: true }, "090": { isSelected: false }, "4$": { isSelected: false }, "1245": { isSelected: false }, "a": { isSelected: false }, "b": { isSelected: false }, "c": { isSelected: false }, "aa": { isSelected: false }, "vv": { isSelected: false }, "cc": { isSelected: false }, "dd": { isSelected: false }, "a1": { isSelected: false }, "b2": { isSelected: false }, "c4": { isSelected: false }, "aa3": { isSelected: false }, "vv5": { isSelected: false }, "cc6": { isSelected: false }, "dd7": { isSelected: false } },
+    memoRooms: {},
     tags: [],
     displayedTags: [],
     tagInfo: {},
-    name: "",
+    newMemoRoomId: "",
   },
   reducers: {
     getMemoRoomListRequest: (state) => {
       state.isLoading = true;
+      state.newMemoRoomId = "";
     },
     getMemoRoomListSuccess: (state, action) => {
       const { memoRooms, tags } = action.payload;
@@ -30,9 +22,11 @@ const memoRoomList = createSlice({
       state.isLoading = false;
       state.memoRooms = memoRooms;
       state.tags = tags;
+      state.displayedTags = tags;
       state.tags.forEach((value) => {
         state.tagInfo[value] = { isSelected: false };
       });
+      state.newMemoRoomId = "";
     },
     getMemoRoomListFailure: (state, action) => {
       const { message } = action.payload;
@@ -65,12 +59,61 @@ const memoRoomList = createSlice({
       state.isLoading = true;
     },
     addNewMemoRoomSuccess: (state, action) => {
-      const { name } = action.payload;
+      const { newMemoRoomId } = action.payload;
 
       state.isLoading = false;
-      state.name = name;
+      state.newMemoRoomId = newMemoRoomId;
     },
     addNewMemoRoomFailure: (state, action) => {
+      const { message } = action.payload;
+
+      state.isLoading = false;
+      state.error = message;
+      state.newMemoRoomId = "";
+    },
+    resetNewMemoRoomId: (state) => {
+      state.newMemoRoomId = "";
+    },
+    resetMemoRoom: (state) => {
+      state.isLoading = false;
+      state.error = "";
+      state.memoRooms = {};
+      state.tags = [];
+      state.displayedTags = [];
+      state.tagInfo = {};
+      state.newMemoRoomId = "";
+    },
+    editMemoRoomTitleRequest: (state) => {
+      state.isLoading = true;
+    },
+    editMemoRoomTitleSuccess: (state, action) => {
+      const { memoRoomId, name } = action.payload;
+
+      state.isLoading = false;
+      state.memoRooms[memoRoomId].name = name;
+    },
+    editMemoRoomTitleFailure: (state, action) => {
+      const { message } = action.payload;
+
+      state.isLoading = false;
+      state.error = message;
+    },
+    removeMemoRoomRequest: (state) => {
+      state.isLoading = true;
+    },
+    removeMemoRoomSuccess: (state, action) => {
+      const { memoRooms, tags } = action.payload;
+
+      state.isLoading = false;
+      state.memoRooms = memoRooms;
+      state.tags = tags;
+      state.displayedTags = tags;
+      state.tags.forEach((value) => {
+        state.tagInfo[value] = { isSelected: false };
+      });
+      state.newMemoRoomId = "";
+    },
+    removeMemoRoomFailure: (state, action) => {
       const { message } = action.payload;
 
       state.isLoading = false;
@@ -81,11 +124,21 @@ const memoRoomList = createSlice({
 
 export const {
   getMemoRoomListRequest,
+  getMemoRoomListSuccess,
+  getMemoRoomListFailure,
   setDisplayedTag,
   setTagInfo,
   addNewMemoRoomRequest,
   addNewMemoRoomSuccess,
   addNewMemoRoomFailure,
-} = memoRoomList.actions;
+  resetNewMemoRoomId,
+  resetMemoRoom,
+  editMemoRoomTitleRequest,
+  editMemoRoomTitleSuccess,
+  editMemoRoomTitleFailure,
+  removeMemoRoomRequest,
+  removeMemoRoomSuccess,
+  removeMemoRoomFailure,
+} = slice.actions;
 
-export default memoRoomList.reducer;
+export default slice.reducer;

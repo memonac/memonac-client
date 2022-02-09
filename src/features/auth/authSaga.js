@@ -34,7 +34,13 @@ function* userLogin({ payload }) {
       const serverResponse = yield call(userApi.getlogin, token);
 
       if (serverResponse.result === "success") {
-        yield put(loginSuccess({ email, name }));
+        yield put(
+          loginSuccess({
+            email,
+            name: name ? name : serverResponse.data.name,
+            id: serverResponse.data.userId,
+          })
+        );
       } else {
         yield put(loginFailure(serverResponse.error));
       }
@@ -50,7 +56,7 @@ function* userLogin({ payload }) {
           loginSuccess({
             email: firebaseResponse.user.email,
             name: firebaseResponse.user.displayName,
-            id: serverResponse.userId,
+            id: serverResponse.data.userId,
           })
         );
       } else {

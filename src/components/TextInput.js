@@ -11,6 +11,7 @@ const TextInputContainer = styled.input`
   height: 30px;
   border: none;
   border-bottom: 1px solid #000000;
+  background: none;
   font-size: 16px;
 `;
 
@@ -40,8 +41,8 @@ export default TextInput;
 TextInput.propTypes = {
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
-  width: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
+  width: PropTypes.number.isRequired,
   onInputTextChange: PropTypes.func,
   inputText: PropTypes.string,
 };

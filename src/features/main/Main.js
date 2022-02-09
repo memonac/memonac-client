@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 
 import styled from "styled-components";
 import propTypes from "prop-types";
@@ -8,44 +9,56 @@ import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import Tag from "../../components/Tag";
 import Nav from "../../components/Nav";
-import Button from "../../components/Button";
-import TextInput from "../../components/TextInput";
 import RoomList from "../../components/RoomList";
-import ModalContainer from "../../components/Modal";
-import MemoRoom from "../../components/Memoroom";
-import { addNewMemoRoomRequest, getMemoRoomListRequest } from "./mainSlice";
+import MemoRoomBox from "../../components/MemoroomBox/MemoroomBox";
+import { getMemoRoomListRequest } from "./mainSlice";
 
 const MainWrapper = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(1, 300px 2fr);
+  padding: 0 20px;
+  margin: 0 50px;
 `;
 
 function Main() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTags, setSelectedTags] = useState([]);
+
   const displayedTags = useSelector((state) => state.main.displayedTags);
   const tagInfo = useSelector((state) => state.main.tagInfo);
   const memoRooms = useSelector((state) => state.main.memoRooms);
+  const newMemoRoomId = useSelector((state) => state.main.newMemoRoomId);
   const userId = useSelector((state) => state.auth.id);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (newMemoRoomId) {
+      navigate(`/${newMemoRoomId}`);
+    }
+  }, [newMemoRoomId]);
+
+  useEffect(() => {
+    const clickedTags = [];
+
+    Object.entries(tagInfo).forEach(([tagName, tagStatus]) => {
+      if (tagStatus.isSelected) {
+        clickedTags.push(tagName);
+      }
+    });
+
+    setSelectedTags(clickedTags);
+
+    return () => setSelectedTags([]);
+  }, [tagInfo]);
+
   useEffect(() => {
     dispatch(getMemoRoomListRequest({ userId }));
   }, []);
 
-  function handleAddMemoRoomButtonClick() {
-    setIsModalOpen(true);
-  }
-
-  function handleTitleInputSubmit(event) {
-    event.preventDefault();
-    const name = event.target.value;
-
-    dispatch(addNewMemoRoomRequest({ userId, name }));
-    // 이후 메모상세로 이동
-  }
-
   return (
     <>
-      <Header title="memona" />
+      <Header title="MEMONA C" />
       <Nav />
       <MainWrapper>
         <Sidebar>
@@ -60,28 +73,20 @@ function Main() {
           })}
         </Sidebar>
         <RoomList>
-          <Button text="+" width={300} onClick={handleAddMemoRoomButtonClick} />
-          <ModalContainer
-            isOpen={isModalOpen}
-            title="Memo Room Name"
-            onClose={setIsModalOpen}
-          >
-            <TextInput
-              type="text"
-              name="name"
-              placeholder="Please Enter Name"
-              width={300}
-            />
-            <Button text="SAVE" width={100} onClick={handleTitleInputSubmit} />
-          </ModalContainer>
-          {Object.entries(memoRooms).map(([roomId, memoRoom]) => {
-            return (
-              <MemoRoom
-                key={roomId}
-                roomName={memoRoom.name}
-                tags={memoRoom.tags}
-              />
-            );
+          {Object.entries(memoRooms).map(([roomId, room]) => {
+            const filteredTagsLength = new Set([...room.tags, ...selectedTags])
+              .size;
+
+            if (room.tags.length === filteredTagsLength) {
+              return (
+                <MemoRoomBox
+                  key={roomId}
+                  id={roomId}
+                  roomName={room.name}
+                  tags={room.tags}
+                />
+              );
+            }
           })}
         </RoomList>
       </MainWrapper>
