@@ -8,7 +8,7 @@ export const memoRoomSlice = createSlice({
     name: "",
     participants: {},
     /*
-    id: { 
+    id: {
       userName: "userUser",
       email: "rhrnakajrw@gmail.com",
       isPending: true,
@@ -18,7 +18,7 @@ export const memoRoomSlice = createSlice({
       "1": {
         formType: "text",
         content: "abcdefg",
-        location: [0, 0],
+        location: [300, 110],
         size: [120, 100],
         color: "red",
         alarmDate: "2022-02-03",
@@ -45,7 +45,7 @@ export const memoRoomSlice = createSlice({
       "4": {
         formType: "text",
         content: "abcdefg",
-        location: [400, 500],
+        location: [700, 200],
         size: [500, 200],
         color: "white",
         alarmDate: "2022-02-03",
@@ -54,7 +54,7 @@ export const memoRoomSlice = createSlice({
       "5": {
         formType: "image",
         content: "abcdefg",
-        location: [400, 200],
+        location: [0, 10],
         size: [200, 200],
         color: "red",
         alarmDate: "2022-02-03",

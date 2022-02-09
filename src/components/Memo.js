@@ -6,30 +6,40 @@ import close from "../assets/images/close.png";
 
 const MemoContainer = styled.div`
   position: absolute;
+  display: flex;
+  flex-direction: column;
   top: ${(props) => props.top}px;
   left: ${(props) => props.left}px;
-  background-color: lightgray;
+  background-color: ${(props) => props.color};
+  min-width: 250px;
+  min-height: 250px;
+  max-width: 500px;
+  max-height: 500px;
+
+  box-shadow: 10px 10px 24px 0px rgba(0,0,0,0.75);
+  overflow: hidden;
+  resize: both;
+  width: ${(props) => props.width}px;
+  height: ${(props) => props.height}px;
 
   .close {
-    position: absolute;
+    margin-top: 10px;
+    margin-right: 10px;
     width: 10px;
-    top: 15px;
-    right: 20px;
+    float: right;
     cursor: pointer;
   }
 
   textarea {
-    box-shadow: 10px 10px 24px 0px rgba(0,0,0,0.75);
     outline: none;
     border: none;
-    min-width: 165px;
-    min-height: 145px;
-    width: ${(props) => props.width}px;
-    height: ${(props) => props.height}px;
-    padding: 40px 25px 25px 25px;
+    width: 100%;
+    height: 100%;
+    padding-left: 15px;
     background-color: ${(props) => props.color};
     font-size: 20px;
-    overflow: hidden;
+    resize: none;
+    box-sizing: border-box;
   }
 
   .main-image {
@@ -41,7 +51,10 @@ const MemoContainer = styled.div`
   }
 
   .memo-info-wrapper {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
 
     p {
       margin: 5px 0;
@@ -49,8 +62,15 @@ const MemoContainer = styled.div`
       font-weight: 900;
     }
   }
+
+  .textarea-wrapper {
+    width: 100%;
+    height: 100%;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
 `;
-// location, size, color, content, tags, alarmDate 
+
 function Memo({ info, tag }) {
   const [text, setText] = useState(info.content);
 
@@ -66,16 +86,20 @@ function Memo({ info, tag }) {
       height={info.size[1]}
       color={info.color}
     >
-      <img className="close" src={close} />
+      <div>
+        <img className="close" src={close} />
+      </div>
       {info.formType === "text"
-        && <textarea
-            placeholder="Write.."
-            value={text}
-            onChange={handleTextChange}
-           />
+        && <div className="textarea-wrapper">
+            <textarea
+              placeholder="Write.."
+              value={text}
+              onChange={handleTextChange}
+            />
+          </div>
       }
       {info.formType === "image"
-        && <div>
+        && <div className="textarea-wrapper">
             <img className="main-image" src={close} />
            </div>
       }

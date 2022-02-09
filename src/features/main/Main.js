@@ -44,7 +44,7 @@ function Main() {
   }
 
   return (
-      <MemoRoom top={20} left={20} />
+      <MemoRoom />
     // <>
     //   <Header title="memona" />
     //   <Nav />
