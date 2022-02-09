@@ -75,7 +75,7 @@ function* userSignup(action) {
     const firebaseResponse = yield createUserWithEmailAndPassword(
       authenication,
       email,
-      password,
+      password
     );
 
     const { accessToken: token } = firebaseResponse.user;

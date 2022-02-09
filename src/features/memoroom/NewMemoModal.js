@@ -95,7 +95,7 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
           Body: Imagefile,
         },
       });
-  
+
       const result = await upload.promise();
       setImageFileName(changeIntoAwsUrl(result));
     } catch (err) {
@@ -182,7 +182,16 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
             />
             voice
           </div>
-          <div>{isImageType && <input type="file" name="imageFile" onChange={handleImageUploadClick} required/>}</div>
+          <div>
+            {isImageType && (
+              <input
+                type="file"
+                name="imageFile"
+                onChange={handleImageUploadClick}
+                required
+              />
+            )}
+          </div>
         </MemoOptionContainer>
         <MemoOptionContainer>
           <div className="memo-option-title">COLORS : </div>

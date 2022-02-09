@@ -5,8 +5,6 @@ const memoApi = {};
 memoApi.getMemoList = async (userId, memoRoomId) => {
   const response = await axios.get(`/users/${userId}/memorooms/${memoRoomId}`);
 
-  console.log(response.data);
-
   return response.data;
 };
 
@@ -20,9 +18,6 @@ memoApi.addNewMemo = async ({
   memoTags,
   memoType,
 }) => {
-
-  console.log(new Date(`${alarmDate} ${alarmTime}`));
-
   const response = await axios.post(
     `users/${author}/memorooms/${memoRoomId}/memo/`,
     {

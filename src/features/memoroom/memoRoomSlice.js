@@ -51,7 +51,7 @@ export const slice = createSlice({
 
       state.memos = {
         ...state.memos,
-        [newMemo._id] : {
+        [newMemo._id]: {
           formType: newMemo.formType,
           content: newMemo.content,
           location: newMemo.location,
@@ -59,7 +59,7 @@ export const slice = createSlice({
           color: newMemo.color,
           alarmDate: newMemo.alarmDate,
           tags: newMemo.tags,
-        }
+        },
       };
       state.isLoading = false;
     },

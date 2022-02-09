@@ -8,19 +8,16 @@ export const MemoRoomContainer = styled.div`
   position: relative;
   width: 300px;
   height: 300px;
-  margin: 0 10px 20px 0;
-  border-radius: 20px;
+  border: 1px solid #000000;
   background: #ffc300;
 
   img {
     width: 40px;
     margin: 15px;
   }
-
   .menu-icon {
     width: 20px;
     margin: 7px;
-    cursor: pointer;
   }
 
   .menu-bar {
@@ -39,19 +36,11 @@ export const MemoRoomContainer = styled.div`
     align-items: center;
     height: 220px;
     margin-top: 80px;
-
-    &:hover {
-      cursor: pointer;
-    }
   }
 
   .room-name {
-    width: 200px;
     border: none;
-    font-size: 40px;
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 25px;
   }
 
   .participant {
@@ -59,7 +48,7 @@ export const MemoRoomContainer = styled.div`
     justify-content: center;
     width: 300px;
     height: 50px;
-    border-top: 1px solid #cecece;
+    border-top: 1px solid black;
     background: #fefbf2;
     font-size: 15px;
   }
@@ -74,28 +63,20 @@ export const MemoRoomContainer = styled.div`
 
   .tag {
     margin: 3px;
-    color: #ffffff;
+    color: white;
   }
 
   .menu-click {
     display: flex;
-    top: 0;
-    right: 0;
     flex-direction: column;
     align-items: center;
     position: absolute;
     width: 300px;
     height: 300px;
-    border-radius: 20px;
     background: rgba(0, 0, 0, 0.6);
   }
 
   .menu-click-content {
     margin-top: 100px;
-  }
-
-  .title-edit-button,
-  .delete-button {
-    cursor: pointer;
   }
 `;
