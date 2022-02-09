@@ -1,4 +1,4 @@
-import { all, call, put, takeEvery } from "redux-saga/effects";
+import { all, call, put, takeEvery, fork } from "redux-saga/effects";
 import { getMemoRoomSuccess, getMemoRoomFailure } from "./memoRoomSlice";
 
 function* getMemoRoom() {
@@ -15,5 +15,5 @@ function* getMemoRoomWatcher() {
 }
 
 export default function* memoRoomSaga() {
-  yield all([getMemoRoomWatcher()]);
+  yield all([fork(getMemoRoomWatcher)]);
 }

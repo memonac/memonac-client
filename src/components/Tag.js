@@ -2,24 +2,24 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 import { setTagInfo } from "../features/main/mainSlice";
 
 const TagContainer = styled.div`
   .tag {
-    border: 1px solid red;
-    padding: 15px;
-    border-radius: 30px;
+    padding: 10px;
+    border-radius: 10px;
     font-size: 20px;
     text-align: center;
     word-break: break-all;
-    background-color: ${(props) => (props.isSelected ? "#fde333" : "#ffffff")};
-    color: ${(props) => (props.isSelected ? "#0000ff" : "#000000")};
+    background-color: ${(props) => (props.isSelected ? "#8c0000" : "#ffffff")};
+    color: ${(props) => (props.isSelected ? "#fbe6c2" : "#000000")};
   }
 
   .tag:hover {
-    background-color: gray;
-    color: wheat;
+    background-color: #ffd57e;
+    color: #000000;
     cursor: pointer;
   }
 `;
@@ -39,3 +39,8 @@ function Tag({ text, isSelected }) {
 }
 
 export default Tag;
+
+Tag.propTypes = {
+  text: PropTypes.string.isRequired,
+  isSelected: PropTypes.bool.isRequired,
+};

@@ -1,6 +1,11 @@
 import React from "react";
 
 import { useSelector } from "react-redux";
+import { useParams, useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+
+import { resetNewMemoRoomId } from "../main/mainSlice";
+
 import styled from "styled-components";
 
 import Memo from "../../components/Memo";
@@ -59,12 +64,24 @@ function MemoRoom() {
   const memoTagInfo = {};
   const memoList = Object.entries(memos);
 
+  const { memoroomId } = useParams();
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  function handleBackButtonClick() {
+    dispatch(resetNewMemoRoomId());
+    navigate("/");
+  }
+
   memoList.forEach(([memoId, memoInfo]) => {
     memoTagInfo[memoId] = memoInfo.tags.join(",");
   });
 
   return (
     <MemoRoomContainer >
+      <div>This is MemoRoom {memoroomId}</div>
+      <button onClick={handleBackButtonClick}>back</button>
       <Header title="hi" />
       <div className="parti">
         <div>

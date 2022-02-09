@@ -1,4 +1,4 @@
-import React, { Children } from "react";
+import React from "react";
 
 import styled from "styled-components";
 import PropTypes from "prop-types";
@@ -17,8 +17,6 @@ const SidebarContainer = styled.div`
     overflow-y: scroll;
     width: 260px;
     height: 500px;
-    margin-top: 20px;
-    padding: 20px;
   }
 `;
 

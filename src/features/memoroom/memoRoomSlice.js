@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const memoRoomSlice = createSlice({
+export const slice = createSlice({
   name: "memoRoom",
   initialState: {
     isLoading: false,
@@ -96,7 +96,7 @@ export const memoRoomSlice = createSlice({
   },
 });
 
-export const { getMemoRoomFetch, getMemoRoomSuccess, getMemoRoomFailure } =
-  memoRoomSlice.actions;
+export const { getMemoRoomRequest, getMemoRoomSuccess, getMemoRoomFailure } =
+  slice.actions;
 
-export default memoRoomSlice.reducer;
+export default slice.reducer;
