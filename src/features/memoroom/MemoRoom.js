@@ -1,29 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 
 import { resetNewMemoRoomId } from "../main/mainSlice";
+import { getMemoListRequest, resetMemoList } from "./memoRoomSlice";
 
 import styled from "styled-components";
 
 import Memo from "../../components/Memo";
 import Header from "../../components/Header";
 import Profile from "../../components/Profile";
+import Button from "../../components/Button";
+import backIcon from "../../assets/images/back.png";
 
 const MemoRoomContainer = styled.div`
   .memo-wrapper {
     position: relative;
+    height: 100%;
   }
 
   .main-wrapper {
-    display: flex;
+    width: 100%;
+    height: 100%;
   }
 
   .content-wrapper {
-    display: flex;
-    flex-direction: column;
+    height: 100%;
   }
 
   .parti {
@@ -34,13 +38,13 @@ const MemoRoomContainer = styled.div`
 
   .profile-wrapper {
     display: flex;
+    align-items: center;
   }
 
   .profile-box {
     position: relative;
     right: 0;
     top: 0;
-    border: 1px solid black;
     width: 20px;
   }
 
@@ -49,65 +53,76 @@ const MemoRoomContainer = styled.div`
     z-index: 1;
     width: 300px;
     height: 500px;
-    left: -400px;
-    background-color: white;
-    border: 1px solid black;
+    left: ${(props) => (props.chatState ? 5 : -400)}px;
+    background-color: #ffffff;
+    transition: 1s;
   }
 
   .content-box {
-    display: flex;
+    height: 100%;
   }
 `;
 
 function MemoRoom() {
   const memos = useSelector((state) => state.memoRoom.memos);
-  const memoTagInfo = {};
-  const memoList = Object.entries(memos);
+  const memoRoomName = useSelector((state) => state.memoRoom.name);
+  const userId = useSelector((state) => state.auth.id);
+  const participants = useSelector((state) => state.memoRoom.participants);
+
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const { memoroomId } = useParams();
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  function handleBackButtonClick() {
-    dispatch(resetNewMemoRoomId());
-    navigate("/");
-  }
+  useEffect(() => {
+    dispatch(getMemoListRequest({ userId, memoroomId }));
+  }, []);
+
+  const memoTagInfo = {};
+  const memoList = Object.entries(memos);
 
   memoList.forEach(([memoId, memoInfo]) => {
     memoTagInfo[memoId] = memoInfo.tags.join(",");
   });
 
+  function handleBackIconClick() {
+    dispatch(resetNewMemoRoomId());
+    dispatch(resetMemoList());
+    navigate("/");
+  }
+
+  function handleChatButtonClick() {
+    setIsChatOpen(!isChatOpen);
+  }
+
+  const back = <img onClick={handleBackIconClick} src={backIcon}></img>;
+
   return (
-    <MemoRoomContainer >
-      <div>This is MemoRoom {memoroomId}</div>
-      <button onClick={handleBackButtonClick}>back</button>
-      <Header title="hi" />
+    <MemoRoomContainer chatState={isChatOpen}>
+      <Header title={memoRoomName} left={back} />
       <div className="parti">
         <div>
-          <button>sadf</button>
+          <Button
+            onClick={handleChatButtonClick}
+            text={`Chat ${isChatOpen ? "Close" : "Open"}`}
+            width={100}
+          />
         </div>
         <div className="profile-wrapper">
-          <Profile />
-          <Profile />
-          <Profile />
-          <Profile />
-          <Profile />
+          {participants.map(({ id, name }) => (
+            <Profile key={id} firstName={name[0]} />
+          ))}
+          <Button text="share" color="#3E497A" width={100} />
         </div>
       </div>
-      <div className="sidebar">
-
-      </div>
+      <div className="sidebar"></div>
       <div className="main-wrapper">
         <div className="content-wrapper">
           <div className="content-box">
             <div className="memo-wrapper">
               {memoList.map(([memoId, memoInfo]) => (
-                <Memo
-                  key={memoId}
-                  info={memoInfo}
-                  tag={memoTagInfo[memoId]}
-                />
+                <Memo key={memoId} info={memoInfo} tag={memoTagInfo[memoId]} />
               ))}
             </div>
           </div>
@@ -118,4 +133,3 @@ function MemoRoom() {
 }
 
 export default MemoRoom;
-

@@ -1,19 +1,27 @@
 import { all, call, put, takeEvery, fork } from "redux-saga/effects";
-import { getMemoRoomSuccess, getMemoRoomFailure } from "./memoRoomSlice";
+import {
+  getMemoListRequest,
+  getMemoListSuccess,
+  getMemoListFailure,
+} from "./memoRoomSlice";
+import memoApi from "../../utils/api/memo";
 
-function* getMemoRoom() {
+function* getMemoList({ payload }) {
+  const { userId, memoroomId } = payload;
+
   try {
-    const memoRoomData = yield call();
-    yield put(getMemoRoomSuccess(memoRoomData));
+    const memoRoomData = yield call(memoApi.getMemoList, userId, memoroomId);
+
+    yield put(getMemoListSuccess(memoRoomData.data));
   } catch (err) {
-    yield put(getMemoRoomFailure(err.message));
+    yield put(getMemoListFailure(err.message));
   }
 }
 
 function* getMemoRoomWatcher() {
-  yield takeEvery("memorooms/getMemoRoomFetch", getMemoRoom);
+  yield takeEvery(getMemoListRequest, getMemoList);
 }
 
-export default function* memoRoomSaga() {
+export function* memoRoomSaga() {
   yield all([fork(getMemoRoomWatcher)]);
 }

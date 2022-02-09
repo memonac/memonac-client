@@ -6,61 +6,14 @@ export const slice = createSlice({
     isLoading: false,
     error: "",
     name: "",
-    participants: {},
+    participants: [],
+    memos: {},
     /*
     id: {
       userName: "userUser",
       email: "rhrnakajrw@gmail.com",
       isPending: true,
     }
-    */
-    memos: {
-      "1": {
-        formType: "text",
-        content: "abcdefg",
-        location: [300, 110],
-        size: [120, 100],
-        color: "red",
-        alarmDate: "2022-02-03",
-        tags: ["good", "hello"],
-      },
-      "2": {
-        formType: "text",
-        content: "abcdefg",
-        location: [40, 50],
-        size: [200, 400],
-        color: "blue",
-        alarmDate: "2022-02-03",
-        tags: ["good", "hello"],
-      },
-      "3": {
-        formType: "text",
-        content: "abcdefg",
-        location: [200, 90],
-        size: [300, 350],
-        color: "green",
-        alarmDate: "2022-02-03",
-        tags: ["good", "hello"],
-      },
-      "4": {
-        formType: "text",
-        content: "abcdefg",
-        location: [700, 200],
-        size: [500, 200],
-        color: "white",
-        alarmDate: "2022-02-03",
-        tags: ["good", "hello"],
-      },
-      "5": {
-        formType: "image",
-        content: "abcdefg",
-        location: [0, 10],
-        size: [200, 200],
-        color: "red",
-        alarmDate: "2022-02-03",
-        tags: ["good", "hello"],
-      },
-    },
     /* memoId: {
       formType: "text",
       content: "abcdefg",
@@ -73,10 +26,10 @@ export const slice = createSlice({
     slackToken: "",
   },
   reducers: {
-    getMemoRoomRequest: (state) => {
+    getMemoListRequest: (state) => {
       state.isLoading = true;
     },
-    getMemoRoomSuccess: (state, action) => {
+    getMemoListSuccess: (state, action) => {
       const { participants, memos, slackToken, name } = action.payload;
 
       state.name = name;
@@ -85,9 +38,15 @@ export const slice = createSlice({
       state.slackToken = slackToken;
       state.isLoading = false;
     },
-    getMemoRoomFailure: (state, action) => {
+    getMemoListFailure: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
+    },
+    resetMemoList: (state) => {
+      state.error = "";
+      state.name = "";
+      state.participants = [];
+      state.memos = {};
     },
     joinRoom: (state, action) => {
       // 유저가 방에 참가 했을때
@@ -96,7 +55,11 @@ export const slice = createSlice({
   },
 });
 
-export const { getMemoRoomRequest, getMemoRoomSuccess, getMemoRoomFailure } =
-  slice.actions;
+export const {
+  getMemoListRequest,
+  getMemoListSuccess,
+  getMemoListFailure,
+  resetMemoList,
+} = slice.actions;
 
 export default slice.reducer;
