@@ -1,5 +1,12 @@
-import { all, call, put, takeEvery, fork } from "redux-saga/effects";
-import { getMemoRoomSuccess, getMemoRoomFailure } from "./memoRoomSlice";
+import { all, call, put, takeEvery, fork, takeLatest } from "redux-saga/effects";
+import {
+  getMemoRoomSuccess,
+  getMemoRoomFailure,
+  postSendMailRequest,
+  postSendMailSuccess,
+  postSendMailFailure,
+} from "./memoRoomSlice";
+import nodemailerApi from "../../utils/api/nodemailer";
 
 function* getMemoRoom() {
   try {
@@ -10,10 +17,30 @@ function* getMemoRoom() {
   }
 }
 
+function* postSendMail({ payload }) {
+console.log("saga>>>>>", payload);
+  try {
+    const serverResponse = yield call(nodemailerApi.postSendMail, payload);
+console.log("sagaRes>>>>>>", serverResponse)
+    if (serverResponse.result === "success") {
+      yield put(postSendMailSuccess());
+    } else {
+      console.log("err::::", serverResponse.error)
+      yield put(postSendMailFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(postSendMailFailure(err));
+  }
+}
+
 function* getMemoRoomWatcher() {
   yield takeEvery("memorooms/getMemoRoomFetch", getMemoRoom);
 }
 
-export default function* memoRoomSaga() {
-  yield all([fork(getMemoRoomWatcher)]);
+function* watchPostSendMail() {
+  yield takeLatest(postSendMailRequest, postSendMail);
+}
+
+export function* memoRoomSaga() {
+  yield all([fork(getMemoRoomWatcher), fork(watchPostSendMail)]);
 }

@@ -24,7 +24,7 @@ module.exports = {
     "no-var": "error",
     "no-unused-vars": "warn",
     "func-style": ["error", "declaration", { allowArrowFunctions: true }],
-    "react/prop-types": "warn"
+    "react/prop-types": "warn",
   },
   settings: {
     react: {
