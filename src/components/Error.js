@@ -7,10 +7,10 @@ import Button from "./Button";
 import { initiateErrorState } from "../features/auth/authSlice";
 
 const ErrorContainer = styled.div`
-  top: 50%;
-  transform: translateY(50%);
   display: flex;
   flex-direction: column;
+  top: 50%;
+  transform: translateY(50%);
   align-items: center;
 
   .error-title {

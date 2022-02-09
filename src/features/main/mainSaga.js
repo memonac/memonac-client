@@ -29,14 +29,12 @@ function* getMemoRoomList({ payload }) {
 
 function* addNewMemoRoom({ payload }) {
   try {
-    if (payload) {
-      const serverResponse = yield call(mainApi.postNewMemoRoom, payload);
+    const serverResponse = yield call(mainApi.postNewMemoRoom, payload);
 
-      if (serverResponse.result === "success") {
-        yield put(addNewMemoRoomSuccess(serverResponse.data));
-      } else {
-        yield put(addNewMemoRoomFailure(serverResponse.error));
-      }
+    if (serverResponse.result === "success") {
+      yield put(addNewMemoRoomSuccess(serverResponse.data));
+    } else {
+      yield put(addNewMemoRoomFailure(serverResponse.error));
     }
   } catch (err) {
     yield put(addNewMemoRoomFailure(err));
