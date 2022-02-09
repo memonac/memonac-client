@@ -29,7 +29,7 @@ function MemoRoom() {
   return (
     <>
       <div>This is MemoRoom {memoroomId}</div>
-      {isModalOpen && <NewMemoModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />}
+      {isModalOpen && <NewMemoModal isOpen={isModalOpen} setIsOpen={() => console.log("here")} />}
       <Button text="New" width={300} onClick={handleNewMemoModalClick} />
       <Button text="Back" width={300} onClick={handleBackButtonClick} />
     </>
