@@ -13,6 +13,8 @@ export const slice = createSlice({
   },
   reducers: {
     getMemoRoomListRequest: (state) => {
+      console.log("here is action!");
+      
       state.isLoading = true;
       state.newMemoRoomId = "";
     },

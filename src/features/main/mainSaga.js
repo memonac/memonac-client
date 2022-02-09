@@ -18,7 +18,11 @@ import mainApi from "../../utils/api/main";
 function* getMemoRoomList({ payload }) {
   const { userId } = payload;
 
+  console.log(payload);
+
   try {
+    console.log("here");
+
     const memoRoomList = yield call(mainApi.getMemoRoomList, userId);
 
     yield put(getMemoRoomListSuccess(memoRoomList.data));
@@ -70,6 +74,7 @@ function* removeMemoRoom({ payload }) {
 }
 
 function* watchGetMemoList() {
+  console.log("watcher....");
   yield takeLatest(getMemoRoomListRequest, getMemoRoomList);
 }
 
