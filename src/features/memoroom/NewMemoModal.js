@@ -8,23 +8,43 @@ import TextInput from "../../components/TextInput";
 
 const MemoOptionContainer = styled.div``;
 
-function newMemoModal(isOpen, setIsOpen) {
+function NewMemoModal(isOpen, setIsOpen) {
   const [isImageType, setIsImageType] = useState(false);
 
-  function foo(event) {
+  function handleNewMemoSubmit(event) {
     event.preventDefault();
-    console.log(event.target);
+
+    const { memoType, imageFile, memoColor, alarmDate, alarmTime, memoTags } =
+      event.target;
+
+    console.log(
+      memoType.value,
+      imageFile.value,
+      memoColor.value,
+      alarmDate.value,
+      alarmTime.value,
+      memoTags.value
+    );
   }
 
   function handleImageButtonClick() {
     setIsImageType(!isImageType);
   }
 
+  function handleNotImageButtonClick() {
+    setIsImageType(false);
+  }
+
   return (
     <ModalContainer isOpen={isOpen} title="New Memo" onClose={setIsOpen}>
-      <form onSubmit={foo}>
+      <form onSubmit={handleNewMemoSubmit}>
         <MemoOptionContainer>
-          <input type="radio" name="memoType" value="text" />
+          <input
+            type="radio"
+            name="memoType"
+            value="text"
+            onClick={handleNotImageButtonClick}
+          />
           text
           <input
             type="radio"
@@ -33,11 +53,16 @@ function newMemoModal(isOpen, setIsOpen) {
             onClick={handleImageButtonClick}
           />
           image
-          <input type="radio" name="memoType" value="voice" />
+          <input
+            type="radio"
+            name="memoType"
+            value="voice"
+            onClick={handleNotImageButtonClick}
+          />
           voice
           {isImageType && (
             <MemoOptionContainer>
-              <input type="file" />
+              <input type="file" name="imageFile" />
             </MemoOptionContainer>
           )}
         </MemoOptionContainer>
@@ -80,14 +105,14 @@ function newMemoModal(isOpen, setIsOpen) {
           <input
             type="radio"
             name="memoColor"
-            value="gray"
-            className="gray-color"
+            value="ivory"
+            className="ivory-color"
           />
           GRAY
         </MemoOptionContainer>
         <MemoOptionContainer>
-          <input type="date" value="alarmDate" />
-          <input type="time" value="alarmTime" />
+          <input type="date" name="alarmDate" />
+          <input type="time" name="alarmTime" />
         </MemoOptionContainer>
         <MemoOptionContainer>
           <TextInput
@@ -103,9 +128,9 @@ function newMemoModal(isOpen, setIsOpen) {
   );
 }
 
-export default newMemoModal;
+export default NewMemoModal;
 
-newMemoModal.propTypes = {
+NewMemoModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,
 };

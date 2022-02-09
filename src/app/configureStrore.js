@@ -7,6 +7,7 @@ import authReducer from "../features/auth/authSlice";
 import mainReducer from "../features/main/mainSlice";
 import memoroomReducer from "../features/memoroom/memoRoomSlice";
 import { userSaga } from "../features/auth/authSaga";
+import { memoListSaga } from "../features/main/mainSaga";
 import { socketSagas } from "../features/memoroom/socketSaga";
 
 const reducer = combineReducers({
@@ -18,7 +19,7 @@ const reducer = combineReducers({
 const sagaMiddleware = createSagaMiddleware();
 
 function* rootSaga() {
-  yield all([userSaga(), socketSagas()]);
+  yield all([userSaga(), memoListSaga(), socketSagas()]);
 }
 
 const createStore = () => {

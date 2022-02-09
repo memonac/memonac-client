@@ -10,7 +10,7 @@ import Sidebar from "../../components/Sidebar";
 import Tag from "../../components/Tag";
 import Nav from "../../components/Nav";
 import RoomList from "../../components/RoomList";
-import MemoRoomBox from "../../components/MemoroomBox";
+import MemoRoomBox from "../../components/MemoroomBox/MemoroomBox";
 import { getMemoRoomListRequest } from "./mainSlice";
 
 const MainWrapper = styled.div`

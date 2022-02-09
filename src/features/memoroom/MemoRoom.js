@@ -10,7 +10,7 @@ function MemoRoom() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  function foo() {
+  function handleBackButtonClick() {
     dispatch(resetNewMemoRoomId());
     navigate("/");
   }
@@ -18,7 +18,7 @@ function MemoRoom() {
   return (
     <>
       <div>This is MemoRoom {memoroomId}</div>
-      <button onClick={foo}>back</button>
+      <button onClick={handleBackButtonClick}>back</button>
     </>
   );
 }
