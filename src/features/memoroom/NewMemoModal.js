@@ -90,7 +90,7 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
     try {
       const upload = new AWS.S3.ManagedUpload({
         params: {
-          Bucket: "okongee-project",
+          Bucket: process.env.REACT_APP_AWS_BUCKET_NAME,
           Key: Imagefile.name,
           Body: Imagefile,
         },
