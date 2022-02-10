@@ -7,10 +7,8 @@ import {
 import memoApi from "../../utils/api/memo";
 
 function* getMemoList({ payload }) {
-  const { userId, memoroomId } = payload;
-
   try {
-    const memoRoomData = yield call(memoApi.getMemoList, userId, memoroomId);
+    const memoRoomData = yield call(memoApi.getMemoList, payload);
 
     yield put(getMemoListSuccess(memoRoomData.data));
   } catch (err) {

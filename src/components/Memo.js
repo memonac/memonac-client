@@ -48,7 +48,6 @@ const MemoContainer = styled.div`
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    background-color: "#ffffff";
     resize: none;
   }
 
@@ -76,7 +75,7 @@ const MemoContainer = styled.div`
 function Memo({ info, tag }) {
   const [text, setText] = useState(info.content);
 
-  function handleTextChange({ target }) {
+  function handleMeomTextChange({ target }) {
     setText(target.value);
   }
 
@@ -87,7 +86,7 @@ function Memo({ info, tag }) {
       width={info.size[0]}
       height={info.size[1]}
       color={info.color}
-      imageUrl={close}
+      imageUrl={info.imageUrl}
     >
       <div>
         <img className="close" src={close} />
@@ -97,7 +96,7 @@ function Memo({ info, tag }) {
           <textarea
             placeholder="Write.."
             value={text}
-            onChange={handleTextChange}
+            onChange={handleMeomTextChange}
           />
         </div>
       )}

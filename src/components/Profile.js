@@ -4,13 +4,13 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 
 const ProfileContainer = styled.div`
-  p {
+  .user-first-name {
     display: inline-block;
     width: 40px;
     height: 40px;
     margin: 10px;
     border-radius: 50px;
-    background: #999;
+    background: #c8f2ef;
     text-align: center;
     font-weight: 500;
     font-size: 30px;
@@ -20,7 +20,7 @@ const ProfileContainer = styled.div`
 function Profile({ firstName }) {
   return (
     <ProfileContainer>
-      <p>{firstName}</p>
+      <p className="user-first-name">{firstName}</p>
     </ProfileContainer>
   );
 }

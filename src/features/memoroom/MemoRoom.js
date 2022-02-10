@@ -21,16 +21,7 @@ const MemoRoomContainer = styled.div`
     height: 100%;
   }
 
-  .main-wrapper {
-    width: 100%;
-    height: 100%;
-  }
-
-  .content-wrapper {
-    height: 100%;
-  }
-
-  .parti {
+  .nav {
     display: flex;
     justify-content: space-between;
     padding: 10px;
@@ -101,7 +92,7 @@ function MemoRoom() {
   return (
     <MemoRoomContainer chatState={isChatOpen}>
       <Header title={memoRoomName} left={back} />
-      <div className="parti">
+      <div className="nav">
         <div>
           <Button
             onClick={handleChatButtonClick}
@@ -117,16 +108,10 @@ function MemoRoom() {
         </div>
       </div>
       <div className="sidebar"></div>
-      <div className="main-wrapper">
-        <div className="content-wrapper">
-          <div className="content-box">
-            <div className="memo-wrapper">
-              {memoList.map(([memoId, memoInfo]) => (
-                <Memo key={memoId} info={memoInfo} tag={memoTagInfo[memoId]} />
-              ))}
-            </div>
-          </div>
-        </div>
+      <div className="memo-wrapper">
+        {memoList.map(([memoId, memoInfo]) => (
+          <Memo key={memoId} info={memoInfo} tag={memoTagInfo[memoId]} />
+        ))}
       </div>
     </MemoRoomContainer>
   );
