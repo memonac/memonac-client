@@ -35,4 +35,15 @@ memoApi.addNewMemo = async ({
   return response.data;
 };
 
+memoApi.removeNewMemo = async ({ userId, memoroomId, memoId }) => {
+  const response = await axios.delete(
+    `users/${userId}/memorooms/${memoroomId}/memos/${memoId}`,
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};
+
 export default memoApi;

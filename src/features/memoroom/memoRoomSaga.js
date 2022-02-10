@@ -13,6 +13,9 @@ import {
   addNewMemoRequest,
   addNewMemoSuccess,
   addNewMemoFailure,
+  removeMemoRequest,
+  removeMemoSuccess,
+  removeMemoFailure,
 } from "./memoRoomSlice";
 import memoApi from "../../utils/api/memo";
 
@@ -40,6 +43,22 @@ function* addNewMemo({ payload }) {
   }
 }
 
+function* removeMemo({ payload }) {
+  const { memoId } = payload;
+
+  try {
+    const serverResponse = yield call(memoApi.removeNewMemo, payload);
+
+    if (serverResponse.result === "success") {
+      yield put(removeMemoSuccess(memoId));
+    } else {
+      yield put(removeMemoFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(removeMemoFailure(err));
+  }
+}
+
 function* getMemoRoomWatcher() {
   yield takeEvery(getMemoListRequest, getMemoList);
 }
@@ -48,6 +67,14 @@ function* addNewMemoWatcher() {
   yield takeLatest(addNewMemoRequest, addNewMemo);
 }
 
+function* removeMemoWatcher() {
+  yield takeLatest(removeMemoRequest, removeMemo);
+}
+
 export function* memoRoomSaga() {
-  yield all([fork(getMemoRoomWatcher), fork(addNewMemoWatcher)]);
+  yield all([
+    fork(getMemoRoomWatcher),
+    fork(addNewMemoWatcher),
+    fork(removeMemoWatcher),
+  ]);
 }

@@ -134,6 +134,8 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
         memoTags: memoTags.value,
       })
     );
+
+    setIsOpen(false);
   }
 
   function handleImageButtonClick() {

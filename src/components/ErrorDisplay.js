@@ -24,13 +24,18 @@ const ErrorContainer = styled.div`
   }
 `;
 
-function Error() {
+function ErrorDisplay() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const errorMessage = useSelector((state) => state.auth.error);
 
   function handleHomeButtonClick() {
+    if (!navigate(-1)) {
+      navigate("/");
+      return;
+    }
+
     navigate(-1);
     dispatch(initiateErrorState());
   }
@@ -44,4 +49,4 @@ function Error() {
   );
 }
 
-export default Error;
+export default ErrorDisplay;
