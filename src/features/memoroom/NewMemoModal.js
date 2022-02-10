@@ -16,15 +16,6 @@ function NewMemoModal(isOpen, setIsOpen) {
 
     const { memoType, imageFile, memoColor, alarmDate, alarmTime, memoTags } =
       event.target;
-
-    console.log(
-      memoType.value,
-      imageFile.value,
-      memoColor.value,
-      alarmDate.value,
-      alarmTime.value,
-      memoTags.value
-    );
   }
 
   function handleImageButtonClick() {

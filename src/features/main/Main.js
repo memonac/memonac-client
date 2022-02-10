@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 
 import styled from "styled-components";
 import propTypes from "prop-types";
-
+import MemoRoom from "../../features/memoroom/MemoRoom";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import Tag from "../../components/Tag";

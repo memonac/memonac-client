@@ -20,6 +20,15 @@ const HeaderContainer = styled.div`
 
   .left-box {
     flex: 1 1 0;
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+
+    img {
+      width: 60px;
+      height: 60px;
+      cursor: pointer;
+    }
   }
 
   .right-box {
