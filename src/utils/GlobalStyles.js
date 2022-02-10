@@ -6,7 +6,7 @@ const GlobalStyles = createGlobalStyle`
     font-family: 'Gochi Hand', cursive;
   }
 
-  button, input {
+  button, input, textarea {
     font-family: 'Gochi Hand', cursive;
   }
 `;

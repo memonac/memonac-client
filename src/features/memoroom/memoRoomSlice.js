@@ -80,9 +80,9 @@ export const slice = createSlice({
 });
 
 export const {
-  getMemoRoomRequest,
-  getMemoRoomSuccess,
-  getMemoRoomFailure,
+  getMemoListRequest,
+  getMemoListSuccess,
+  getMemoListFailure,
   addNewMemoRequest,
   addNewMemoSuccess,
   addNewMemoFailure,

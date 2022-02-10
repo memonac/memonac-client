@@ -18,7 +18,7 @@ const MemoContainer = styled.div`
   max-width: 500px;
   max-height: 500px;
   background-color: ${(props) => props.color};
-  box-shadow: 10px 10px 24px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 10px 10px 24px 0px rgba(0, 0, 0, 0.25);
   resize: both;
 
   .close {
