@@ -86,7 +86,7 @@ function Memo({ info, tag }) {
       width={info.size[0]}
       height={info.size[1]}
       color={info.color}
-      imageUrl={info.imageUrl}
+      imageUrl={info.content}
     >
       <div>
         <img className="close" src={close} />
@@ -118,7 +118,7 @@ Memo.propTypes = {
     color: PropTypes.string.isRequired,
     formType: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
-    alarmDate: PropTypes.string.isRequired,
+    alarmDate: PropTypes.string,
   }).isRequired,
   tag: PropTypes.string.isRequired,
 };

@@ -31,6 +31,8 @@ memoApi.addNewMemo = async ({
       withCredentials: true,
     }
   );
+
+  return response.data;
 };
 
 export default memoApi;

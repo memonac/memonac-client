@@ -107,7 +107,7 @@ function MemoRoom() {
             text={`Chat ${isChatOpen ? "Close" : "Open"}`}
             width={100}
           />
-          <Button text="New" onClick={handleNewMemoModalClick} />
+          <Button text="New" width={100} onClick={handleNewMemoModalClick} />
           {isModalOpen && (
             <NewMemoModal
               roomId={memoroomId}
