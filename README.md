@@ -11,4 +11,5 @@ develop 브랜치에서 pull 받은 후 작업하면서 추가로 리팩토링 �
 
 ## feature/1017
  - formdata append 처리
+ - 형식에 맞지 않는 파일 업로드 시, 에러 처리
  
