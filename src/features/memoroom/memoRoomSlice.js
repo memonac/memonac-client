@@ -6,15 +6,14 @@ export const slice = createSlice({
     isLoading: false,
     error: "",
     name: "",
-    participants: {},
+    participants: [],
+    memos: {},
     /*
-    id: { 
+    id: {
       userName: "userUser",
       email: "rhrnakajrw@gmail.com",
       isPending: true,
     }
-    */
-    memos: {},
     /* memoId: {
       formType: "text",
       content: "abcdefg",
@@ -27,10 +26,10 @@ export const slice = createSlice({
     slackToken: "",
   },
   reducers: {
-    getMemoRoomRequest: (state) => {
+    getMemoListRequest: (state) => {
       state.isLoading = true;
     },
-    getMemoRoomSuccess: (state, action) => {
+    getMemoListSuccess: (state, action) => {
       const { participants, memos, slackToken, name } = action.payload;
 
       state.name = name;
@@ -39,21 +38,15 @@ export const slice = createSlice({
       state.slackToken = slackToken;
       state.isLoading = false;
     },
-    getMemoRoomFailure: (state, action) => {
+    getMemoListFailure: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
-    postSendMailRequest: (state) => {
-      state.isLoading = true;
-    },
-    postSendMailSuccess: (state) => {
-      state.isLoading = false;
-    },
-    postSendMailFailure: (state, action) => {
-      const { message } = action.payload;
-
-      state.isLoading = false;
-      state.error = message;
+    resetMemoList: (state) => {
+      state.error = "";
+      state.name = "";
+      state.participants = [];
+      state.memos = {};
     },
     joinRoom: (state, action) => {
       // 유저가 방에 참가 했을때
@@ -63,12 +56,10 @@ export const slice = createSlice({
 });
 
 export const {
-  getMemoRoomRequest,
-  getMemoRoomSuccess,
-  getMemoRoomFailure,
-  postSendMailRequest,
-  postSendMailSuccess,
-  postSendMailFailure,
+  getMemoListRequest,
+  getMemoListSuccess,
+  getMemoListFailure,
+  resetMemoList,
 } = slice.actions;
 
 export default slice.reducer;

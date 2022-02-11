@@ -16,7 +16,7 @@ export const MemoRoomContainer = styled.div`
     width: 40px;
     margin: 15px;
   }
-  
+
   .menu-icon {
     width: 20px;
     margin: 7px;

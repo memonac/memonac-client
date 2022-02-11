@@ -25,7 +25,6 @@ function* getMemoRoomList({ payload }) {
     } catch (err) {
       yield put(getMemoRoomListFailure(err));
     }
-
   }
 }
 

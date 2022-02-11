@@ -16,4 +16,18 @@ nodemailerApi.postSendMail = async ({ userId, memoroomId, email }) => {
   return response.data;
 };
 
+nodemailerApi.postVerifyToken = async ({ memoroomId, token }) => {
+  const response = await axios.post(
+    `users/${memoroomId}/invite`,
+    {
+      token,
+    },
+    {
+      withCredential: true,
+    }
+  );
+
+  return response.data;
+};
+
 export default nodemailerApi;
