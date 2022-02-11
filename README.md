@@ -10,4 +10,5 @@ develop 브랜치에서 pull 받은 후 작업하면서 추가로 리팩토링 �
  - services >> memoroom.getAllMemoRoom flatMap으로 리팩토링 혹은 별도 함수를 따로 만들어 관리
 
 ## feature/1017
- - 리팩토링 특이사항 코멘트 이후 추가 예정 
+ - formdata append 처리
+ 

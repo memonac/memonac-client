@@ -8,7 +8,6 @@ import close from "../assets/images/close.png";
 
 import { removeMemoRequest } from "../features/memoroom/memoRoomSlice";
 
-
 const MemoContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -90,7 +89,9 @@ function Memo({ id, info, tag }) {
   }
 
   function handleRemoveMemoClick() {
-    dispatch(removeMemoRequest({ userId: currentUserId, memoroomId, memoId: id }));
+    dispatch(
+      removeMemoRequest({ userId: currentUserId, memoroomId, memoId: id })
+    );
   }
 
   return (
@@ -103,7 +104,7 @@ function Memo({ id, info, tag }) {
       imageUrl={info.content}
     >
       <div>
-        <img className="close" src={close} onClick={handleRemoveMemoClick}/>
+        <img className="close" src={close} onClick={handleRemoveMemoClick} />
       </div>
       {info.formType === "text" && (
         <div className="textarea-wrapper">

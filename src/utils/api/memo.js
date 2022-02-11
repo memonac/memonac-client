@@ -8,25 +8,13 @@ memoApi.getMemoList = async ({ userId, memoroomId }) => {
   return response.data;
 };
 
-memoApi.addNewMemo = async ({
-  memoRoomId,
-  alarmDate,
-  alarmTime,
-  author,
-  imageFile,
-  memoColor,
-  memoTags,
-  memoType,
-}) => {
+memoApi.addNewMemo = async (formData) => {
+  const author = formData.get("author");
+  const memoroomId = formData.get("memoRoomId");
+
   const response = await axios.post(
-    `users/${author}/memorooms/${memoRoomId}/memo/`,
-    {
-      alarmDateInfo: new Date(`${alarmDate} ${alarmTime}`),
-      imageFile,
-      memoColor,
-      memoTags,
-      memoType,
-    },
+    `users/${author}/memorooms/${memoroomId}/memo/`,
+    formData,
     {
       withCredentials: true,
     }

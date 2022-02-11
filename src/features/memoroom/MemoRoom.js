@@ -71,13 +71,12 @@ function MemoRoom() {
   }, []);
 
   const memoTagInfo = {};
-  const memoList = Object.entries(memos); // [memoId, memoInfo]
+  const memoList = Object.entries(memos);
   const back = <img onClick={handleBackIconClick} src={backIcon}></img>;
 
   memoList.forEach(([memoId, memoInfo]) => {
     memoTagInfo[memoId] = memoInfo.tags.join(",");
   });
-
 
   function handleBackIconClick() {
     dispatch(resetNewMemoRoomId());
@@ -126,7 +125,14 @@ function MemoRoom() {
       <div className="sidebar"></div>
       <div className="memo-wrapper">
         {memoList.map(([memoId, memoInfo]) => {
-          return <Memo key={memoId} id={memoId} info={memoInfo} tag={memoTagInfo[memoId]} />
+          return (
+            <Memo
+              key={memoId}
+              id={memoId}
+              info={memoInfo}
+              tag={memoTagInfo[memoId]}
+            />
+          );
         })}
       </div>
     </MemoRoomContainer>
