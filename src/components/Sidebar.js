@@ -28,8 +28,8 @@ function Sidebar({ children }) {
   );
 }
 
-export default Sidebar;
-
 Sidebar.propTypes = {
-  children: PropTypes.element,
+  children: PropTypes.array,
 };
+
+export default Sidebar;

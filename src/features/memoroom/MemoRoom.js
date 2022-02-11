@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
-
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
+import styled from "styled-components";
 
 import { resetNewMemoRoomId } from "../main/mainSlice";
+import Button from "../../components/Button";
+import NewMemoModal from "./NewMemoModal";
 import { getMemoListRequest, resetMemoList } from "./memoRoomSlice";
-
-import styled from "styled-components";
 
 import Memo from "../../components/Memo";
 import Header from "../../components/Header";
 import Profile from "../../components/Profile";
-import Button from "../../components/Button";
 import backIcon from "../../assets/images/back.png";
 
 const MemoRoomContainer = styled.div`
@@ -55,14 +53,16 @@ const MemoRoomContainer = styled.div`
 `;
 
 function MemoRoom() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
+  const { memoroomId } = useParams();
+
   const memos = useSelector((state) => state.memoRoom.memos);
   const memoRoomName = useSelector((state) => state.memoRoom.name);
   const userId = useSelector((state) => state.auth.id);
   const participants = useSelector((state) => state.memoRoom.participants);
 
-  const [isChatOpen, setIsChatOpen] = useState(false);
-
-  const { memoroomId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -77,6 +77,8 @@ function MemoRoom() {
     memoTagInfo[memoId] = memoInfo.tags.join(",");
   });
 
+  const back = <img onClick={handleBackIconClick} src={backIcon}></img>;
+
   function handleBackIconClick() {
     dispatch(resetNewMemoRoomId());
     dispatch(resetMemoList());
@@ -87,7 +89,13 @@ function MemoRoom() {
     setIsChatOpen(!isChatOpen);
   }
 
-  const back = <img onClick={handleBackIconClick} src={backIcon}></img>;
+  function handleNewMemoModalClick() {
+    setIsModalOpen(true);
+  }
+
+  function handleModalCloseClick() {
+    setIsModalOpen(false);
+  }
 
   return (
     <MemoRoomContainer chatState={isChatOpen}>
@@ -99,6 +107,14 @@ function MemoRoom() {
             text={`Chat ${isChatOpen ? "Close" : "Open"}`}
             width={100}
           />
+          <Button text="New" width={100} onClick={handleNewMemoModalClick} />
+          {isModalOpen && (
+            <NewMemoModal
+              roomId={memoroomId}
+              isOpen={isModalOpen}
+              setIsOpen={handleModalCloseClick}
+            />
+          )}
         </div>
         <div className="profile-wrapper">
           {participants.map(({ id, name }) => (

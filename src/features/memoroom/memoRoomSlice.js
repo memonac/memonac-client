@@ -20,7 +20,7 @@ export const slice = createSlice({
       location: [x, y],
       size: [120, 100],
       color: "red",
-      alarmDate: "2022-02-03",
+      alarmDate: "2022-02-03 00:00",
       tags: ["good", "hello"]
     } */
     slackToken: "",
@@ -42,6 +42,30 @@ export const slice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
+    addNewMemoRequest: (state) => {
+      state.isLoading = true;
+    },
+    addNewMemoSuccess: (state, action) => {
+      const { newMemo } = action.payload;
+
+      state.memos = {
+        ...state.memos,
+        [newMemo._id]: {
+          formType: newMemo.formType,
+          content: newMemo.content,
+          location: newMemo.location,
+          size: newMemo.size,
+          color: newMemo.color,
+          alarmDate: newMemo.alarmDate,
+          tags: newMemo.tags,
+        },
+      };
+      state.isLoading = false;
+    },
+    addNewMemoFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
     resetMemoList: (state) => {
       state.error = "";
       state.name = "";
@@ -59,6 +83,9 @@ export const {
   getMemoListRequest,
   getMemoListSuccess,
   getMemoListFailure,
+  addNewMemoRequest,
+  addNewMemoSuccess,
+  addNewMemoFailure,
   resetMemoList,
 } = slice.actions;
 
