@@ -7,7 +7,7 @@ export const slice = createSlice({
     error: "",
     success: "",
     name: "",
-    participants: [],
+    participants: {},
     memos: {},
     /*
     id: {
@@ -73,6 +73,7 @@ export const slice = createSlice({
     },
     postVerifyTokenFailure: (state, action) => {
       const { response } = action.payload;
+
       state.isLoading = false;
       state.error = response.data.error.message;
     },

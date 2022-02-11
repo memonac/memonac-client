@@ -119,9 +119,9 @@ function NewMemoModal(isOpen, setIsOpen) {
   );
 }
 
-export default NewMemoModal;
-
 NewMemoModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,
 };
+
+export default NewMemoModal;

@@ -112,7 +112,9 @@ function MemoRoom() {
     event.preventDefault();
 
     const { email } = event.target;
-    const participant = participants.find((user) => user.email === email.value);
+    const participant = Object.entries(participants).find(([id, data]) => {
+      return email.value === data.email;
+    });
 
     if (!participant) {
       dispatch(postSendMailRequest({ userId, memoroomId, email: email.value }));
@@ -147,8 +149,8 @@ function MemoRoom() {
           />
         </div>
         <div className="profile-wrapper">
-          {participants.map(({ id, name }) => (
-            <Profile key={id} firstName={name[0]} />
+          {Object.entries(participants).map(([id, data]) => (
+            <Profile key={id} firstName={data.name[0]} />
           ))}
           <Button
             text="share"
