@@ -10,7 +10,6 @@ import { userSaga } from "../features/auth/authSaga";
 import { memoListSaga } from "../features/main/mainSaga";
 import { memoRoomSaga } from "../features/memoroom/memoRoomSaga";
 import { socketSagas } from "../features/memoroom/socketSaga";
-import { memoRoomSaga } from "../features/memoroom/memoRoomSaga";
 
 const reducer = combineReducers({
   auth: authReducer,

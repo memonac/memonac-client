@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 
-import { useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 
 import { resetNewMemoRoomId } from "../main/mainSlice";
-import { getMemoListRequest, resetMemoList } from "./memoRoomSlice";
+import {
+  getMemoListRequest,
+  postSendMailRequest,
+  resetMemoList,
+} from "./memoRoomSlice";
 
 import styled from "styled-components";
 
@@ -14,6 +17,8 @@ import Header from "../../components/Header";
 import Profile from "../../components/Profile";
 import Button from "../../components/Button";
 import backIcon from "../../assets/images/back.png";
+import ModalContainer from "../../components/Modal";
+import TextInput from "../../components/TextInput";
 
 const MemoRoomContainer = styled.div`
   .memo-wrapper {
@@ -55,6 +60,7 @@ const MemoRoomContainer = styled.div`
 `;
 
 function MemoRoom() {
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const memos = useSelector((state) => state.memoRoom.memos);
   const memoRoomName = useSelector((state) => state.memoRoom.name);
   const userId = useSelector((state) => state.auth.id);
@@ -76,6 +82,18 @@ function MemoRoom() {
   memoList.forEach(([memoId, memoInfo]) => {
     memoTagInfo[memoId] = memoInfo.tags.join(",");
   });
+
+  function handleShareButtonClick() {
+    setIsShareModalOpen(!isShareModalOpen);
+  }
+
+  function handleInviteMailSubmit(event) {
+    event.preventDefault();
+
+    const { email } = event.target;
+
+    dispatch(postSendMailRequest({ userId, memoroomId, email: email.value }));
+  }
 
   function handleBackIconClick() {
     dispatch(resetNewMemoRoomId());
@@ -104,7 +122,27 @@ function MemoRoom() {
           {participants.map(({ id, name }) => (
             <Profile key={id} firstName={name[0]} />
           ))}
-          <Button text="share" color="#3E497A" width={100} />
+          <Button
+            text="share"
+            color="#3E497A"
+            width={100}
+            onClick={handleShareButtonClick}
+          />
+          <ModalContainer
+            isOpen={isShareModalOpen}
+            title="Invite Your Friends!"
+            onClose={setIsShareModalOpen}
+          >
+            <form onSubmit={handleInviteMailSubmit}>
+              <TextInput
+                type="email"
+                name="email"
+                placeholder="Please Enter Email"
+                width={200}
+              />
+              <Button text="SEND" width={100} />
+            </form>
+          </ModalContainer>
         </div>
       </div>
       <div className="sidebar"></div>

@@ -48,6 +48,33 @@ export const slice = createSlice({
       state.participants = [];
       state.memos = {};
     },
+    postSendMailRequest: (state) => {
+      state.isLoading = true;
+    },
+    postSendMailSuccess: (state) => {
+      state.isLoading = false;
+    },
+    postSendMailFailure: (state, action) => {
+      const { message } = action.payload;
+
+      state.isLoading = false;
+      state.error = message;
+    },
+    postVerifyTokenRequest: (state) => {
+      state.isLoading = true;
+    },
+    postVerifyTokenSuccess: (state, action) => {
+      const { userId } = action.payload;
+
+      state.isLoading = false;
+      state.participants.push(userId);
+    },
+    postVerifyTokenFailure: (state, action) => {
+      const { response } = action.payload;
+
+      state.isLoading = false;
+      state.error = response.data.error.message;
+    },
     joinRoom: (state, action) => {
       // 유저가 방에 참가 했을때
       // 해당 상태로 관리
@@ -60,6 +87,12 @@ export const {
   getMemoListSuccess,
   getMemoListFailure,
   resetMemoList,
+  postSendMailRequest,
+  postSendMailSuccess,
+  postSendMailFailure,
+  postVerifyTokenRequest,
+  postVerifyTokenSuccess,
+  postVerifyTokenFailure,
 } = slice.actions;
 
 export default slice.reducer;
