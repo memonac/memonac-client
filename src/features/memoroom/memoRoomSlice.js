@@ -5,6 +5,7 @@ export const slice = createSlice({
   initialState: {
     isLoading: false,
     error: "",
+    success: "",
     name: "",
     participants: [],
     memos: {},
@@ -51,8 +52,9 @@ export const slice = createSlice({
     postSendMailRequest: (state) => {
       state.isLoading = true;
     },
-    postSendMailSuccess: (state) => {
+    postSendMailSuccess: (state, action) => {
       state.isLoading = false;
+      state.success = action.payload;
     },
     postSendMailFailure: (state, action) => {
       const { message } = action.payload;
@@ -64,14 +66,13 @@ export const slice = createSlice({
       state.isLoading = true;
     },
     postVerifyTokenSuccess: (state, action) => {
-      const { userId } = action.payload;
+      const { userInfo } = action.payload;
 
       state.isLoading = false;
-      state.participants.push(userId);
+      state.participants.push(userInfo);
     },
     postVerifyTokenFailure: (state, action) => {
       const { response } = action.payload;
-
       state.isLoading = false;
       state.error = response.data.error.message;
     },

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { useLocation } from "react-router";
@@ -50,7 +50,7 @@ function VerifyInvitedUser() {
       {error.length && (
         <>
           <div className="error-title">{error}</div>
-          <Button text="Login" onClick={handleLoginButtonClick} width={200} />
+          <Button text="LOGIN" onClick={handleLoginButtonClick} width={200} />
         </>
       )}
     </NotificationContainer>

@@ -35,7 +35,7 @@ function* postSendMail({ payload }) {
     const serverResponse = yield call(nodemailerApi.postSendMail, payload);
 
     if (serverResponse.result === "success") {
-      yield put(postSendMailSuccess(serverResponse.data));
+      yield put(postSendMailSuccess(serverResponse.result));
     } else {
       yield put(postSendMailFailure(serverResponse.error));
     }
@@ -47,6 +47,7 @@ function* postSendMail({ payload }) {
 function* postVerifyToken({ payload }) {
   try {
     const serverResponse = yield call(nodemailerApi.postVerifyToken, payload);
+
     if (serverResponse.result === "success") {
       yield put(postVerifyTokenSuccess(serverResponse.data));
     } else {

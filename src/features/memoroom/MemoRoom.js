@@ -61,20 +61,41 @@ const MemoRoomContainer = styled.div`
 
 function MemoRoom() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
   const memos = useSelector((state) => state.memoRoom.memos);
   const memoRoomName = useSelector((state) => state.memoRoom.name);
   const userId = useSelector((state) => state.auth.id);
   const participants = useSelector((state) => state.memoRoom.participants);
-
-  const [isChatOpen, setIsChatOpen] = useState(false);
+  const error = useSelector((state) => state.memoRoom.error);
+  const success = useSelector((state) => state.memoRoom.success);
 
   const { memoroomId } = useParams();
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getMemoListRequest({ userId, memoroomId }));
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      setErrorMessage("❗️ Failed to send mail");
+    }
+
+    return () => setErrorMessage("");
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      setSuccessMessage(" Success to send mail 👍🏻 ");
+    }
+
+    return () => setSuccessMessage("");
+  }, [success]);
 
   const memoTagInfo = {};
   const memoList = Object.entries(memos);
@@ -91,8 +112,15 @@ function MemoRoom() {
     event.preventDefault();
 
     const { email } = event.target;
+    const participant = participants.find((user) => user.email === email.value);
 
-    dispatch(postSendMailRequest({ userId, memoroomId, email: email.value }));
+    if (!participant) {
+      dispatch(postSendMailRequest({ userId, memoroomId, email: email.value }));
+    }
+
+    if (participant) {
+      setErrorMessage("❗️ Already participated member");
+    }
   }
 
   function handleBackIconClick() {
@@ -133,6 +161,9 @@ function MemoRoom() {
             title="Invite Your Friends!"
             onClose={setIsShareModalOpen}
           >
+            <div className="notification">
+              ☝🏻 가입된 사용자만 초대할 수 있습니다
+            </div>
             <form onSubmit={handleInviteMailSubmit}>
               <TextInput
                 type="email"
@@ -142,6 +173,8 @@ function MemoRoom() {
               />
               <Button text="SEND" width={100} />
             </form>
+            <div>{errorMessage}</div>
+            <div>{successMessage}</div>
           </ModalContainer>
         </div>
       </div>
