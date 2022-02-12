@@ -2,6 +2,8 @@ import React from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 import ROUTES from "../constants/routes";
 import Login from "../features/auth/Login";
@@ -22,7 +24,14 @@ function App() {
         {loginStatus && (
           <>
             <Route path={ROUTES.home} element={<Main />} />
-            <Route path={ROUTES.detail} element={<MemoRoom />} />
+            <Route
+              path={ROUTES.detail}
+              element={
+                <DndProvider backend={HTML5Backend}>
+                  <MemoRoom />
+                </DndProvider>
+              }
+            />
           </>
         )}
         {!loginStatus && (

@@ -94,10 +94,9 @@ function Memo({ id, info, tag }) {
     );
   }
 
+  // 이 부분이 draggableMemo로 병합되어야 할 것 같음.
   return (
     <MemoContainer
-      left={info.location[0]}
-      top={info.location[1]}
       width={info.size[0]}
       height={info.size[1]}
       color={info.color}
