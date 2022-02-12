@@ -7,6 +7,7 @@ import styled from "styled-components";
 import close from "../assets/images/close.png";
 
 import { removeMemoRequest } from "../features/memoroom/memoRoomSlice";
+import AudioRecord from "./Audio";
 
 const MemoContainer = styled.div`
   display: flex;
@@ -74,6 +75,10 @@ const MemoContainer = styled.div`
     margin-top: 10px;
     margin-bottom: 20px;
   }
+
+  .voice {
+    margin: 90px;
+  }
 `;
 
 function Memo({ id, info, tag }) {
@@ -90,7 +95,7 @@ function Memo({ id, info, tag }) {
 
   const alarmDate = info.alarmDate;
 
-  function handleMemoAlarmDateChange(alarmDate) {
+  function changeMemoAlarmDate(alarmDate) {
     const date = new Date(alarmDate);
 
     return date.toLocaleString();
@@ -126,9 +131,14 @@ function Memo({ id, info, tag }) {
       {info.formType === "image" && (
         <div className="textarea-wrapper image"></div>
       )}
+      {info.formType === "voice" && (
+        <div className="textarea-wrapper voice">
+          <AudioRecord />
+        </div>
+      )}
       <div className="memo-info-wrapper">
         <p>#(Tag): {tag}</p>
-        {info.alarmDate && <p>{handleMemoAlarmDateChange(alarmDate)}</p>}
+        {info.alarmDate && <p>{changeMemoAlarmDate(alarmDate)}</p>}
       </div>
     </MemoContainer>
   );
