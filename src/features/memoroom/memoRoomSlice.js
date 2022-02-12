@@ -69,7 +69,7 @@ export const slice = createSlice({
       const { userInfo } = action.payload;
 
       state.isLoading = false;
-      state.participants.push(userInfo);
+      state.participants = userInfo;
     },
     postVerifyTokenFailure: (state, action) => {
       const { response } = action.payload;

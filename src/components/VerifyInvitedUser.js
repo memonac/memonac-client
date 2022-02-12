@@ -37,7 +37,7 @@ function VerifyInvitedUser() {
     dispatch(postVerifyTokenRequest({ memoroomId, token }));
   }, []);
 
-  if (user.length) {
+  if (user) {
     navigate(ROUTES.login);
   }
 
