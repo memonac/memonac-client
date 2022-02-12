@@ -31,11 +31,6 @@ function ErrorDisplay() {
   const errorMessage = useSelector((state) => state.auth.error);
 
   function handleHomeButtonClick() {
-    if (!navigate(-1)) {
-      navigate("/");
-      return;
-    }
-
     navigate(-1);
     dispatch(initiateErrorState());
   }
