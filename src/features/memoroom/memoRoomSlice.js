@@ -23,6 +23,7 @@ export const slice = createSlice({
       alarmDate: "2022-02-03",
       tags: ["good", "hello"]
     } */
+    chats: [],
     slackToken: "",
   },
   reducers: {
@@ -30,12 +31,13 @@ export const slice = createSlice({
       state.isLoading = true;
     },
     getMemoListSuccess: (state, action) => {
-      const { participants, memos, slackToken, name } = action.payload;
+      const { participants, memos, slackToken, name, chats } = action.payload;
 
       state.name = name;
       state.participants = participants;
       state.memos = memos;
       state.slackToken = slackToken;
+      state.chats = chats;
       state.isLoading = false;
     },
     getMemoListFailure: (state, action) => {
@@ -52,6 +54,15 @@ export const slice = createSlice({
       // 유저가 방에 참가 했을때
       // 해당 상태로 관리
     },
+    receiveMessage: (state, action) => {
+      const { user, message, date } = action.payload;
+
+      state.chats.push({
+        user,
+        message,
+        sendDate: date,
+      });
+    },
   },
 });
 
@@ -60,6 +71,7 @@ export const {
   getMemoListSuccess,
   getMemoListFailure,
   resetMemoList,
+  receiveMessage,
 } = slice.actions;
 
 export default slice.reducer;
