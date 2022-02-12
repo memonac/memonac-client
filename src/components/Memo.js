@@ -88,6 +88,14 @@ function Memo({ id, info, tag }) {
     setText(target.value);
   }
 
+  const alarmDate = info.alarmDate;
+
+  function handleMemoAlarmDateChange(alarmDate) {
+    const date = new Date(alarmDate);
+
+    return date.toLocaleString();
+  }
+
   function handleRemoveMemoClick() {
     dispatch(
       removeMemoRequest({ userId: currentUserId, memoroomId, memoId: id })
@@ -120,7 +128,7 @@ function Memo({ id, info, tag }) {
       )}
       <div className="memo-info-wrapper">
         <p>#(Tag): {tag}</p>
-        <p>{info.alarmDate}</p>
+        {info.alarmDate && <p>{handleMemoAlarmDateChange(alarmDate)}</p>}
       </div>
     </MemoContainer>
   );
