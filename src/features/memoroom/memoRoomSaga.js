@@ -19,8 +19,15 @@ import {
   updateMemoLocationRequest,
   updateMemoLocationSuccess,
   updateMemoLocationFailure,
+  postSendMailRequest,
+  postSendMailSuccess,
+  postSendMailFailure,
+  postVerifyTokenSuccess,
+  postVerifyTokenFailure,
+  postVerifyTokenRequest,
 } from "./memoRoomSlice";
 import memoApi from "../../utils/api/memo";
+import nodemailerApi from "../../utils/api/nodemailer";
 
 function* getMemoList({ payload }) {
   try {
@@ -78,6 +85,34 @@ function* updateMemoLocation({ payload }) {
   }
 }
 
+function* postSendMail({ payload }) {
+  try {
+    const serverResponse = yield call(nodemailerApi.postSendMail, payload);
+
+    if (serverResponse.result === "success") {
+      yield put(postSendMailSuccess(serverResponse.result));
+    } else {
+      yield put(postSendMailFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(postSendMailFailure(err));
+  }
+}
+
+function* postVerifyToken({ payload }) {
+  try {
+    const serverResponse = yield call(nodemailerApi.postVerifyToken, payload);
+
+    if (serverResponse.result === "success") {
+      yield put(postVerifyTokenSuccess(serverResponse.data));
+    } else {
+      yield put(postVerifyTokenFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(postVerifyTokenFailure(err));
+  }
+}
+
 function* getMemoRoomWatcher() {
   yield takeEvery(getMemoListRequest, getMemoList);
 }
@@ -94,11 +129,21 @@ function* updateMemoLocationWatcher() {
   yield takeLatest(updateMemoLocationRequest, updateMemoLocation);
 }
 
+function* watchPostSendMail() {
+  yield takeLatest(postSendMailRequest, postSendMail);
+}
+
+function* watchPostVerifyToken() {
+  yield takeLatest(postVerifyTokenRequest, postVerifyToken);
+}
+
 export function* memoRoomSaga() {
   yield all([
     fork(getMemoRoomWatcher),
     fork(addNewMemoWatcher),
     fork(removeMemoWatcher),
     fork(updateMemoLocationWatcher),
+    fork(watchPostSendMail),
+    fork(watchPostVerifyToken),
   ]);
 }

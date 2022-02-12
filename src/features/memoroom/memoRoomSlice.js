@@ -5,8 +5,9 @@ export const slice = createSlice({
   initialState: {
     isLoading: false,
     error: "",
+    success: "",
     name: "",
-    participants: [],
+    participants: {},
     memos: {},
     /*
     id: {
@@ -96,6 +97,34 @@ export const slice = createSlice({
       // 유저가 방에 참가 했을때
       // 해당 상태로 관리
     },
+    postSendMailRequest: (state) => {
+      state.isLoading = true;
+    },
+    postSendMailSuccess: (state, action) => {
+      state.isLoading = false;
+      state.success = action.payload;
+    },
+    postSendMailFailure: (state, action) => {
+      const { message } = action.payload;
+
+      state.isLoading = false;
+      state.error = message;
+    },
+    postVerifyTokenRequest: (state) => {
+      state.isLoading = true;
+    },
+    postVerifyTokenSuccess: (state, action) => {
+      const { userInfo } = action.payload;
+
+      state.isLoading = false;
+      state.participants = userInfo;
+    },
+    postVerifyTokenFailure: (state, action) => {
+      const { response } = action.payload;
+
+      state.isLoading = false;
+      state.error = response.data.error.message;
+    },
   },
 });
 
@@ -114,6 +143,12 @@ export const {
   updateMemoLocationSuccess,
   updateMemoLocationFailure,
   resetMemoList,
+  postSendMailRequest,
+  postSendMailSuccess,
+  postSendMailFailure,
+  postVerifyTokenRequest,
+  postVerifyTokenSuccess,
+  postVerifyTokenFailure,
 } = slice.actions;
 
 export default slice.reducer;

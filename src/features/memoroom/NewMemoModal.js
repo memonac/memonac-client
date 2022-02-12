@@ -210,10 +210,10 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
   );
 }
 
-export default NewMemoModal;
-
 NewMemoModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.func.isRequired,
   roomId: PropTypes.string.isRequired,
 };
+
+export default NewMemoModal;

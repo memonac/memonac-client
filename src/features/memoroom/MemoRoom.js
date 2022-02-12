@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { resetNewMemoRoomId } from "../main/mainSlice";
 import Button from "../../components/Button";
 import NewMemoModal from "./NewMemoModal";
-import { getMemoListRequest, resetMemoList } from "./memoRoomSlice";
+import { getMemoListRequest, resetMemoList, postSendMailRequest } from "./memoRoomSlice";
 import { updateMemoLocationRequest } from "../memoroom/memoRoomSlice";
 
 import Memo from "../../components/Memo";
@@ -15,6 +15,8 @@ import Header from "../../components/Header";
 import Profile from "../../components/Profile";
 import { DraggableMemo } from "../../components/DraggableMemo";
 import backIcon from "../../assets/images/back.png";
+import ModalContainer from "../../components/Modal";
+import TextInput from "../../components/TextInput";
 
 const MemoRoomContainer = styled.div`
   .memo-wrapper {
@@ -59,21 +61,41 @@ const MemoRoomContainer = styled.div`
 function MemoRoom() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
-  const { memoroomId } = useParams();
-
+  const error = useSelector((state) => state.memoRoom.error);
+  const success = useSelector((state) => state.memoRoom.success);
   const memos = useSelector((state) => state.memoRoom.memos);
 
   const memoRoomName = useSelector((state) => state.memoRoom.name);
   const userId = useSelector((state) => state.auth.id);
   const participants = useSelector((state) => state.memoRoom.participants);
 
+  const { memoroomId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getMemoListRequest({ userId, memoroomId }));
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      setErrorMessage("❗️ Failed to send mail");
+    }
+
+    return () => setErrorMessage("");
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      setSuccessMessage(" Success to send mail 👍🏻 ");
+    }
+
+    return () => setSuccessMessage("");
+  }, [success]);
 
   const memoTagInfo = {};
   const memoList = Object.entries(memos);
@@ -107,6 +129,27 @@ function MemoRoom() {
     }),
     [moveMemo]
   );
+  
+  function handleShareButtonClick() {
+    setIsShareModalOpen(!isShareModalOpen);
+  }
+
+  function handleInvitationMailSubmit(event) {
+    event.preventDefault();
+
+    const { email } = event.target;
+    const participant = Object.entries(participants).find(([id, data]) => {
+      email.value === data.email;
+    });
+
+    if (!participant) {
+      dispatch(postSendMailRequest({ userId, memoroomId, email: email.value }));
+
+      return;
+    }
+
+    setErrorMessage("❗️ Already participated member");
+  }
 
   function handleBackIconClick() {
     dispatch(resetNewMemoRoomId());
@@ -149,7 +192,32 @@ function MemoRoom() {
           {Object.entries(participants).map(([id, data]) => (
             <Profile key={id} firstName={data.name[0]} />
           ))}
-          <Button text="share" color="#3E497A" width={100} />
+          <Button
+            text="share"
+            color="#3E497A"
+            width={100}
+            onClick={handleShareButtonClick}
+          />
+          <ModalContainer
+            isOpen={isShareModalOpen}
+            title="Invite Your Friends!"
+            onClose={setIsShareModalOpen}
+          >
+            <div className="notification">
+              ☝🏻 가입된 사용자만 초대할 수 있습니다
+            </div>
+            <form onSubmit={handleInvitationMailSubmit}>
+              <TextInput
+                type="email"
+                name="email"
+                placeholder="Please Enter Email"
+                width={200}
+              />
+              <Button text="SEND" width={100} />
+            </form>
+            <div>{errorMessage}</div>
+            <div>{successMessage}</div>
+          </ModalContainer>
         </div>
       </div>
       <div className="sidebar"></div>
