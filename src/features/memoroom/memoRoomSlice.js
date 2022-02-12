@@ -9,12 +9,6 @@ export const slice = createSlice({
     name: "",
     participants: {},
     memos: {},
-    /*
-    id: {
-      userName: "userUser",
-      email: "rhrnakajrw@gmail.com",
-      isPending: true,
-    }
     /* memoId: {
       formType: "text",
       content: "abcdefg",
@@ -24,6 +18,7 @@ export const slice = createSlice({
       alarmDate: "2022-02-03 00:00",
       tags: ["good", "hello"]
     } */
+    chats: [],
     slackToken: "",
   },
   reducers: {
@@ -31,12 +26,13 @@ export const slice = createSlice({
       state.isLoading = true;
     },
     getMemoListSuccess: (state, action) => {
-      const { participants, memos, slackToken, name } = action.payload;
+      const { participants, memos, slackToken, name, chats } = action.payload;
 
       state.name = name;
       state.participants = participants;
       state.memos = memos;
       state.slackToken = slackToken;
+      state.chats = chats;
       state.isLoading = false;
     },
     getMemoListFailure: (state, action) => {
@@ -125,6 +121,15 @@ export const slice = createSlice({
       state.isLoading = false;
       state.error = response.data.error.message;
     },
+    receiveMessage: (state, action) => {
+      const { user, message, date } = action.payload;
+
+      state.chats.push({
+        user,
+        message,
+        sendDate: date,
+      });
+    },
   },
 });
 
@@ -143,6 +148,7 @@ export const {
   updateMemoLocationSuccess,
   updateMemoLocationFailure,
   resetMemoList,
+  receiveMessage,
   postSendMailRequest,
   postSendMailSuccess,
   postSendMailFailure,
