@@ -24,7 +24,7 @@ const ErrorContainer = styled.div`
   }
 `;
 
-function Error() {
+function ErrorDisplay() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -44,4 +44,4 @@ function Error() {
   );
 }
 
-export default Error;
+export default ErrorDisplay;

@@ -70,7 +70,7 @@ const SubmitButtonContainer = styled.div`
 function NewMemoModal({ isOpen, setIsOpen, roomId }) {
   const [isImageType, setIsImageType] = useState(false);
   const [hasInputError, setHasInputError] = useState(false);
-  const [uploadedImage, setUploadedImage] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState(undefined);
 
   const currentUserId = useSelector((state) => state.auth.id);
   const dispatch = useDispatch();
@@ -90,25 +90,23 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
       alarmDate?.value &&
       new Date(`${alarmDate.value} ${alarmTime.value}`) <= new Date()
     ) {
-      setHasInputError("Alarm Date cannot be later then now.");
+      setHasInputError("Alarm Date cannot be faster then now.");
       return;
     }
 
     const formData = new FormData();
-    formData.append("file", uploadedImage);
+    formData.append("memoRoomId", roomId);
+    formData.append("author", currentUserId);
+    formData.append("memoType", memoType.value);
+    formData.append("imageFile", uploadedImage);
+    formData.append("memoColor", memoColor.value);
+    formData.append("alarmDate", alarmDate?.value);
+    formData.append("alarmTime", alarmTime?.value);
+    formData.append("memoTags", memoTags.value);
 
-    dispatch(
-      addNewMemoRequest({
-        memoRoomId: roomId,
-        author: currentUserId,
-        memoType: memoType.value,
-        imageFile: formData,
-        memoColor: memoColor.value,
-        alarmDate: alarmDate?.value,
-        alarmTime: alarmTime?.value,
-        memoTags: memoTags.value,
-      })
-    );
+    dispatch(addNewMemoRequest(formData));
+
+    setIsOpen(false);
   }
 
   function handleUploadFileChange(event) {
@@ -162,7 +160,14 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
             voice
           </div>
           <div>
-            {isImageType && <input type="file" name="imageFile" onChange={handleUploadFileChange} required />}
+            {isImageType && (
+              <input
+                type="file"
+                name="imageFile"
+                onChange={handleUploadFileChange}
+                required
+              />
+            )}
           </div>
         </MemoOptionContainer>
         <MemoOptionContainer>

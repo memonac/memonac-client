@@ -48,17 +48,14 @@ export const slice = createSlice({
     addNewMemoSuccess: (state, action) => {
       const { newMemo } = action.payload;
 
-      state.memos = {
-        ...state.memos,
-        [newMemo._id]: {
-          formType: newMemo.formType,
-          content: newMemo.content,
-          location: newMemo.location,
-          size: newMemo.size,
-          color: newMemo.color,
-          alarmDate: newMemo.alarmDate,
-          tags: newMemo.tags,
-        },
+      state.memos[newMemo._id] = {
+        formType: newMemo.formType,
+        content: newMemo.content,
+        location: newMemo.location,
+        size: newMemo.size,
+        color: newMemo.color,
+        alarmDate: newMemo.alarmDate,
+        tags: newMemo.tags,
       };
       state.isLoading = false;
     },
@@ -71,6 +68,17 @@ export const slice = createSlice({
       state.name = "";
       state.participants = [];
       state.memos = {};
+    },
+    removeMemoRequest: (state) => {
+      state.isLoading = true;
+    },
+    removeMemoSuccess: (state, action) => {
+      state.isLoading = false;
+      delete state.memos[action.payload];
+    },
+    removeMemoFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
     },
     joinRoom: (state, action) => {
       // 유저가 방에 참가 했을때
@@ -86,6 +94,9 @@ export const {
   addNewMemoRequest,
   addNewMemoSuccess,
   addNewMemoFailure,
+  removeMemoRequest,
+  removeMemoSuccess,
+  removeMemoFailure,
   resetMemoList,
 } = slice.actions;
 
