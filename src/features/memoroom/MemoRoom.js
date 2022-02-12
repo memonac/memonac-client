@@ -4,13 +4,16 @@ import { useParams, useNavigate } from "react-router";
 import styled from "styled-components";
 
 import { resetNewMemoRoomId } from "../main/mainSlice";
-import Button from "../../components/Button";
-import NewMemoModal from "./NewMemoModal";
 import {
   getMemoListRequest,
   resetMemoList,
   postSendMailRequest,
+  receiveMessage,
 } from "./memoRoomSlice";
+import { memoRoomSocket } from "../../app/socketSaga";
+
+import Button from "../../components/Button";
+import NewMemoModal from "./NewMemoModal";
 
 import Memo from "../../components/Memo";
 import Header from "../../components/Header";
@@ -18,6 +21,8 @@ import Profile from "../../components/Profile";
 import backIcon from "../../assets/images/back.png";
 import ModalContainer from "../../components/Modal";
 import TextInput from "../../components/TextInput";
+
+import ChatSideBar from "../../components/ChatSideBar";
 
 const MemoRoomContainer = styled.div`
   .memo-wrapper {
@@ -43,16 +48,6 @@ const MemoRoomContainer = styled.div`
     width: 20px;
   }
 
-  .sidebar {
-    position: absolute;
-    z-index: 1;
-    width: 300px;
-    height: 500px;
-    left: ${(props) => (props.chatState ? 5 : -400)}px;
-    background-color: #ffffff;
-    transition: 1s;
-  }
-
   .content-box {
     height: 100%;
   }
@@ -71,6 +66,9 @@ function MemoRoom() {
   const memoRoomName = useSelector((state) => state.memoRoom.name);
   const userId = useSelector((state) => state.auth.id);
   const participants = useSelector((state) => state.memoRoom.participants);
+  const userName = useSelector((state) => state.auth.name);
+  const chats = useSelector((state) => state.memoRoom.chats);
+  const [inputInfo, setinputInfo] = useState({});
 
   const { memoroomId } = useParams();
   const navigate = useNavigate();
@@ -78,7 +76,16 @@ function MemoRoom() {
 
   useEffect(() => {
     dispatch(getMemoListRequest({ userId, memoroomId }));
+    memoRoomSocket.join(userId, userName, memoroomId);
   }, []);
+
+  useEffect(() => {
+    if (!inputInfo.message) {
+      return;
+    }
+
+    memoRoomSocket.sendMessage(inputInfo.message, inputInfo.date);
+  }, [inputInfo.message, inputInfo.date]);
 
   useEffect(() => {
     if (error) {
@@ -126,6 +133,7 @@ function MemoRoom() {
   }
 
   function handleBackIconClick() {
+    memoRoomSocket.leave(memoroomId);
     dispatch(resetNewMemoRoomId());
     dispatch(resetMemoList());
     navigate("/");
@@ -133,6 +141,25 @@ function MemoRoom() {
 
   function handleChatButtonClick() {
     setIsChatOpen(!isChatOpen);
+  }
+
+  function handleSendMessageSubmit(event) {
+    event.preventDefault();
+
+    const inputMessage = event.target.message.value;
+    const date = new Date();
+    dispatch(
+      receiveMessage({
+        user: {
+          id: userId,
+          name: userName,
+        },
+        message: inputMessage,
+        date: date,
+      })
+    );
+    setinputInfo({ message: inputMessage, date });
+    event.target.message.value = "";
   }
 
   function handleNewMemoModalClick() {
@@ -144,7 +171,7 @@ function MemoRoom() {
   }
 
   return (
-    <MemoRoomContainer chatState={isChatOpen}>
+    <MemoRoomContainer>
       <Header title={memoRoomName} left={back} />
       <div className="nav">
         <div>
@@ -194,7 +221,12 @@ function MemoRoom() {
           </ModalContainer>
         </div>
       </div>
-      <div className="sidebar"></div>
+      <ChatSideBar
+        onSubmitInputText={handleSendMessageSubmit}
+        chatList={chats}
+        isOpen={isChatOpen}
+        currentUserId={userId}
+      />
       <div className="memo-wrapper">
         {memoList.map(([memoId, memoInfo]) => {
           return (
