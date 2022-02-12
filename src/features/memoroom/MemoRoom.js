@@ -8,7 +8,7 @@ import { resetNewMemoRoomId } from "../main/mainSlice";
 import Button from "../../components/Button";
 import NewMemoModal from "./NewMemoModal";
 import { getMemoListRequest, resetMemoList } from "./memoRoomSlice";
-import { changeMemoLocation } from "../memoroom/memoRoomSlice";
+import { updateMemoLocationRequest } from "../memoroom/memoRoomSlice";
 
 import Memo from "../../components/Memo";
 import Header from "../../components/Header";
@@ -19,7 +19,8 @@ import backIcon from "../../assets/images/back.png";
 const MemoRoomContainer = styled.div`
   .memo-wrapper {
     position: relative;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
   }
 
   .nav {
@@ -61,16 +62,6 @@ function MemoRoom() {
 
   const { memoroomId } = useParams();
 
-  // 전체 메모들 (내 예시에서는 boxData)
-  /* memoId: {
-      formType: "text",
-      content: "abcdefg",
-      location: [x, y],
-      size: [120, 100],
-      color: "red",
-      alarmDate: "2022-02-03 00:00",
-      tags: ["good", "hello"]
-    } */
   const memos = useSelector((state) => state.memoRoom.memos);
 
   const memoRoomName = useSelector((state) => state.memoRoom.name);
@@ -86,7 +77,6 @@ function MemoRoom() {
 
   const memoTagInfo = {};
   const memoList = Object.entries(memos);
-  // const memoList = Object.entries(memosLocation);
   const back = <img onClick={handleBackIconClick} src={backIcon}></img>;
 
   memoList.forEach(([memoId, memoInfo]) => {
@@ -95,16 +85,9 @@ function MemoRoom() {
 
   const moveMemo = useCallback(
     (id, left, top) => {
-      // setMemosLocation({
-      //   ...memosLocation,
-      //   [id]: {
-      //     ...memosLocation[id],
-      //     location: [left, top],
-      //   },
-      // });
-      
-      console.log("moveMemo 함수 안..", id, left, top);
-      dispatch(changeMemoLocation({ id, left, top }));
+      dispatch(
+        updateMemoLocationRequest({ userId, memoroomId, memoId: id, left, top })
+      );
     },
     [memos]
   );
@@ -113,8 +96,6 @@ function MemoRoom() {
     () => ({
       accept: "memo",
       drop(item, monitor) {
-        console.log(item);
-
         const delta = monitor.getDifferenceFromInitialOffset();
         const left = Math.round(item.left + delta.x);
         const top = Math.round(item.top + delta.y);
@@ -173,21 +154,16 @@ function MemoRoom() {
       </div>
       <div className="sidebar"></div>
       <div className="memo-wrapper" ref={drop}>
-        {memoList.map(([memoId, memoInfo]) => {
-          console.log("memo left", memoInfo.location[0]);
-          console.log("memo top", memoInfo.location[1]);
-
-          return (
-            <DraggableMemo
-              key={memoId}
-              id={memoId}
-              left={memoInfo.location[0]}
-              top={memoInfo.location[1]}
-            >
-              <Memo id={memoId} info={memoInfo} tag={memoTagInfo[memoId]} />
-            </DraggableMemo>
-          );
-        })}
+        {memoList.map(([memoId, memoInfo]) => (
+          <DraggableMemo
+            key={memoId}
+            id={memoId}
+            left={memoInfo.location[0]}
+            top={memoInfo.location[1]}
+          >
+            <Memo id={memoId} info={memoInfo} tag={memoTagInfo[memoId]} />
+          </DraggableMemo>
+        ))}
       </div>
     </MemoRoomContainer>
   );

@@ -34,4 +34,25 @@ memoApi.removeNewMemo = async ({ userId, memoroomId, memoId }) => {
   return response.data;
 };
 
+memoApi.updateMemoLocation = async ({
+  userId,
+  memoroomId,
+  memoId,
+  left,
+  top,
+}) => {
+  const response = await axios.put(
+    `users/${userId}/memorooms/${memoroomId}/memos/${memoId}/location`,
+    {
+      left,
+      top,
+    },
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};
+
 export default memoApi;
