@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from "react";
-
+import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
 
 import { resetNewMemoRoomId } from "../main/mainSlice";
+import Button from "../../components/Button";
+import NewMemoModal from "./NewMemoModal";
 import {
   getMemoListRequest,
-  postSendMailRequest,
   resetMemoList,
+  postSendMailRequest,
 } from "./memoRoomSlice";
-
-import styled from "styled-components";
 
 import Memo from "../../components/Memo";
 import Header from "../../components/Header";
 import Profile from "../../components/Profile";
-import Button from "../../components/Button";
 import backIcon from "../../assets/images/back.png";
 import ModalContainer from "../../components/Modal";
 import TextInput from "../../components/TextInput";
@@ -60,20 +59,20 @@ const MemoRoomContainer = styled.div`
 `;
 
 function MemoRoom() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [isChatOpen, setIsChatOpen] = useState(false);
 
+  const error = useSelector((state) => state.memoRoom.error);
+  const success = useSelector((state) => state.memoRoom.success);
   const memos = useSelector((state) => state.memoRoom.memos);
   const memoRoomName = useSelector((state) => state.memoRoom.name);
   const userId = useSelector((state) => state.auth.id);
   const participants = useSelector((state) => state.memoRoom.participants);
-  const error = useSelector((state) => state.memoRoom.error);
-  const success = useSelector((state) => state.memoRoom.success);
 
   const { memoroomId } = useParams();
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -99,6 +98,7 @@ function MemoRoom() {
 
   const memoTagInfo = {};
   const memoList = Object.entries(memos);
+  const back = <img onClick={handleBackIconClick} src={backIcon}></img>;
 
   memoList.forEach(([memoId, memoInfo]) => {
     memoTagInfo[memoId] = memoInfo.tags.join(",");
@@ -135,7 +135,13 @@ function MemoRoom() {
     setIsChatOpen(!isChatOpen);
   }
 
-  const back = <img onClick={handleBackIconClick} src={backIcon}></img>;
+  function handleNewMemoModalClick() {
+    setIsModalOpen(true);
+  }
+
+  function handleModalCloseClick() {
+    setIsModalOpen(false);
+  }
 
   return (
     <MemoRoomContainer chatState={isChatOpen}>
@@ -147,6 +153,14 @@ function MemoRoom() {
             text={`Chat ${isChatOpen ? "Close" : "Open"}`}
             width={100}
           />
+          <Button text="New" width={100} onClick={handleNewMemoModalClick} />
+          {isModalOpen && (
+            <NewMemoModal
+              roomId={memoroomId}
+              isOpen={isModalOpen}
+              setIsOpen={handleModalCloseClick}
+            />
+          )}
         </div>
         <div className="profile-wrapper">
           {Object.entries(participants).map(([id, data]) => (
@@ -182,9 +196,16 @@ function MemoRoom() {
       </div>
       <div className="sidebar"></div>
       <div className="memo-wrapper">
-        {memoList.map(([memoId, memoInfo]) => (
-          <Memo key={memoId} info={memoInfo} tag={memoTagInfo[memoId]} />
-        ))}
+        {memoList.map(([memoId, memoInfo]) => {
+          return (
+            <Memo
+              key={memoId}
+              id={memoId}
+              info={memoInfo}
+              tag={memoTagInfo[memoId]}
+            />
+          );
+        })}
       </div>
     </MemoRoomContainer>
   );
