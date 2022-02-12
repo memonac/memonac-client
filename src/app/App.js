@@ -8,7 +8,8 @@ import Login from "../features/auth/Login";
 import Signup from "../features/auth/Signup";
 import Main from "../features/main/Main";
 import MemoRoom from "../features/memoroom/MemoRoom";
-import Error from "../components/Error";
+import VerifyInvitedUser from "../components/VerifyInvitedUser";
+import ErrorDisplay from "../components/ErrorDisplay";
 import GlobalStyles from "../utils/GlobalStyles";
 import theme from "../utils/theme";
 
@@ -33,8 +34,12 @@ function App() {
         )}
         <Route path={ROUTES.login} element={<Login />} />
         <Route path={ROUTES.signup} element={<Signup />} />
-        <Route path={ROUTES.error} element={<Error />} />
-        <Route path={ROUTES.notFound} element={<Error text="Not Found" />} />
+        <Route path={ROUTES.invite} element={<VerifyInvitedUser />} />
+        <Route path={ROUTES.error} element={<ErrorDisplay />} />
+        <Route
+          path={ROUTES.notFound}
+          element={<ErrorDisplay text="Not Found" />}
+        />
       </Routes>
     </ThemeProvider>
   );

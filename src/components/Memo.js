@@ -1,8 +1,12 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router";
 
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import close from "../assets/images/close.png";
+
+import { removeMemoRequest } from "../features/memoroom/memoRoomSlice";
 
 const MemoContainer = styled.div`
   display: flex;
@@ -18,7 +22,7 @@ const MemoContainer = styled.div`
   max-width: 500px;
   max-height: 500px;
   background-color: ${(props) => props.color};
-  box-shadow: 10px 10px 24px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 10px 10px 24px 0px rgba(0, 0, 0, 0.25);
   resize: both;
 
   .close {
@@ -72,11 +76,22 @@ const MemoContainer = styled.div`
   }
 `;
 
-function Memo({ info, tag }) {
+function Memo({ id, info, tag }) {
   const [text, setText] = useState(info.content);
 
-  function handleMeomTextChange({ target }) {
+  const dispatch = useDispatch();
+  const { memoroomId } = useParams();
+
+  const currentUserId = useSelector((state) => state.auth.id);
+
+  function handleMemoTextChange({ target }) {
     setText(target.value);
+  }
+
+  function handleRemoveMemoClick() {
+    dispatch(
+      removeMemoRequest({ userId: currentUserId, memoroomId, memoId: id })
+    );
   }
 
   return (
@@ -86,17 +101,17 @@ function Memo({ info, tag }) {
       width={info.size[0]}
       height={info.size[1]}
       color={info.color}
-      imageUrl={info.imageUrl}
+      imageUrl={info.content}
     >
       <div>
-        <img className="close" src={close} />
+        <img className="close" src={close} onClick={handleRemoveMemoClick} />
       </div>
       {info.formType === "text" && (
         <div className="textarea-wrapper">
           <textarea
             placeholder="Write.."
             value={text}
-            onChange={handleMeomTextChange}
+            onChange={handleMemoTextChange}
           />
         </div>
       )}
@@ -112,13 +127,14 @@ function Memo({ info, tag }) {
 }
 
 Memo.propTypes = {
+  id: PropTypes.string.isRequired,
   info: PropTypes.shape({
     location: PropTypes.array.isRequired,
     size: PropTypes.array.isRequired,
     color: PropTypes.string.isRequired,
     formType: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-    alarmDate: PropTypes.string.isRequired,
+    content: PropTypes.string,
+    alarmDate: PropTypes.string,
   }).isRequired,
   tag: PropTypes.string.isRequired,
 };

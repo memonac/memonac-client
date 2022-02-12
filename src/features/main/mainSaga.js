@@ -17,13 +17,14 @@ import mainApi from "../../utils/api/main";
 
 function* getMemoRoomList({ payload }) {
   const { userId } = payload;
+  if (payload) {
+    try {
+      const memoRoomList = yield call(mainApi.getMemoRoomList, userId);
 
-  try {
-    const memoRoomList = yield call(mainApi.getMemoRoomList, userId);
-
-    yield put(getMemoRoomListSuccess(memoRoomList.data));
-  } catch (err) {
-    yield put(getMemoRoomListFailure(err));
+      yield put(getMemoRoomListSuccess(memoRoomList.data));
+    } catch (err) {
+      yield put(getMemoRoomListFailure(err));
+    }
   }
 }
 

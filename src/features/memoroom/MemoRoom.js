@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from "react";
-
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
+import styled from "styled-components";
 
 import { resetNewMemoRoomId } from "../main/mainSlice";
 import {
   getMemoListRequest,
   resetMemoList,
+  postSendMailRequest,
   receiveMessage,
 } from "./memoRoomSlice";
 import { memoRoomSocket } from "../../app/socketSaga";
 
-import styled from "styled-components";
+import Button from "../../components/Button";
+import NewMemoModal from "./NewMemoModal";
 
 import Memo from "../../components/Memo";
 import Header from "../../components/Header";
 import Profile from "../../components/Profile";
-import Button from "../../components/Button";
 import backIcon from "../../assets/images/back.png";
+import ModalContainer from "../../components/Modal";
+import TextInput from "../../components/TextInput";
 
 import ChatSideBar from "../../components/ChatSideBar";
 
@@ -52,14 +54,20 @@ const MemoRoomContainer = styled.div`
 `;
 
 function MemoRoom() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
+  const error = useSelector((state) => state.memoRoom.error);
+  const success = useSelector((state) => state.memoRoom.success);
   const memos = useSelector((state) => state.memoRoom.memos);
   const memoRoomName = useSelector((state) => state.memoRoom.name);
   const userId = useSelector((state) => state.auth.id);
   const participants = useSelector((state) => state.memoRoom.participants);
   const userName = useSelector((state) => state.auth.name);
   const chats = useSelector((state) => state.memoRoom.chats);
-
-  const [isChatOpen, setIsChatOpen] = useState(false);
   const [inputInfo, setinputInfo] = useState({});
 
   const { memoroomId } = useParams();
@@ -79,12 +87,50 @@ function MemoRoom() {
     memoRoomSocket.sendMessage(inputInfo.message, inputInfo.date);
   }, [inputInfo.message, inputInfo.date]);
 
+  useEffect(() => {
+    if (error) {
+      setErrorMessage("❗️ Failed to send mail");
+    }
+
+    return () => setErrorMessage("");
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      setSuccessMessage(" Success to send mail 👍🏻 ");
+    }
+
+    return () => setSuccessMessage("");
+  }, [success]);
+
   const memoTagInfo = {};
   const memoList = Object.entries(memos);
+  const back = <img onClick={handleBackIconClick} src={backIcon}></img>;
 
   memoList.forEach(([memoId, memoInfo]) => {
     memoTagInfo[memoId] = memoInfo.tags.join(",");
   });
+
+  function handleShareButtonClick() {
+    setIsShareModalOpen(!isShareModalOpen);
+  }
+
+  function handleInvitationMailSubmit(event) {
+    event.preventDefault();
+
+    const { email } = event.target;
+    const participant = Object.entries(participants).find(([id, data]) => {
+      email.value === data.email;
+    });
+
+    if (!participant) {
+      dispatch(postSendMailRequest({ userId, memoroomId, email: email.value }));
+
+      return;
+    }
+
+    setErrorMessage("❗️ Already participated member");
+  }
 
   function handleBackIconClick() {
     memoRoomSocket.leave(memoroomId);
@@ -116,7 +162,13 @@ function MemoRoom() {
     event.target.message.value = "";
   }
 
-  const back = <img onClick={handleBackIconClick} src={backIcon}></img>;
+  function handleNewMemoModalClick() {
+    setIsModalOpen(true);
+  }
+
+  function handleModalCloseClick() {
+    setIsModalOpen(false);
+  }
 
   return (
     <MemoRoomContainer>
@@ -128,12 +180,45 @@ function MemoRoom() {
             text={`Chat ${isChatOpen ? "Close" : "Open"}`}
             width={100}
           />
+          <Button text="New" width={100} onClick={handleNewMemoModalClick} />
+          {isModalOpen && (
+            <NewMemoModal
+              roomId={memoroomId}
+              isOpen={isModalOpen}
+              setIsOpen={handleModalCloseClick}
+            />
+          )}
         </div>
         <div className="profile-wrapper">
-          {participants.map(({ id, name }) => (
-            <Profile key={id} firstName={name[0]} />
+          {Object.entries(participants).map(([id, data]) => (
+            <Profile key={id} firstName={data.name[0]} />
           ))}
-          <Button text="share" color="#3E497A" width={100} />
+          <Button
+            text="share"
+            color="#3E497A"
+            width={100}
+            onClick={handleShareButtonClick}
+          />
+          <ModalContainer
+            isOpen={isShareModalOpen}
+            title="Invite Your Friends!"
+            onClose={setIsShareModalOpen}
+          >
+            <div className="notification">
+              ☝🏻 가입된 사용자만 초대할 수 있습니다
+            </div>
+            <form onSubmit={handleInvitationMailSubmit}>
+              <TextInput
+                type="email"
+                name="email"
+                placeholder="Please Enter Email"
+                width={200}
+              />
+              <Button text="SEND" width={100} />
+            </form>
+            <div>{errorMessage}</div>
+            <div>{successMessage}</div>
+          </ModalContainer>
         </div>
       </div>
       <ChatSideBar
@@ -143,9 +228,16 @@ function MemoRoom() {
         currentUserId={userId}
       />
       <div className="memo-wrapper">
-        {memoList.map(([memoId, memoInfo]) => (
-          <Memo key={memoId} info={memoInfo} tag={memoTagInfo[memoId]} />
-        ))}
+        {memoList.map(([memoId, memoInfo]) => {
+          return (
+            <Memo
+              key={memoId}
+              id={memoId}
+              info={memoInfo}
+              tag={memoTagInfo[memoId]}
+            />
+          );
+        })}
       </div>
     </MemoRoomContainer>
   );
