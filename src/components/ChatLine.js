@@ -63,6 +63,7 @@ ChatLine.propTypes = {
   isMine: PropTypes.bool.isRequired,
   userName: PropTypes.string.isRequired,
   comment: PropTypes.string.isRequired,
+  date: PropTypes.string.isRequired,
 };
 
 export default ChatLine;
