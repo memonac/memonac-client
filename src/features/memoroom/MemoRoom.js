@@ -108,21 +108,21 @@ function MemoRoom() {
     setIsShareModalOpen(!isShareModalOpen);
   }
 
-  function handleInviteMailSubmit(event) {
+  function handleInvitationMailSubmit(event) {
     event.preventDefault();
 
     const { email } = event.target;
     const participant = Object.entries(participants).find(([id, data]) => {
-      return email.value === data.email;
+      email.value === data.email;
     });
 
     if (!participant) {
       dispatch(postSendMailRequest({ userId, memoroomId, email: email.value }));
+
+      return;
     }
 
-    if (participant) {
-      setErrorMessage("❗️ Already participated member");
-    }
+    setErrorMessage("❗️ Already participated member");
   }
 
   function handleBackIconClick() {
@@ -180,7 +180,7 @@ function MemoRoom() {
             <div className="notification">
               ☝🏻 가입된 사용자만 초대할 수 있습니다
             </div>
-            <form onSubmit={handleInviteMailSubmit}>
+            <form onSubmit={handleInvitationMailSubmit}>
               <TextInput
                 type="email"
                 name="email"
