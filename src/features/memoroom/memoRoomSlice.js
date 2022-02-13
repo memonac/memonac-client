@@ -77,6 +77,11 @@ export const slice = createSlice({
 
       state.memos[memoId].location = [left, top];
     },
+    updateMemoSize: (state, action) => {
+      const { memoId, width, height } = action.payload;
+
+      state.memos[memoId].size = [width, height];
+    },
     joinRoom: (state, action) => {
       // 유저가 방에 참가 했을때
       // 해당 상태로 관리
@@ -130,6 +135,7 @@ export const {
   addNewMemoFailure,
   removeMemo,
   updateMemoLocation,
+  updateMemoSize,
   resetMemoList,
   receiveMessage,
   postSendMailRequest,

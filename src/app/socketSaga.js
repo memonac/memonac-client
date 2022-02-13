@@ -5,6 +5,7 @@ import {
   receiveMessage,
   updateMemoLocation,
   removeMemo,
+  updateMemoSize,
 } from "../features/memoroom/memoRoomSlice";
 
 const chatSocket = io(`${process.env.REACT_APP_SERVER_URI}/chat`);
@@ -65,10 +66,21 @@ function createMemoSocketChannel(socket) {
       );
     });
 
+    socket.on("memo/size", (memoId, width, height) => {
+      emit(
+        updateMemoSize({
+          memoId,
+          width,
+          height,
+        })
+      );
+    });
+
     return () => {
       socket.off("join room");
       socket.off("memo/location");
       socket.off("memo/delete");
+      socket.off("memo/size");
     };
   });
 }
@@ -108,6 +120,9 @@ const memoRoomSocket = {
   },
   deleteMemo(memoId) {
     memoSocket.emit("memo/delete", memoId);
+  },
+  updateMemoSize(memoId, width, height) {
+    memoSocket.emit("memo/size", memoId, width, height);
   },
 };
 

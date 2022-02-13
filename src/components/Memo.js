@@ -7,7 +7,7 @@ import styled from "styled-components";
 
 import close from "../assets/images/close.png";
 import { memoRoomSocket } from "../app/socketSaga";
-import { removeMemo } from "../features/memoroom/memoRoomSlice";
+import { removeMemo, updateMemoSize } from "../features/memoroom/memoRoomSlice";
 
 const MemoContainer = styled.div`
   display: flex;
@@ -81,9 +81,10 @@ function Memo({ id, info, tag }) {
   const [text, setText] = useState(info.content);
 
   const dispatch = useDispatch();
-  const { memoroomId } = useParams();
+  const targetMemo = useSelector((state) => state.memoRoom.memos)[id];
+  // const { memoroomId } = useParams();
 
-  const currentUserId = useSelector((state) => state.auth.id);
+  // const currentUserId = useSelector((state) => state.auth.id);
 
   function handleMemoTextChange({ target }) {
     setText(target.value);
@@ -94,20 +95,30 @@ function Memo({ id, info, tag }) {
     dispatch(removeMemo({ memoId: id }));
   }
 
-  // function handleMemoSizeMouseUp({ target }) {
-  //   const resizedWidth = target.clientWidth;
-  //   const resizedHeight = target.clientHeight;
+  function handleMemoSizeMouseUp({ target }) {
+    if (target.id === "memoContainer") {
+      const resizedWidth = target.offsetWidth;
+      const resizedHeight = target.offsetHeight;
 
-  //   console.log(resizedWidth, resizedHeight);
-  // }
+      memoRoomSocket.updateMemoSize(id, resizedWidth, resizedHeight);
+      dispatch(
+        updateMemoSize({
+          memoId: id,
+          width: resizedWidth,
+          height: resizedHeight,
+        })
+      );
+    }
+  }
 
   return (
     <MemoContainer
-      width={info.size[0]}
-      height={info.size[1]}
+      width={targetMemo.size[0]}
+      height={targetMemo.size[1]}
       color={info.color}
       imageUrl={info.content}
-      // onMouseUp={handleMemoSizeMouseUp}
+      onMouseUp={handleMemoSizeMouseUp}
+      id="memoContainer"
     >
       <div>
         <img className="close" src={close} onClick={handleRemoveMemoClick} />
