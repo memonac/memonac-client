@@ -82,7 +82,6 @@ function MemoRoom() {
     memoRoomSocket.join(userId, userName, memoroomId);
   }, []);
 
-  //input이 변화함에 따른 useEffect
   useEffect(() => {
     if (!inputInfo.message) {
       return;

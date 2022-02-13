@@ -94,13 +94,20 @@ function Memo({ id, info, tag }) {
     );
   }
 
-  // 이 부분이 draggableMemo로 병합되어야 할 것 같음.
+  // function handleMemoSizeMouseUp({ target }) {
+  //   const resizedWidth = target.clientWidth;
+  //   const resizedHeight = target.clientHeight;
+
+  //   console.log(resizedWidth, resizedHeight);
+  // }
+
   return (
     <MemoContainer
       width={info.size[0]}
       height={info.size[1]}
       color={info.color}
       imageUrl={info.content}
+      // onMouseUp={handleMemoSizeMouseUp}
     >
       <div>
         <img className="close" src={close} onClick={handleRemoveMemoClick} />

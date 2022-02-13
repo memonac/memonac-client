@@ -7,8 +7,6 @@ import {
 } from "../features/memoroom/memoRoomSlice";
 
 const chatSocket = io(`${process.env.REACT_APP_SERVER_URI}/chat`);
-
-// 메모관련 socket namespace
 const memoSocket = io(`${process.env.REACT_APP_SERVER_URI}/memo`);
 
 function createChatSocketChannel(socket) {
@@ -38,18 +36,7 @@ function createChatSocketChannel(socket) {
   });
 }
 
-export function* chatSocketSaga() {
-  const chatChannel = yield call(createChatSocketChannel, chatSocket);
-
-  while (true) {
-    const action = yield take(chatChannel);
-    yield put(action);
-  }
-}
-
-// ===============================================
-
-function createMemoLocationSocketChannel(socket) {
+function createMemoSocketChannel(socket) {
   return eventChannel((emit) => {
     socket.on("connect", () => {
       // 서버 연결 체크용
@@ -59,7 +46,7 @@ function createMemoLocationSocketChannel(socket) {
       // 누군가 내가 들어왔을때 토스트 알림
     });
 
-    socket.on("receive updated location", (memoId, left, top) => {
+    socket.on("memo/location", (memoId, left, top) => {
       emit(
         updateMemoLocation({
           memoId,
@@ -71,19 +58,28 @@ function createMemoLocationSocketChannel(socket) {
 
     return () => {
       socket.off("join room");
-      socket.off("receive updated location");
+      socket.off("memo/location");
     };
   });
 }
 
-export function* memoLocationSocketSaga() {
-  const memoLocationChannel = yield call(
-    createMemoLocationSocketChannel,
+export function* chatSocketSaga() {
+  const chatChannel = yield call(createChatSocketChannel, chatSocket);
+
+  while (true) {
+    const action = yield take(chatChannel);
+    yield put(action);
+  }
+}
+
+export function* memoSocketSaga() {
+  const memoChannel = yield call(
+    createMemoSocketChannel,
     memoSocket
   );
 
   while (true) {
-    const action = yield take(memoLocationChannel);
+    const action = yield take(memoChannel);
     yield put(action);
   }
 }
@@ -105,7 +101,7 @@ const memoRoomSocket = {
   },
   updateMemoLocation(memoId, left, top) {
     // 업데이트 된 메모 위치 보내기
-    memoSocket.emit("send updated location", memoId, left, top);
+    memoSocket.emit("memo/location", memoId, left, top);
   },
 };
 

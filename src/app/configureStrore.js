@@ -9,7 +9,7 @@ import memoRoomReducer from "../features/memoroom/memoRoomSlice";
 import { userSaga } from "../features/auth/authSaga";
 import { memoListSaga } from "../features/main/mainSaga";
 import { memoRoomSaga } from "../features/memoroom/memoRoomSaga";
-import { chatSocketSaga, memoLocationSocketSaga } from "./socketSaga";
+import { chatSocketSaga, memoSocketSaga } from "./socketSaga";
 
 const reducer = combineReducers({
   auth: authReducer,
@@ -25,7 +25,7 @@ function* rootSaga() {
     memoListSaga(),
     memoRoomSaga(),
     chatSocketSaga(),
-    memoLocationSocketSaga(),
+    memoSocketSaga(),
   ]);
 }
 
