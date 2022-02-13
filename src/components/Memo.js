@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
 
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import { debounce } from "lodash";
 
 import close from "../assets/images/close.png";
 import { memoRoomSocket } from "../app/socketSaga";
-import { removeMemo, updateMemoSize } from "../features/memoroom/memoRoomSlice";
+import {
+  removeMemo,
+  updateMemoSize,
+  updateMemoText,
+} from "../features/memoroom/memoRoomSlice";
 
 const MemoContainer = styled.div`
   display: flex;
@@ -78,17 +82,25 @@ const MemoContainer = styled.div`
 `;
 
 function Memo({ id, info, tag }) {
-  const [text, setText] = useState(info.content);
+  const [memoText, setMemoText] = useState("");
 
-  const dispatch = useDispatch();
   const targetMemo = useSelector((state) => state.memoRoom.memos)[id];
-  // const { memoroomId } = useParams();
-
-  // const currentUserId = useSelector((state) => state.auth.id);
+  const dispatch = useDispatch();
 
   function handleMemoTextChange({ target }) {
-    setText(target.value);
+    printTextValue(target.value);
   }
+
+  const printTextValue = debounce((text) => {
+    memoRoomSocket.updateMemoText(id, text);
+    dispatch(updateMemoText({ memoId: id, text }));
+  }, 200);
+
+  useEffect(() => {
+    if (targetMemo.formType === "text") {
+      setMemoText(targetMemo.content);
+    }
+  }, [targetMemo.content]);
 
   function handleRemoveMemoClick() {
     memoRoomSocket.deleteMemo(id);
@@ -127,7 +139,7 @@ function Memo({ id, info, tag }) {
         <div className="textarea-wrapper">
           <textarea
             placeholder="Write.."
-            value={text}
+            defaultValue={memoText}
             onChange={handleMemoTextChange}
           />
         </div>

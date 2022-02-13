@@ -40,7 +40,7 @@ function Nav() {
   }, [debounceInput]);
 
   const printvalue = useCallback(
-    debounce((val) => setDebounceInput(val), 300),
+    debounce((text) => setDebounceInput(text), 300),
     []
   );
 
