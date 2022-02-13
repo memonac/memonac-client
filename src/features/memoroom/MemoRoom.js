@@ -68,6 +68,8 @@ function MemoRoom() {
   const participants = useSelector((state) => state.memoRoom.participants);
   const userName = useSelector((state) => state.auth.name);
   const chats = useSelector((state) => state.memoRoom.chats);
+  const chatLastIndex = useSelector((state) => state.memoRoom.chatLastIndex);
+
   const [inputInfo, setinputInfo] = useState({});
 
   const { memoroomId } = useParams();
@@ -226,6 +228,8 @@ function MemoRoom() {
         chatList={chats}
         isOpen={isChatOpen}
         currentUserId={userId}
+        currentMemoRoomId={memoroomId}
+        chatLastIndex={chatLastIndex}
       />
       <div className="memo-wrapper">
         {memoList.map(([memoId, memoInfo]) => {
