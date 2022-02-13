@@ -68,6 +68,7 @@ const MemoContainer = styled.div`
 
     p {
       margin: 5px 0;
+      padding: 0 10px;
       font-size: 15px;
       font-weight: 900;
     }
@@ -123,6 +124,8 @@ function Memo({ id, info, tag }) {
     }
   }
 
+  const date = new Date(info.alarmDate);
+
   return (
     <MemoContainer
       width={targetMemo.size[0]}
@@ -148,8 +151,8 @@ function Memo({ id, info, tag }) {
         <div className="textarea-wrapper image"></div>
       )}
       <div className="memo-info-wrapper">
-        <p>#(Tag): {tag}</p>
-        <p>{info.alarmDate}</p>
+        <p>{tag.split(",").map((singleTag) => `#${singleTag} `)}</p>
+        <p>{date.toLocaleString()}</p>
       </div>
     </MemoContainer>
   );
