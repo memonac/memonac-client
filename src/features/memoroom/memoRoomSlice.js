@@ -66,16 +66,11 @@ export const slice = createSlice({
       state.participants = [];
       state.memos = {};
     },
-    removeMemoRequest: (state) => {
-      state.isLoading = true;
-    },
-    removeMemoSuccess: (state, action) => {
+    removeMemo: (state, action) => {
+      const { memoId } = action.payload;
+
       state.isLoading = false;
-      delete state.memos[action.payload];
-    },
-    removeMemoFailure: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
+      delete state.memos[memoId];
     },
     updateMemoLocation: (state, action) => {
       const { memoId, left, top } = action.payload;
@@ -133,9 +128,7 @@ export const {
   addNewMemoRequest,
   addNewMemoSuccess,
   addNewMemoFailure,
-  removeMemoRequest,
-  removeMemoSuccess,
-  removeMemoFailure,
+  removeMemo,
   updateMemoLocation,
   resetMemoList,
   receiveMessage,

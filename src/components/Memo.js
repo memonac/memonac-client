@@ -4,9 +4,10 @@ import { useParams } from "react-router";
 
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import close from "../assets/images/close.png";
 
-import { removeMemoRequest } from "../features/memoroom/memoRoomSlice";
+import close from "../assets/images/close.png";
+import { memoRoomSocket } from "../app/socketSaga";
+import { removeMemo } from "../features/memoroom/memoRoomSlice";
 
 const MemoContainer = styled.div`
   display: flex;
@@ -89,9 +90,8 @@ function Memo({ id, info, tag }) {
   }
 
   function handleRemoveMemoClick() {
-    dispatch(
-      removeMemoRequest({ userId: currentUserId, memoroomId, memoId: id })
-    );
+    memoRoomSocket.deleteMemo(id);
+    dispatch(removeMemo({ memoId: id }));
   }
 
   // function handleMemoSizeMouseUp({ target }) {
