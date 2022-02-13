@@ -16,8 +16,13 @@ import backIcon from "../../assets/images/back.png";
 
 import { memoRoomSocket } from "../../app/socketSaga";
 import { resetNewMemoRoomId } from "../main/mainSlice";
-import { updateMemoLocationRequest } from "../memoroom/memoRoomSlice";
-import { getMemoListRequest, resetMemoList, postSendMailRequest, receiveMessage } from "./memoRoomSlice";
+import {
+  getMemoListRequest,
+  resetMemoList,
+  postSendMailRequest,
+  receiveMessage,
+  updateMemoLocation,
+} from "./memoRoomSlice";
 import NewMemoModal from "./NewMemoModal";
 
 const MemoRoomContainer = styled.div`
@@ -77,6 +82,7 @@ function MemoRoom() {
     memoRoomSocket.join(userId, userName, memoroomId);
   }, []);
 
+  //input이 변화함에 따른 useEffect
   useEffect(() => {
     if (!inputInfo.message) {
       return;
@@ -111,9 +117,8 @@ function MemoRoom() {
 
   const moveMemo = useCallback(
     (id, left, top) => {
-      dispatch(
-        updateMemoLocationRequest({ userId, memoroomId, memoId: id, left, top })
-      );
+      memoRoomSocket.updateMemoLocation(id, left, top);
+      dispatch(updateMemoLocation({ memoId: id, left, top }));
     },
     [memos]
   );
@@ -133,7 +138,7 @@ function MemoRoom() {
     }),
     [moveMemo]
   );
-  
+
   function handleShareButtonClick() {
     setIsShareModalOpen(!isShareModalOpen);
   }

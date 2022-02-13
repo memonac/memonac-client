@@ -77,17 +77,10 @@ export const slice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
-    updateMemoLocationRequest: (state, action) => {
-      state.isLoading = true;
-    },
-    updateMemoLocationSuccess: (state, action) => {
+    updateMemoLocation: (state, action) => {
       const { memoId, left, top } = action.payload;
 
       state.memos[memoId].location = [left, top];
-    },
-    updateMemoLocationFailure: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
     },
     joinRoom: (state, action) => {
       // 유저가 방에 참가 했을때
@@ -143,10 +136,7 @@ export const {
   removeMemoRequest,
   removeMemoSuccess,
   removeMemoFailure,
-  changeMemoLocation,
-  updateMemoLocationRequest,
-  updateMemoLocationSuccess,
-  updateMemoLocationFailure,
+  updateMemoLocation,
   resetMemoList,
   receiveMessage,
   postSendMailRequest,

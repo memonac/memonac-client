@@ -16,9 +16,6 @@ import {
   removeMemoRequest,
   removeMemoSuccess,
   removeMemoFailure,
-  updateMemoLocationRequest,
-  updateMemoLocationSuccess,
-  updateMemoLocationFailure,
   postSendMailRequest,
   postSendMailSuccess,
   postSendMailFailure,
@@ -69,22 +66,6 @@ function* removeMemo({ payload }) {
   }
 }
 
-function* updateMemoLocation({ payload }) {
-  const { memoId, left, top } = payload;
-
-  try {
-    const serverResponse = yield call(memoApi.updateMemoLocation, payload);
-
-    if (serverResponse.result === "success") {
-      yield put(updateMemoLocationSuccess({ memoId, left, top }));
-    } else {
-      yield put(updateMemoLocationFailure(serverResponse.error));
-    }
-  } catch (err) {
-    yield put(updateMemoLocationFailure(err));
-  }
-}
-
 function* postSendMail({ payload }) {
   try {
     const serverResponse = yield call(nodemailerApi.postSendMail, payload);
@@ -125,10 +106,6 @@ function* removeMemoWatcher() {
   yield takeLatest(removeMemoRequest, removeMemo);
 }
 
-function* updateMemoLocationWatcher() {
-  yield takeLatest(updateMemoLocationRequest, updateMemoLocation);
-}
-
 function* watchPostSendMail() {
   yield takeLatest(postSendMailRequest, postSendMail);
 }
@@ -142,7 +119,6 @@ export function* memoRoomSaga() {
     fork(getMemoRoomWatcher),
     fork(addNewMemoWatcher),
     fork(removeMemoWatcher),
-    fork(updateMemoLocationWatcher),
     fork(watchPostSendMail),
     fork(watchPostVerifyToken),
   ]);
