@@ -9,12 +9,6 @@ export const slice = createSlice({
     name: "",
     participants: {},
     memos: {},
-    /*
-    id: {
-      userName: "userUser",
-      email: "rhrnakajrw@gmail.com",
-      isPending: true,
-    }
     /* memoId: {
       formType: "text",
       content: "abcdefg",
@@ -83,6 +77,11 @@ export const slice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
+    updateMemoLocation: (state, action) => {
+      const { memoId, left, top } = action.payload;
+
+      state.memos[memoId].location = [left, top];
+    },
     joinRoom: (state, action) => {
       // 유저가 방에 참가 했을때
       // 해당 상태로 관리
@@ -137,6 +136,7 @@ export const {
   removeMemoRequest,
   removeMemoSuccess,
   removeMemoFailure,
+  updateMemoLocation,
   resetMemoList,
   receiveMessage,
   postSendMailRequest,

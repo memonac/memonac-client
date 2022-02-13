@@ -1,33 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router";
+import { useDrop } from "react-dnd";
 import styled from "styled-components";
 
+import Button from "../../components/Button";
+import Memo from "../../components/Memo";
+import Header from "../../components/Header";
+import Profile from "../../components/Profile";
+import { DraggableMemo } from "../../components/DraggableMemo";
+import ModalContainer from "../../components/Modal";
+import TextInput from "../../components/TextInput";
+import ChatSideBar from "../../components/ChatSideBar";
+import backIcon from "../../assets/images/back.png";
+
+import { memoRoomSocket } from "../../app/socketSaga";
 import { resetNewMemoRoomId } from "../main/mainSlice";
 import {
   getMemoListRequest,
   resetMemoList,
   postSendMailRequest,
   receiveMessage,
+  updateMemoLocation,
 } from "./memoRoomSlice";
-import { memoRoomSocket } from "../../app/socketSaga";
-
-import Button from "../../components/Button";
 import NewMemoModal from "./NewMemoModal";
-
-import Memo from "../../components/Memo";
-import Header from "../../components/Header";
-import Profile from "../../components/Profile";
-import backIcon from "../../assets/images/back.png";
-import ModalContainer from "../../components/Modal";
-import TextInput from "../../components/TextInput";
-
-import ChatSideBar from "../../components/ChatSideBar";
 
 const MemoRoomContainer = styled.div`
   .memo-wrapper {
     position: relative;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
   }
 
   .nav {
@@ -63,6 +65,7 @@ function MemoRoom() {
   const error = useSelector((state) => state.memoRoom.error);
   const success = useSelector((state) => state.memoRoom.success);
   const memos = useSelector((state) => state.memoRoom.memos);
+
   const memoRoomName = useSelector((state) => state.memoRoom.name);
   const userId = useSelector((state) => state.auth.id);
   const participants = useSelector((state) => state.memoRoom.participants);
@@ -110,6 +113,30 @@ function MemoRoom() {
   memoList.forEach(([memoId, memoInfo]) => {
     memoTagInfo[memoId] = memoInfo.tags.join(",");
   });
+
+  const moveMemo = useCallback(
+    (id, left, top) => {
+      memoRoomSocket.updateMemoLocation(id, left, top);
+      dispatch(updateMemoLocation({ memoId: id, left, top }));
+    },
+    [memos]
+  );
+
+  const [, drop] = useDrop(
+    () => ({
+      accept: "memo",
+      drop(item, monitor) {
+        const delta = monitor.getDifferenceFromInitialOffset();
+        const left = Math.round(item.left + delta.x);
+        const top = Math.round(item.top + delta.y);
+
+        moveMemo(item.id, left, top);
+
+        return undefined;
+      },
+    }),
+    [moveMemo]
+  );
 
   function handleShareButtonClick() {
     setIsShareModalOpen(!isShareModalOpen);
@@ -227,17 +254,17 @@ function MemoRoom() {
         isOpen={isChatOpen}
         currentUserId={userId}
       />
-      <div className="memo-wrapper">
-        {memoList.map(([memoId, memoInfo]) => {
-          return (
-            <Memo
-              key={memoId}
-              id={memoId}
-              info={memoInfo}
-              tag={memoTagInfo[memoId]}
-            />
-          );
-        })}
+      <div className="memo-wrapper" ref={drop}>
+        {memoList.map(([memoId, memoInfo]) => (
+          <DraggableMemo
+            key={memoId}
+            id={memoId}
+            left={memoInfo.location[0]}
+            top={memoInfo.location[1]}
+          >
+            <Memo id={memoId} info={memoInfo} tag={memoTagInfo[memoId]} />
+          </DraggableMemo>
+        ))}
       </div>
     </MemoRoomContainer>
   );
