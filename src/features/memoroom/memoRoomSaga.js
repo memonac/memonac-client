@@ -22,6 +22,9 @@ import {
   postVerifyTokenSuccess,
   postVerifyTokenFailure,
   postVerifyTokenRequest,
+  addAudioFileRequest,
+  addAudioFileSuccess,
+  addAudioFileFailure,
 } from "./memoRoomSlice";
 import memoApi from "../../utils/api/memo";
 import nodemailerApi from "../../utils/api/nodemailer";
@@ -94,6 +97,20 @@ function* postVerifyToken({ payload }) {
   }
 }
 
+function* addAudioFile({ payload }) {
+  try {
+    const serverResponse = yield call(memoApi.addAudioFile, payload);
+
+    if (serverResponse.result === "success") {
+      yield put(addAudioFileSuccess(serverResponse.data));
+    } else {
+      yield put(addAudioFileFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(addAudioFileFailure(err));
+  }
+}
+
 function* getMemoRoomWatcher() {
   yield takeEvery(getMemoListRequest, getMemoList);
 }
@@ -114,6 +131,10 @@ function* watchPostVerifyToken() {
   yield takeLatest(postVerifyTokenRequest, postVerifyToken);
 }
 
+function* watchAddAudioFile() {
+  yield takeLatest(addAudioFileRequest, addAudioFile);
+}
+
 export function* memoRoomSaga() {
   yield all([
     fork(getMemoRoomWatcher),
@@ -121,5 +142,6 @@ export function* memoRoomSaga() {
     fork(removeMemoWatcher),
     fork(watchPostSendMail),
     fork(watchPostVerifyToken),
+    fork(watchAddAudioFile),
   ]);
 }

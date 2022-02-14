@@ -34,4 +34,16 @@ memoApi.removeNewMemo = async ({ userId, memoroomId, memoId }) => {
   return response.data;
 };
 
+memoApi.addAudioFile = async ({ userId, memoroomId, memoId, formData }) => {
+  const response = await axios.post(
+    `users/${userId}/memorooms/${memoroomId}/memos/${memoId}/sound`,
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};
+
 export default memoApi;

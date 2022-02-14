@@ -1,19 +1,30 @@
 import React, { useState, useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import PropTypes from "prop-types";
 import Button from "./Button";
-import { useDispatch } from "react-redux";
 import { addAudioFileRequest } from "../features/memoroom/memoRoomSlice";
 
 function AudioRecord({ userId, memoroomId, memoId }) {
-  const [stream, setStream] = useState();
-  const [media, setMedia] = useState();
+  const [stream, setStream] = useState("");
+  const [media, setMedia] = useState("");
   const [onRec, setOnRec] = useState(true);
-  const [source, setSource] = useState();
-  const [analyser, setAnalyser] = useState();
-  const [audioUrl, setAudioUrl] = useState();
+  const [source, setSource] = useState("");
+  const [analyser, setAnalyser] = useState("");
+  const [audioUrl, setAudioUrl] = useState("");
+  const [awsAudioUrl, setAwsAudioUrl] = useState("");
 
   const dispatch = useDispatch();
+
+  const updatedMemo = useSelector((state) => state.memoRoom.memos);
+
+  useEffect(() => {
+    if (updatedMemo[memoId].content) {
+      console.log("url", updatedMemo[memoId].content);
+      setAwsAudioUrl(updatedMemo[memoId].content);
+    }
+  }, [awsAudioUrl]);
+
+  console.log("update>>>", updatedMemo[memoId]);
 
   const onRecAudio = () => {
     // 음원정보를 담은 노드를 생성하거나 음원을 실행또는 디코딩 시키는 일을 한다
@@ -80,9 +91,6 @@ function AudioRecord({ userId, memoroomId, memoId }) {
   };
 
   const onSubmitAudioFile = useCallback(() => {
-    if (audioUrl) {
-      console.log(URL.createObjectURL(audioUrl)); // 출력된 링크에서 녹음된 오디오 확인 가능
-    }
     // File 생성자를 사용해 파일로 변환
     const sound = new File([audioUrl], "mp3", {
       lastModified: new Date().getTime(),
@@ -98,20 +106,24 @@ function AudioRecord({ userId, memoroomId, memoId }) {
 
   return (
     <>
-      {/* {onRec ? (
+      {onRec && !awsAudioUrl ? (
         <Button text="RECORD" width={80} color="#3E497A" onClick={onRecAudio} />
       ) : (
         <Button text="STOP" width={80} color="#f03c3c" onClick={offRecAudio} />
       )}
-      <Button
-        text="SAVE"
-        width={80}
-        color="#3E497A"
-        onClick={onSubmitAudioFile}
-      /> */}
-      <audio controls>
-        <source src="https://okongee-project.s3.ap-northeast-2.amazonaws.com/audio1644833867502.mp3" />
-      </audio>
+      {!awsAudioUrl && (
+        <Button
+          text="SAVE"
+          width={80}
+          color="#3E497A"
+          onClick={onSubmitAudioFile}
+        />
+      )}
+      {awsAudioUrl && (
+        <audio controls>
+          <source src={awsAudioUrl} />
+        </audio>
+      )}
     </>
   );
 }

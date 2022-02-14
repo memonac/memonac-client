@@ -113,6 +113,19 @@ export const slice = createSlice({
       state.isLoading = false;
       state.error = response.data.error.message;
     },
+    addAudioFileRequest: (state) => {
+      state.isLoading = true;
+    },
+    addAudioFileSuccess: (state, action) => {
+      const { userId, memoroomId, memoId, audioUrl } = action.payload;
+
+      state.memos[memoId].content = audioUrl;
+      state.isLoading = false;
+    },
+    addAudioFileFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -133,6 +146,9 @@ export const {
   postVerifyTokenRequest,
   postVerifyTokenSuccess,
   postVerifyTokenFailure,
+  addAudioFileRequest,
+  addAudioFileSuccess,
+  addAudioFileFailure,
 } = slice.actions;
 
 export default slice.reducer;
