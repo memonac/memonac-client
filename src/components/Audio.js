@@ -2,14 +2,18 @@ import React, { useState, useCallback, useEffect } from "react";
 
 import PropTypes from "prop-types";
 import Button from "./Button";
+import { useDispatch } from "react-redux";
+import { addAudioFileRequest } from "../features/memoroom/memoRoomSlice";
 
-function AudioRecord() {
+function AudioRecord({ userId, memoroomId, memoId }) {
   const [stream, setStream] = useState();
   const [media, setMedia] = useState();
   const [onRec, setOnRec] = useState(true);
   const [source, setSource] = useState();
   const [analyser, setAnalyser] = useState();
   const [audioUrl, setAudioUrl] = useState();
+
+  const dispatch = useDispatch();
 
   const onRecAudio = () => {
     // 음원정보를 담은 노드를 생성하거나 음원을 실행또는 디코딩 시키는 일을 한다
@@ -80,16 +84,21 @@ function AudioRecord() {
       console.log(URL.createObjectURL(audioUrl)); // 출력된 링크에서 녹음된 오디오 확인 가능
     }
     // File 생성자를 사용해 파일로 변환
-    const sound = new File([audioUrl], "soundBlob", {
+    const sound = new File([audioUrl], "mp3", {
       lastModified: new Date().getTime(),
-      type: "audio",
+      type: "audio/mpeg",
     });
+
+    const formData = new FormData();
+    formData.append("audio", sound);
+
+    dispatch(addAudioFileRequest({ userId, memoroomId, memoId, formData }));
     console.log(sound); // File 정보 출력
   }, [audioUrl]);
 
   return (
     <>
-      {onRec ? (
+      {/* {onRec ? (
         <Button text="RECORD" width={80} color="#3E497A" onClick={onRecAudio} />
       ) : (
         <Button text="STOP" width={80} color="#f03c3c" onClick={offRecAudio} />
@@ -99,7 +108,10 @@ function AudioRecord() {
         width={80}
         color="#3E497A"
         onClick={onSubmitAudioFile}
-      />
+      /> */}
+      <audio controls>
+        <source src="https://okongee-project.s3.ap-northeast-2.amazonaws.com/audio1644833867502.mp3" />
+      </audio>
     </>
   );
 }
