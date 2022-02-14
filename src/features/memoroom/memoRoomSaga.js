@@ -26,6 +26,8 @@ import {
   getChatListSuccess,
   getChatListFailure,
 } from "./memoRoomSlice";
+
+import { memoRoomSocket } from "../../app/socketSaga";
 import memoApi from "../../utils/api/memo";
 import nodemailerApi from "../../utils/api/nodemailer";
 import chatApi from "../../utils/api/chat";
@@ -46,6 +48,7 @@ function* addNewMemo({ payload }) {
 
     if (serverResponse.result === "success") {
       yield put(addNewMemoSuccess(serverResponse.data));
+      yield fork(memoRoomSocket.addMemo, serverResponse.data);
     } else {
       yield put(addNewMemoFailure(serverResponse.error));
     }
