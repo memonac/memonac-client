@@ -29,4 +29,10 @@ develop 브랜치에서 pull 받은 후 작업하면서 추가로 리팩토링 �
 
 ## feature/1026
  - 태그 검색 로직 useCallback 없애고 debounce로만 구현
- 
+
+## feature/1028
+ - slice 함수 정리(코드정리)
+ - memoroom 내에서 share 모달 별도 분리
+ - react-dnd 외부영역 스크롤 방지
+ - 메모 사이즈 동시 렌더링 체크 필요
+
