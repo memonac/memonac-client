@@ -108,7 +108,7 @@ function MemoRoom() {
 
   const memoTagInfo = {};
   const memoList = Object.entries(memos);
-  const back = <img onClick={handleBackIconClick} src={backIcon}></img>;
+  const back = <img onClick={handleBackIconClick} src={backIcon} />;
 
   memoList.forEach(([memoId, memoInfo]) => {
     memoTagInfo[memoId] = memoInfo.tags.join(",");

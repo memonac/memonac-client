@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
 
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import close from "../assets/images/close.png";
+import { debounce } from "lodash";
 
-import { removeMemoRequest } from "../features/memoroom/memoRoomSlice";
+import close from "../assets/images/close.png";
+import { memoRoomSocket } from "../app/socketSaga";
+import {
+  removeMemo,
+  updateMemoSize,
+  updateMemoText,
+} from "../features/memoroom/memoRoomSlice";
 
 const MemoContainer = styled.div`
   display: flex;
@@ -63,6 +68,7 @@ const MemoContainer = styled.div`
 
     p {
       margin: 5px 0;
+      padding: 0 10px;
       font-size: 15px;
       font-weight: 900;
     }
@@ -77,37 +83,57 @@ const MemoContainer = styled.div`
 `;
 
 function Memo({ id, info, tag }) {
-  const [text, setText] = useState(info.content);
+  const [memoText, setMemoText] = useState("");
 
+  const targetMemo = useSelector((state) => state.memoRoom.memos)[id];
   const dispatch = useDispatch();
-  const { memoroomId } = useParams();
-
-  const currentUserId = useSelector((state) => state.auth.id);
 
   function handleMemoTextChange({ target }) {
-    setText(target.value);
+    printTextValue(target.value);
   }
+
+  const printTextValue = debounce((text) => {
+    memoRoomSocket.updateMemoText(id, text);
+    dispatch(updateMemoText({ memoId: id, text }));
+  }, 200);
+
+  useEffect(() => {
+    if (targetMemo.formType === "text") {
+      setMemoText(targetMemo.content);
+    }
+  }, [targetMemo.content]);
 
   function handleRemoveMemoClick() {
-    dispatch(
-      removeMemoRequest({ userId: currentUserId, memoroomId, memoId: id })
-    );
+    memoRoomSocket.deleteMemo(id);
+    dispatch(removeMemo({ memoId: id }));
   }
 
-  // function handleMemoSizeMouseUp({ target }) {
-  //   const resizedWidth = target.clientWidth;
-  //   const resizedHeight = target.clientHeight;
+  function handleMemoSizeMouseUp({ target }) {
+    if (target.id === "memoContainer") {
+      const resizedWidth = target.offsetWidth;
+      const resizedHeight = target.offsetHeight;
 
-  //   console.log(resizedWidth, resizedHeight);
-  // }
+      memoRoomSocket.updateMemoSize(id, resizedWidth, resizedHeight);
+      dispatch(
+        updateMemoSize({
+          memoId: id,
+          width: resizedWidth,
+          height: resizedHeight,
+        })
+      );
+    }
+  }
+
+  const date = new Date(info.alarmDate);
 
   return (
     <MemoContainer
-      width={info.size[0]}
-      height={info.size[1]}
+      width={targetMemo.size[0]}
+      height={targetMemo.size[1]}
       color={info.color}
       imageUrl={info.content}
-      // onMouseUp={handleMemoSizeMouseUp}
+      onMouseUp={handleMemoSizeMouseUp}
+      id="memoContainer"
     >
       <div>
         <img className="close" src={close} onClick={handleRemoveMemoClick} />
@@ -116,7 +142,7 @@ function Memo({ id, info, tag }) {
         <div className="textarea-wrapper">
           <textarea
             placeholder="Write.."
-            value={text}
+            defaultValue={memoText}
             onChange={handleMemoTextChange}
           />
         </div>
@@ -125,8 +151,8 @@ function Memo({ id, info, tag }) {
         <div className="textarea-wrapper image"></div>
       )}
       <div className="memo-info-wrapper">
-        <p>#(Tag): {tag}</p>
-        <p>{info.alarmDate}</p>
+        <p>{tag.split(",").map((singleTag) => `#${singleTag} `)}</p>
+        <p>{date.toLocaleString()}</p>
       </div>
     </MemoContainer>
   );

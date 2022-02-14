@@ -66,21 +66,26 @@ export const slice = createSlice({
       state.participants = [];
       state.memos = {};
     },
-    removeMemoRequest: (state) => {
-      state.isLoading = true;
-    },
-    removeMemoSuccess: (state, action) => {
+    removeMemo: (state, action) => {
+      const { memoId } = action.payload;
+
       state.isLoading = false;
-      delete state.memos[action.payload];
-    },
-    removeMemoFailure: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
+      delete state.memos[memoId];
     },
     updateMemoLocation: (state, action) => {
       const { memoId, left, top } = action.payload;
 
       state.memos[memoId].location = [left, top];
+    },
+    updateMemoSize: (state, action) => {
+      const { memoId, width, height } = action.payload;
+
+      state.memos[memoId].size = [width, height];
+    },
+    updateMemoText: (state, action) => {
+      const { memoId, text } = action.payload;
+
+      state.memos[memoId].content = text;
     },
     joinRoom: (state, action) => {
       // 유저가 방에 참가 했을때
@@ -133,10 +138,10 @@ export const {
   addNewMemoRequest,
   addNewMemoSuccess,
   addNewMemoFailure,
-  removeMemoRequest,
-  removeMemoSuccess,
-  removeMemoFailure,
+  removeMemo,
   updateMemoLocation,
+  updateMemoSize,
+  updateMemoText,
   resetMemoList,
   receiveMessage,
   postSendMailRequest,
