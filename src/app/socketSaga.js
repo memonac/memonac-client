@@ -18,12 +18,13 @@ function createChatSocketChannel(socket) {
       // 누군가 내가 들어왔을때 토스트 알림
     });
 
-    socket.on("receive message", (userId, userName, message, date) => {
+    socket.on("receive message", (userId, userName, message, date, id) => {
       emit(
         receiveMessage({
           user: { id: userId, name: userName },
           message,
-          date: new Date(date),
+          date: date,
+          id,
         })
       );
     });

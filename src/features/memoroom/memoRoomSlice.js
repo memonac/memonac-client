@@ -138,12 +138,13 @@ export const slice = createSlice({
       state.chatError = response.data.error.message;
     },
     receiveMessage: (state, action) => {
-      const { user, message, date } = action.payload;
+      const { user, message, date, id } = action.payload;
 
       state.chats.push({
         user,
         message,
         sendDate: date,
+        _id: id,
       });
     },
   },

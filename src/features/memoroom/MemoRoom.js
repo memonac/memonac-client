@@ -150,16 +150,7 @@ function MemoRoom() {
 
     const inputMessage = event.target.message.value;
     const date = new Date();
-    dispatch(
-      receiveMessage({
-        user: {
-          id: userId,
-          name: userName,
-        },
-        message: inputMessage,
-        date: date,
-      })
-    );
+
     setinputInfo({ message: inputMessage, date });
     event.target.message.value = "";
   }

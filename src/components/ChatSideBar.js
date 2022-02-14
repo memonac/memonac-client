@@ -86,13 +86,11 @@ function ChatSideBar({
   return (
     <ChatSideBarContainer isOpen={isOpen}>
       <div className="chat-list-container" ref={scrollRef}>
-        <div ref={targetRef}>
-          <span>sadf</span>
-        </div>
-        {chatList.map(({ user, message, sendDate }) => {
+        <div ref={targetRef}></div>
+        {chatList.map(({ user, message, sendDate, _id }) => {
           return (
             <ChatLine
-              key={sendDate}
+              key={_id}
               userName={user.name}
               comment={message}
               date={sendDate}
