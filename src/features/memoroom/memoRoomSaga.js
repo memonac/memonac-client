@@ -22,9 +22,13 @@ import {
   postVerifyTokenSuccess,
   postVerifyTokenFailure,
   postVerifyTokenRequest,
+  getChatListRequest,
+  getChatListSuccess,
+  getChatListFailure,
 } from "./memoRoomSlice";
 import memoApi from "../../utils/api/memo";
 import nodemailerApi from "../../utils/api/nodemailer";
+import chatApi from "../../utils/api/chat";
 
 function* getMemoList({ payload }) {
   try {
@@ -78,6 +82,20 @@ function* postVerifyToken({ payload }) {
   }
 }
 
+function* getChatList({ payload }) {
+  try {
+    const serverResponse = yield call(chatApi.getNextChatInfo, payload);
+
+    if (serverResponse.result === "success") {
+      yield put(getChatListSuccess(serverResponse.data));
+    } else {
+      yield put(getChatListFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(getChatListFailure(err));
+  }
+}
+
 function* getMemoRoomWatcher() {
   yield takeEvery(getMemoListRequest, getMemoList);
 }
@@ -94,11 +112,16 @@ function* watchPostVerifyToken() {
   yield takeLatest(postVerifyTokenRequest, postVerifyToken);
 }
 
+function* getChatWatcher() {
+  yield takeLatest(getChatListRequest, getChatList);
+}
+
 export function* memoRoomSaga() {
   yield all([
     fork(getMemoRoomWatcher),
     fork(addNewMemoWatcher),
     fork(watchPostSendMail),
     fork(watchPostVerifyToken),
+    fork(getChatWatcher),
   ]);
 }

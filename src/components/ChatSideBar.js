@@ -1,4 +1,6 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getChatListRequest } from "../features/memoroom/memoRoomSlice";
 
 import styled from "styled-components";
 import PropTypes from "prop-types";
@@ -22,25 +24,73 @@ const ChatSideBarContainer = styled.div`
   }
 `;
 
-function ChatSideBar({ onSubmitInputText, chatList, isOpen, currentUserId }) {
+function ChatSideBar({
+  onSubmitInputText,
+  chatList,
+  isOpen,
+  currentUserId,
+  currentMemoRoomId,
+  chatLastIndex,
+}) {
+  const userId = useSelector((state) => state.auth.id);
+
   const scrollRef = useRef();
+  const targetRef = useRef();
+  const dispatch = useDispatch();
+
+  const defaultOption = {
+    threshold: 1,
+    root: scrollRef.current,
+  };
 
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      scrollRef.current.scrollTop = scrollRef.current.scrollTop + 1500;
     }
   }, [chatList]);
+
+  useEffect(() => {
+    function callback(entries) {
+      entries.forEach((entry) => {
+        if (
+          entry.isIntersecting &&
+          scrollRef.current.scrollTop === 0 &&
+          scrollRef.current.scrollHeight !== 500
+        ) {
+          dispatch(
+            getChatListRequest({
+              userId,
+              memoroomId: currentMemoRoomId,
+              chatLastIndex,
+            })
+          );
+        }
+      });
+    }
+
+    const targetElement = targetRef.current;
+    let observer;
+
+    if (targetRef) {
+      observer = new IntersectionObserver(callback, defaultOption);
+      observer.observe(targetElement);
+    }
+
+    if (!chatLastIndex) {
+      observer.unobserve(targetElement);
+    }
+
+    return () => observer?.disconnect(targetElement);
+  }, [chatLastIndex]);
 
   return (
     <ChatSideBarContainer isOpen={isOpen}>
       <div className="chat-list-container" ref={scrollRef}>
-        <div>
-          <span>sadf</span>
-        </div>
-        {chatList.map(({ user, message, sendDate }) => {
+        <div ref={targetRef}></div>
+        {chatList.map(({ user, message, sendDate, _id }) => {
           return (
             <ChatLine
-              key={sendDate}
+              key={_id}
               userName={user.name}
               comment={message}
               date={sendDate}
@@ -64,6 +114,7 @@ ChatSideBar.propTypes = {
   chatList: PropTypes.array.isRequired,
   isOpen: PropTypes.bool.isRequired,
   currentUserId: PropTypes.string.isRequired,
+  currentMemoRoomId: PropTypes.string.isRequired,
 };
 
 export default ChatSideBar;
