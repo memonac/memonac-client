@@ -21,7 +21,7 @@ import {
   resetMemoList,
   postSendMailRequest,
   receiveMessage,
-  updateMemoLocation,
+  updateMemoLocationRequest,
 } from "./memoRoomSlice";
 import NewMemoModal from "./NewMemoModal";
 
@@ -116,8 +116,15 @@ function MemoRoom() {
 
   const moveMemo = useCallback(
     (id, left, top) => {
-      memoRoomSocket.updateMemoLocation(id, left, top);
-      dispatch(updateMemoLocation({ memoId: id, left, top }));
+      dispatch(
+        updateMemoLocationRequest({
+          userId,
+          memoroomId,
+          memoId: id,
+          left,
+          top,
+        })
+      );
     },
     [memos]
   );

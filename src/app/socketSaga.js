@@ -3,7 +3,7 @@ import { take, call, put } from "redux-saga/effects";
 import io from "socket.io-client";
 import {
   receiveMessage,
-  updateMemoLocation,
+  updateMemoLocationSuccess,
   removeMemoSuccess,
   updateMemoSizeSuccess,
   updateMemoStyleSuccess,
@@ -52,7 +52,7 @@ function createMemoSocketChannel(socket) {
 
     socket.on("memo/location", (memoId, left, top) => {
       emit(
-        updateMemoLocation({
+        updateMemoLocationSuccess({
           memoId,
           left,
           top,

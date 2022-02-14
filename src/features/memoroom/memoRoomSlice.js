@@ -93,10 +93,17 @@ export const slice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
-    updateMemoLocation: (state, action) => {
+    updateMemoLocationRequest: (state) => {
+      state.isLoading = true;
+    },
+    updateMemoLocationSuccess: (state, action) => {
       const { memoId, left, top } = action.payload;
 
       state.memos[memoId].location = [left, top];
+    },
+    updateMemoLocationFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
     },
     updateMemoSizeRequest: (state) => {
       state.isLoading = true;
@@ -182,7 +189,9 @@ export const {
   updateMemoStyleRequest,
   updateMemoStyleSuccess,
   updateMemoStyleFailure,
-  updateMemoLocation,
+  updateMemoLocationRequest,
+  updateMemoLocationSuccess,
+  updateMemoLocationFailure,
   updateMemoSizeRequest,
   updateMemoSizeSuccess,
   updateMemoSizeFailure,
