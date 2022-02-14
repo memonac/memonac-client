@@ -21,12 +21,14 @@ const TextInput = ({
   placeholder,
   width,
   inputText,
+  defaultValue,
   onInputTextChange = noop,
 }) => {
   return (
     <TextInputContainer
       type={type}
       name={name}
+      defaultValue={defaultValue}
       placeholder={placeholder}
       width={width}
       onChange={onInputTextChange}
@@ -36,13 +38,14 @@ const TextInput = ({
   );
 };
 
-export default TextInput;
-
 TextInput.propTypes = {
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  defaultValue: PropTypes.string,
   placeholder: PropTypes.string,
   width: PropTypes.number.isRequired,
   onInputTextChange: PropTypes.func,
   inputText: PropTypes.string,
 };
+
+export default TextInput;

@@ -7,7 +7,7 @@ import { debounce } from "lodash";
 
 import close from "../assets/images/close.png";
 import memoMenu from "../assets/images/memoMenu.png";
-import EditMemoInfoModal from "../features/memoroom/EditMemoInfo";
+import EditMemoModal from "../features/memoroom/EditMemoModal";
 import { memoRoomSocket } from "../app/socketSaga";
 import {
   removeMemo,
@@ -133,7 +133,7 @@ function Memo({ id, info, tag }) {
     setIsEditMenuOpen(true);
   }
 
-  const date = new Date(info.alarmDate);
+  const date = info.alarmDate ? new Date(info.alarmDate) : "";
 
   return (
     <MemoContainer
@@ -152,7 +152,7 @@ function Memo({ id, info, tag }) {
           onClick={handleEditMemoMenuClick}
         />
         {isEditMenuOpen && (
-          <EditMemoInfoModal
+          <EditMemoModal
             isOpen={isEditMenuOpen}
             setIsOpen={setIsEditMenuOpen}
             memoId={id}

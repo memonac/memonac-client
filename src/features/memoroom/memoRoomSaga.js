@@ -13,9 +13,9 @@ import {
   addNewMemoRequest,
   addNewMemoSuccess,
   addNewMemoFailure,
-  removeMemoRequest,
-  removeMemoSuccess,
-  removeMemoFailure,
+  updateMemoStyleRequest,
+  updateMemoStyleSuccess,
+  updateMemoStyleFailure,
   postSendMailRequest,
   postSendMailSuccess,
   postSendMailFailure,
@@ -25,6 +25,7 @@ import {
 } from "./memoRoomSlice";
 import memoApi from "../../utils/api/memo";
 import nodemailerApi from "../../utils/api/nodemailer";
+import { memoRoomSocket } from "../../app/socketSaga";
 
 function* getMemoList({ payload }) {
   try {
@@ -78,6 +79,23 @@ function* postVerifyToken({ payload }) {
   }
 }
 
+function* updateMemoStyle({ payload }) {
+  try {
+    const serverResponse = yield call(memoApi.updateMemoStyle, payload);
+
+    // console.log("여기 사가... 서버로 대답왔으", serverResponse);
+
+    if (serverResponse.result === "success") {
+      yield put(updateMemoStyleSuccess(serverResponse.data));
+      yield fork(memoRoomSocket.updateMemoStyle, serverResponse.data);
+    } else {
+      yield put(updateMemoStyleFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(updateMemoStyleFailure(err));
+  }
+}
+
 function* getMemoRoomWatcher() {
   yield takeEvery(getMemoListRequest, getMemoList);
 }
@@ -94,11 +112,16 @@ function* watchPostVerifyToken() {
   yield takeLatest(postVerifyTokenRequest, postVerifyToken);
 }
 
+function* updateMemoStyleWatcher() {
+  yield takeLatest(updateMemoStyleRequest, updateMemoStyle);
+}
+
 export function* memoRoomSaga() {
   yield all([
     fork(getMemoRoomWatcher),
     fork(addNewMemoWatcher),
     fork(watchPostSendMail),
     fork(watchPostVerifyToken),
+    fork(updateMemoStyleWatcher),
   ]);
 }

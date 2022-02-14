@@ -72,6 +72,20 @@ export const slice = createSlice({
       state.isLoading = false;
       delete state.memos[memoId];
     },
+    updateMemoStyleRequest: (state) => {
+      state.isLoading = true;
+    },
+    updateMemoStyleSuccess: (state, action) => {
+      const { memoId, memoColor, alarmDate, memoTags } = action.payload;
+
+      state.memos[memoId].color = memoColor;
+      state.memos[memoId].alarmDate = alarmDate;
+      state.memos[memoId].tags = memoTags;
+    },
+    updateMemoStyleFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
     updateMemoLocation: (state, action) => {
       const { memoId, left, top } = action.payload;
 
@@ -138,10 +152,13 @@ export const {
   addNewMemoRequest,
   addNewMemoSuccess,
   addNewMemoFailure,
-  removeMemo,
-  updateMemoLocation,
-  updateMemoSize,
-  updateMemoText,
+  removeMemo, // 수정필요
+  updateMemoStyleRequest,
+  updateMemoStyleSuccess,
+  updateMemoStyleFailure,
+  updateMemoLocation, // 수정필요
+  updateMemoSize, // 수정필요
+  updateMemoText, // 수정필요
   resetMemoList,
   receiveMessage,
   postSendMailRequest,

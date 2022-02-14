@@ -23,9 +23,32 @@ memoApi.addNewMemo = async (formData) => {
   return response.data;
 };
 
-memoApi.removeNewMemo = async ({ userId, memoroomId, memoId }) => {
+memoApi.removeMemo = async ({ userId, memoroomId, memoId }) => {
   const response = await axios.delete(
     `users/${userId}/memorooms/${memoroomId}/memos/${memoId}`,
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};
+
+memoApi.updateMemoStyle = async ({
+  userId,
+  memoroomId,
+  memoId,
+  memoColor,
+  alarmDate,
+  memoTags,
+}) => {
+  const response = await axios.put(
+    `users/${userId}/memorooms/${memoroomId}/memos/${memoId}`,
+    {
+      memoColor,
+      alarmDate,
+      memoTags,
+    },
     {
       withCredentials: true,
     }

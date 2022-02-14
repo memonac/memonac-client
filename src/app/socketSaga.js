@@ -7,6 +7,7 @@ import {
   removeMemo,
   updateMemoSize,
   updateMemoText,
+  updateMemoStyleSuccess,
 } from "../features/memoroom/memoRoomSlice";
 
 const chatSocket = io(`${process.env.REACT_APP_SERVER_URI}/chat`);
@@ -86,12 +87,24 @@ function createMemoSocketChannel(socket) {
       );
     });
 
+    socket.on("memo/style", (memoId, memoColor, alarmDate, memoTags) => {
+      emit(
+        updateMemoStyleSuccess({
+          memoId,
+          memoColor,
+          alarmDate,
+          memoTags,
+        })
+      );
+    });
+
     return () => {
       socket.off("join room");
       socket.off("memo/location");
       socket.off("memo/delete");
       socket.off("memo/size");
       socket.off("memo/text");
+      socket.off("memo/style");
     };
   });
 }
@@ -137,6 +150,9 @@ const memoRoomSocket = {
   },
   updateMemoText(memoId, text) {
     memoSocket.emit("memo/text", memoId, text);
+  },
+  updateMemoStyle({ memoId, memoColor, alarmDate, memoTags }) {
+    memoSocket.emit("memo/style", memoId, memoColor, alarmDate, memoTags);
   },
 };
 

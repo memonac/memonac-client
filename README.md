@@ -26,3 +26,7 @@ develop 브랜치에서 pull 받은 후 작업하면서 추가로 리팩토링 �
 
 ## feature/1024
  - dnd 위치값 em으로 변경 필요 (현재 100VH, 100VW로 되어있음)
+
+## feature/1026
+ - 태그 검색 로직 useCallback 없애고 debounce로만 구현
+ 
