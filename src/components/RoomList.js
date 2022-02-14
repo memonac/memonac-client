@@ -18,5 +18,5 @@ function RoomList({ children }) {
 export default RoomList;
 
 RoomList.propTypes = {
-  children: PropTypes.element,
+  children: PropTypes.node,
 };

@@ -54,22 +54,6 @@ function* addNewMemo({ payload }) {
   }
 }
 
-function* removeMemo({ payload }) {
-  const { memoId } = payload;
-
-  try {
-    const serverResponse = yield call(memoApi.removeNewMemo, payload);
-
-    if (serverResponse.result === "success") {
-      yield put(removeMemoSuccess(memoId));
-    } else {
-      yield put(removeMemoFailure(serverResponse.error));
-    }
-  } catch (err) {
-    yield put(removeMemoFailure(err));
-  }
-}
-
 function* postSendMail({ payload }) {
   try {
     const serverResponse = yield call(nodemailerApi.postSendMail, payload);
@@ -120,10 +104,6 @@ function* addNewMemoWatcher() {
   yield takeLatest(addNewMemoRequest, addNewMemo);
 }
 
-function* removeMemoWatcher() {
-  yield takeLatest(removeMemoRequest, removeMemo);
-}
-
 function* watchPostSendMail() {
   yield takeLatest(postSendMailRequest, postSendMail);
 }
@@ -140,7 +120,6 @@ export function* memoRoomSaga() {
   yield all([
     fork(getMemoRoomWatcher),
     fork(addNewMemoWatcher),
-    fork(removeMemoWatcher),
     fork(watchPostSendMail),
     fork(watchPostVerifyToken),
     fork(getChatWatcher),
