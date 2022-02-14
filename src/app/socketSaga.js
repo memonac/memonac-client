@@ -28,7 +28,7 @@ function createChatSocketChannel(socket) {
         receiveMessage({
           user: { id: userId, name: userName },
           message,
-          date: date,
+          date,
           id,
         })
       );
