@@ -7,8 +7,6 @@ const RadioButtonText = styled.div`
 `;
 
 function RadioButton({ name, value, color, text, currentValue }) {
-  // console.log(value, currentValue);
-
   return (
     <>
       <input

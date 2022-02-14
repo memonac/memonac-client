@@ -4,7 +4,7 @@ import io from "socket.io-client";
 import {
   receiveMessage,
   updateMemoLocation,
-  removeMemo,
+  removeMemoSuccess,
   updateMemoSize,
   updateMemoText,
   updateMemoStyleSuccess,
@@ -62,7 +62,7 @@ function createMemoSocketChannel(socket) {
 
     socket.on("memo/delete", (memoId) => {
       emit(
-        removeMemo({
+        removeMemoSuccess({
           memoId,
         })
       );

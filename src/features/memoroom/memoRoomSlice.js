@@ -66,11 +66,21 @@ export const slice = createSlice({
       state.participants = [];
       state.memos = {};
     },
-    removeMemo: (state, action) => {
+    removeMemoRequest: (state) => {
+      // remove memo 수정 필요
+      state.isLoading = true;
+    },
+    removeMemoSuccess: (state, action) => {
+      // remove memo 수정 필요
       const { memoId } = action.payload;
 
       state.isLoading = false;
       delete state.memos[memoId];
+    },
+    removeMemoFailure: (state, action) => {
+      // remove memo 수정 필요
+      state.isLoading = false;
+      state.error = action.payload;
     },
     updateMemoStyleRequest: (state) => {
       state.isLoading = true;
@@ -152,7 +162,9 @@ export const {
   addNewMemoRequest,
   addNewMemoSuccess,
   addNewMemoFailure,
-  removeMemo, // 수정필요
+  removeMemoRequest,
+  removeMemoSuccess,
+  removeMemoFailure,
   updateMemoStyleRequest,
   updateMemoStyleSuccess,
   updateMemoStyleFailure,

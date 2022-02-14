@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router";
 
 import PropTypes from "prop-types";
 import styled from "styled-components";
@@ -10,7 +11,7 @@ import memoMenu from "../assets/images/memoMenu.png";
 import EditMemoModal from "../features/memoroom/EditMemoModal";
 import { memoRoomSocket } from "../app/socketSaga";
 import {
-  removeMemo,
+  removeMemoRequest,
   updateMemoSize,
   updateMemoText,
 } from "../features/memoroom/memoRoomSlice";
@@ -91,6 +92,8 @@ function Memo({ id, info, tag }) {
   const [isEditMenuOpen, setIsEditMenuOpen] = useState(false);
 
   const targetMemo = useSelector((state) => state.memoRoom.memos)[id];
+  const userId = useSelector((state) => state.auth.id);
+  const { memoroomId } = useParams();
   const dispatch = useDispatch();
 
   function handleMemoTextChange({ target }) {
@@ -109,8 +112,13 @@ function Memo({ id, info, tag }) {
   }, [targetMemo.content]);
 
   function handleRemoveMemoClick() {
-    memoRoomSocket.deleteMemo(id);
-    dispatch(removeMemo({ memoId: id }));
+    dispatch(
+      removeMemoRequest({
+        userId,
+        memoroomId,
+        memoId: id,
+      })
+    );
   }
 
   function handleMemoSizeMouseUp({ target }) {

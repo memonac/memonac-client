@@ -13,6 +13,9 @@ import {
   addNewMemoRequest,
   addNewMemoSuccess,
   addNewMemoFailure,
+  removeMemoRequest,
+  removeMemoSuccess,
+  removeMemoFailure,
   updateMemoStyleRequest,
   updateMemoStyleSuccess,
   updateMemoStyleFailure,
@@ -83,8 +86,6 @@ function* updateMemoStyle({ payload }) {
   try {
     const serverResponse = yield call(memoApi.updateMemoStyle, payload);
 
-    // console.log("여기 사가... 서버로 대답왔으", serverResponse);
-
     if (serverResponse.result === "success") {
       yield put(updateMemoStyleSuccess(serverResponse.data));
       yield fork(memoRoomSocket.updateMemoStyle, serverResponse.data);
@@ -93,6 +94,21 @@ function* updateMemoStyle({ payload }) {
     }
   } catch (err) {
     yield put(updateMemoStyleFailure(err));
+  }
+}
+
+function* removeMemo({ payload }) {
+  try {
+    const serverResponse = yield call(memoApi.removeMemo, payload);
+
+    if (serverResponse.result === "success") {
+      yield put(removeMemoSuccess(payload));
+      yield fork(memoRoomSocket.deleteMemo, payload.memoId);
+    } else {
+      yield put(removeMemoFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(removeMemoFailure(err));
   }
 }
 
@@ -116,6 +132,10 @@ function* updateMemoStyleWatcher() {
   yield takeLatest(updateMemoStyleRequest, updateMemoStyle);
 }
 
+function* removeMemoWatcher() {
+  yield takeLatest(removeMemoRequest, removeMemo);
+}
+
 export function* memoRoomSaga() {
   yield all([
     fork(getMemoRoomWatcher),
@@ -123,5 +143,6 @@ export function* memoRoomSaga() {
     fork(watchPostSendMail),
     fork(watchPostVerifyToken),
     fork(updateMemoStyleWatcher),
+    fork(removeMemoWatcher),
   ]);
 }
