@@ -67,18 +67,15 @@ export const slice = createSlice({
       state.memos = {};
     },
     removeMemoRequest: (state) => {
-      // remove memo 수정 필요
       state.isLoading = true;
     },
     removeMemoSuccess: (state, action) => {
-      // remove memo 수정 필요
       const { memoId } = action.payload;
 
       state.isLoading = false;
       delete state.memos[memoId];
     },
     removeMemoFailure: (state, action) => {
-      // remove memo 수정 필요
       state.isLoading = false;
       state.error = action.payload;
     },
@@ -106,10 +103,17 @@ export const slice = createSlice({
 
       state.memos[memoId].size = [width, height];
     },
-    updateMemoText: (state, action) => {
+    updateMemoTextRequest: (state) => {
+      state.isLoading = true;
+    },
+    updateMemoTextSuccess: (state, action) => {
       const { memoId, text } = action.payload;
 
       state.memos[memoId].content = text;
+    },
+    updateMemoTextFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
     },
     joinRoom: (state, action) => {
       // 유저가 방에 참가 했을때
@@ -165,12 +169,15 @@ export const {
   removeMemoRequest,
   removeMemoSuccess,
   removeMemoFailure,
+  updateMemoTextRequest,
+  updateMemoTextSuccess,
+  updateMemoTextFailure,
   updateMemoStyleRequest,
   updateMemoStyleSuccess,
   updateMemoStyleFailure,
-  updateMemoLocation, // 수정필요
-  updateMemoSize, // 수정필요
-  updateMemoText, // 수정필요
+  updateMemoLocation,
+  updateMemoSize,
+  updateMemoText,
   resetMemoList,
   receiveMessage,
   postSendMailRequest,

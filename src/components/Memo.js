@@ -13,7 +13,7 @@ import { memoRoomSocket } from "../app/socketSaga";
 import {
   removeMemoRequest,
   updateMemoSize,
-  updateMemoText,
+  updateMemoTextRequest,
 } from "../features/memoroom/memoRoomSlice";
 
 const MemoContainer = styled.div`
@@ -101,9 +101,15 @@ function Memo({ id, info, tag }) {
   }
 
   const printTextValue = debounce((text) => {
-    memoRoomSocket.updateMemoText(id, text);
-    dispatch(updateMemoText({ memoId: id, text }));
-  }, 200);
+    dispatch(
+      updateMemoTextRequest({
+        userId,
+        memoroomId,
+        memoId: id,
+        text,
+      })
+    );
+  }, 300);
 
   useEffect(() => {
     if (targetMemo.formType === "text") {
@@ -195,7 +201,7 @@ Memo.propTypes = {
     color: PropTypes.string.isRequired,
     formType: PropTypes.string.isRequired,
     content: PropTypes.string,
-    alarmDate: PropTypes.number,
+    alarmDate: PropTypes.string,
   }).isRequired,
   tag: PropTypes.string.isRequired,
 };

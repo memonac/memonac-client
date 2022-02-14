@@ -39,7 +39,7 @@ const TextInput = ({
 };
 
 TextInput.propTypes = {
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string,
   name: PropTypes.string.isRequired,
   defaultValue: PropTypes.string,
   placeholder: PropTypes.string,

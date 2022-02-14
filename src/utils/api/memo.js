@@ -34,6 +34,18 @@ memoApi.removeMemo = async ({ userId, memoroomId, memoId }) => {
   return response.data;
 };
 
+memoApi.updateMemoText = async ({ userId, memoroomId, memoId, text }) => {
+  const response = await axios.put(
+    `users/${userId}/memorooms/${memoroomId}/memos/${memoId}/text`,
+    text,
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};
+
 memoApi.updateMemoStyle = async ({
   userId,
   memoroomId,
@@ -43,7 +55,7 @@ memoApi.updateMemoStyle = async ({
   memoTags,
 }) => {
   const response = await axios.put(
-    `users/${userId}/memorooms/${memoroomId}/memos/${memoId}`,
+    `users/${userId}/memorooms/${memoroomId}/memos/${memoId}/style`,
     {
       memoColor,
       alarmDate,

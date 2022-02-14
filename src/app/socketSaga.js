@@ -6,8 +6,8 @@ import {
   updateMemoLocation,
   removeMemoSuccess,
   updateMemoSize,
-  updateMemoText,
   updateMemoStyleSuccess,
+  updateMemoTextSuccess,
 } from "../features/memoroom/memoRoomSlice";
 
 const chatSocket = io(`${process.env.REACT_APP_SERVER_URI}/chat`);
@@ -80,7 +80,7 @@ function createMemoSocketChannel(socket) {
 
     socket.on("memo/text", (memoId, text) => {
       emit(
-        updateMemoText({
+        updateMemoTextSuccess({
           memoId,
           text,
         })
