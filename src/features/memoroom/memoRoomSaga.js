@@ -22,6 +22,9 @@ import {
   updateMemoStyleRequest,
   updateMemoStyleSuccess,
   updateMemoStyleFailure,
+  updateMemoSizeRequest,
+  updateMemoSizeSuccess,
+  updateMemoSizeFailure,
   postSendMailRequest,
   postSendMailSuccess,
   postSendMailFailure,
@@ -130,6 +133,26 @@ function* updateMemoText({ payload }) {
   }
 }
 
+function* updateMemoSize({ payload }) {
+  try {
+    const serverResponse = yield call(memoApi.updateMemoSize, payload);
+
+    if (serverResponse.result === "success") {
+      yield put(updateMemoSizeSuccess(payload));
+      yield fork(
+        memoRoomSocket.updateMemoSize,
+        payload.memoId,
+        payload.width,
+        payload.height
+      );
+    } else {
+      yield put(updateMemoSizeFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(updateMemoSizeFailure(err));
+  }
+}
+
 function* getMemoRoomWatcher() {
   yield takeEvery(getMemoListRequest, getMemoList);
 }
@@ -158,6 +181,10 @@ function* updateMemoTextWatcher() {
   yield takeLatest(updateMemoTextRequest, updateMemoText);
 }
 
+function* updateMemoSizeWatcher() {
+  yield takeLatest(updateMemoSizeRequest, updateMemoSize);
+}
+
 export function* memoRoomSaga() {
   yield all([
     fork(getMemoRoomWatcher),
@@ -167,5 +194,6 @@ export function* memoRoomSaga() {
     fork(updateMemoStyleWatcher),
     fork(removeMemoWatcher),
     fork(updateMemoTextWatcher),
+    fork(updateMemoSizeWatcher),
   ]);
 }

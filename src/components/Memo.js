@@ -9,10 +9,9 @@ import { debounce } from "lodash";
 import close from "../assets/images/close.png";
 import memoMenu from "../assets/images/memoMenu.png";
 import EditMemoModal from "../features/memoroom/EditMemoModal";
-import { memoRoomSocket } from "../app/socketSaga";
 import {
   removeMemoRequest,
-  updateMemoSize,
+  updateMemoSizeRequest,
   updateMemoTextRequest,
 } from "../features/memoroom/memoRoomSlice";
 
@@ -129,15 +128,13 @@ function Memo({ id, info, tag }) {
 
   function handleMemoSizeMouseUp({ target }) {
     if (target.id === "memoContainer") {
-      const resizedWidth = target.offsetWidth;
-      const resizedHeight = target.offsetHeight;
-
-      memoRoomSocket.updateMemoSize(id, resizedWidth, resizedHeight);
       dispatch(
-        updateMemoSize({
+        updateMemoSizeRequest({
+          userId,
+          memoroomId,
           memoId: id,
-          width: resizedWidth,
-          height: resizedHeight,
+          width: target.offsetWidth,
+          height: target.offsetHeight,
         })
       );
     }

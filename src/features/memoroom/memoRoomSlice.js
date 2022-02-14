@@ -98,10 +98,17 @@ export const slice = createSlice({
 
       state.memos[memoId].location = [left, top];
     },
-    updateMemoSize: (state, action) => {
+    updateMemoSizeRequest: (state) => {
+      state.isLoading = true;
+    },
+    updateMemoSizeSuccess: (state, action) => {
       const { memoId, width, height } = action.payload;
 
       state.memos[memoId].size = [width, height];
+    },
+    updateMemoSizeFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
     },
     updateMemoTextRequest: (state) => {
       state.isLoading = true;
@@ -176,8 +183,9 @@ export const {
   updateMemoStyleSuccess,
   updateMemoStyleFailure,
   updateMemoLocation,
-  updateMemoSize,
-  updateMemoText,
+  updateMemoSizeRequest,
+  updateMemoSizeSuccess,
+  updateMemoSizeFailure,
   resetMemoList,
   receiveMessage,
   postSendMailRequest,

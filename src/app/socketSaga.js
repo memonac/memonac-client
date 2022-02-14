@@ -5,7 +5,7 @@ import {
   receiveMessage,
   updateMemoLocation,
   removeMemoSuccess,
-  updateMemoSize,
+  updateMemoSizeSuccess,
   updateMemoStyleSuccess,
   updateMemoTextSuccess,
 } from "../features/memoroom/memoRoomSlice";
@@ -70,7 +70,7 @@ function createMemoSocketChannel(socket) {
 
     socket.on("memo/size", (memoId, width, height) => {
       emit(
-        updateMemoSize({
+        updateMemoSizeSuccess({
           memoId,
           width,
           height,

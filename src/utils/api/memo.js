@@ -90,4 +90,25 @@ memoApi.updateMemoLocation = async ({
   return response.data;
 };
 
+memoApi.updateMemoSize = async ({
+  userId,
+  memoroomId,
+  memoId,
+  width,
+  height,
+}) => {
+  const response = await axios.put(
+    `users/${userId}/memorooms/${memoroomId}/memos/${memoId}/size`,
+    {
+      width,
+      height,
+    },
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};
+
 export default memoApi;
