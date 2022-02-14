@@ -6,6 +6,8 @@ import styled from "styled-components";
 import { debounce } from "lodash";
 
 import close from "../assets/images/close.png";
+import memoMenu from "../assets/images/memoMenu.png";
+import EditMemoInfoModal from "../features/memoroom/EditMemoInfo";
 import { memoRoomSocket } from "../app/socketSaga";
 import {
   removeMemo,
@@ -30,11 +32,13 @@ const MemoContainer = styled.div`
   box-shadow: 10px 10px 24px 0px rgba(0, 0, 0, 0.25);
   resize: both;
 
+  .memo-menu,
   .close {
     float: right;
-    width: 10px;
+    width: 15px;
     margin-top: 10px;
     margin-right: 10px;
+    padding-left: 5px;
     cursor: pointer;
   }
 
@@ -84,6 +88,7 @@ const MemoContainer = styled.div`
 
 function Memo({ id, info, tag }) {
   const [memoText, setMemoText] = useState("");
+  const [isEditMenuOpen, setIsEditMenuOpen] = useState(false);
 
   const targetMemo = useSelector((state) => state.memoRoom.memos)[id];
   const dispatch = useDispatch();
@@ -124,6 +129,10 @@ function Memo({ id, info, tag }) {
     }
   }
 
+  function handleEditMemoMenuClick() {
+    setIsEditMenuOpen(true);
+  }
+
   const date = new Date(info.alarmDate);
 
   return (
@@ -137,6 +146,18 @@ function Memo({ id, info, tag }) {
     >
       <div>
         <img className="close" src={close} onClick={handleRemoveMemoClick} />
+        <img
+          className="memo-menu"
+          src={memoMenu}
+          onClick={handleEditMemoMenuClick}
+        />
+        {isEditMenuOpen && (
+          <EditMemoInfoModal
+            isOpen={isEditMenuOpen}
+            setIsOpen={setIsEditMenuOpen}
+            memoId={id}
+          />
+        )}
       </div>
       {info.formType === "text" && (
         <div className="textarea-wrapper">
@@ -166,7 +187,7 @@ Memo.propTypes = {
     color: PropTypes.string.isRequired,
     formType: PropTypes.string.isRequired,
     content: PropTypes.string,
-    alarmDate: PropTypes.string,
+    alarmDate: PropTypes.number,
   }).isRequired,
   tag: PropTypes.string.isRequired,
 };
