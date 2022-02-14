@@ -71,17 +71,9 @@ export const slice = createSlice({
       state.participants = [];
       state.memos = {};
     },
-<<<<<<< HEAD
-    removeMemoRequest: (state) => {
-      state.isLoading = true;
-      state.chatError = "";
-    },
-    removeMemoSuccess: (state, action) => {
-=======
     removeMemo: (state, action) => {
       const { memoId } = action.payload;
 
->>>>>>> 680f366d3e3ff46db4801cdb70673d658bd83535
       state.isLoading = false;
       delete state.memos[memoId];
     },
