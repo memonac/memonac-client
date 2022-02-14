@@ -77,7 +77,7 @@ const MemoContainer = styled.div`
   }
 
   .voice {
-    margin: 90px;
+    margin: 70px 28px;
   }
 `;
 
@@ -133,7 +133,11 @@ function Memo({ id, info, tag }) {
       )}
       {info.formType === "voice" && (
         <div className="textarea-wrapper voice">
-          <AudioRecord />
+          <AudioRecord
+            userId={currentUserId}
+            memoroomId={memoroomId}
+            memoId={id}
+          />
         </div>
       )}
       <div className="memo-info-wrapper">
