@@ -37,7 +37,7 @@ memoApi.removeMemo = async ({ userId, memoroomId, memoId }) => {
 memoApi.updateMemoText = async ({ userId, memoroomId, memoId, text }) => {
   const response = await axios.put(
     `users/${userId}/memorooms/${memoroomId}/memos/${memoId}/text`,
-    text,
+    { text },
     {
       withCredentials: true,
     }

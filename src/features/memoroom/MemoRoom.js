@@ -28,6 +28,7 @@ import LeaveMemoRoomModal from "./LeaveMemoRoomModal";
 const MemoRoomContainer = styled.div`
   .memo-wrapper {
     position: relative;
+    overflow: hidden;
     width: 100vw;
     height: 100vh;
   }
