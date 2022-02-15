@@ -1,8 +1,15 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components";
 
 import Button from "./Button";
 import { addAudioFileRequest } from "../features/memoroom/memoRoomSlice";
+
+const AudioWrapper = styled.div`
+  audio {
+    width: 150px;
+  }
+`;
 
 function AudioRecord({ userId, memoroomId, memoId }) {
   const [stream, setStream] = useState("");
@@ -105,8 +112,8 @@ function AudioRecord({ userId, memoroomId, memoId }) {
   }, [audioUrl]);
 
   return (
-    <>
-      {onRec && !awsAudioUrl ? (
+    <AudioWrapper>
+      {onRec ? (
         <Button text="RECORD" width={80} color="#3E497A" onClick={onRecAudio} />
       ) : (
         <Button text="STOP" width={80} color="#f03c3c" onClick={offRecAudio} />
@@ -124,7 +131,7 @@ function AudioRecord({ userId, memoroomId, memoId }) {
           <source src={awsAudioUrl} />
         </audio>
       )}
-    </>
+    </AudioWrapper>
   );
 }
 
