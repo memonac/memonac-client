@@ -25,7 +25,7 @@ function* getMemoRoomList({ payload }) {
 
       yield put(getMemoRoomListSuccess(memoRoomList.data));
     } catch (err) {
-      if (err.response.data.error.message === "Invaild Verify Token") {
+      if (err.response.data.error.message === "Expired Token") {
         yield put(logoutRequest());
       } else {
         yield put(getMemoRoomListFailure(err));
@@ -44,7 +44,7 @@ function* addNewMemoRoom({ payload }) {
       yield put(addNewMemoRoomFailure(serverResponse.error));
     }
   } catch (err) {
-    if (err.response.data.error.message === "Invaild Verify Token") {
+    if (err.response.data.error.message === "Expired Token") {
       yield put(logoutRequest());
     } else {
       yield put(addNewMemoRoomFailure(err));
@@ -62,7 +62,7 @@ function* editMemoRoomTitle({ payload }) {
       yield put(editMemoRoomTitleFailure(serverResponse.error));
     }
   } catch (err) {
-    if (err.response.data.error.message === "Invaild Verify Token") {
+    if (err.response.data.error.message === "Expired Token") {
       yield put(logoutRequest());
     } else {
       yield put(editMemoRoomTitleFailure(err));
@@ -80,7 +80,7 @@ function* removeMemoRoom({ payload }) {
       yield put(removeMemoRoomFailure(serverResponse.error));
     }
   } catch (err) {
-    if (err.response.data.error.message === "Invaild Verify Token") {
+    if (err.response.data.error.message === "Expired Token") {
       yield put(logoutRequest());
     } else {
       yield put(removeMemoRoomFailure(err));
