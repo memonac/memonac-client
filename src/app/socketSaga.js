@@ -7,6 +7,7 @@ import {
   removeMemo,
   updateMemoSize,
   updateMemoText,
+  addNewMemoSuccess,
 } from "../features/memoroom/memoRoomSlice";
 
 const chatSocket = io(`${process.env.REACT_APP_SERVER_URI}/chat`);
@@ -87,12 +88,18 @@ function createMemoSocketChannel(socket) {
       );
     });
 
+    socket.on("memo/add", (newMemo) => {
+      console.log("다른 사용자의 메모가 추가 되었다.");
+      emit(addNewMemoSuccess(newMemo));
+    });
+
     return () => {
       socket.off("join room");
       socket.off("memo/location");
       socket.off("memo/delete");
       socket.off("memo/size");
       socket.off("memo/text");
+      socket.off("memo/add");
     };
   });
 }
@@ -138,6 +145,9 @@ const memoRoomSocket = {
   },
   updateMemoText(memoId, text) {
     memoSocket.emit("memo/text", memoId, text);
+  },
+  addMemo(newMemo) {
+    memoSocket.emit("memo/add", newMemo);
   },
 };
 
