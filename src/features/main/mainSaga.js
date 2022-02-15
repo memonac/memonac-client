@@ -15,6 +15,8 @@ import {
 } from "./mainSlice";
 import mainApi from "../../utils/api/main";
 
+import { logoutRequest } from "../auth/authSlice";
+
 function* getMemoRoomList({ payload }) {
   const { userId } = payload;
   if (payload) {
@@ -23,7 +25,11 @@ function* getMemoRoomList({ payload }) {
 
       yield put(getMemoRoomListSuccess(memoRoomList.data));
     } catch (err) {
-      yield put(getMemoRoomListFailure(err));
+      if (err.response.data.error.message === "Invaild Verify Token") {
+        yield put(logoutRequest());
+      } else {
+        yield put(getMemoRoomListFailure(err));
+      }
     }
   }
 }
@@ -38,7 +44,11 @@ function* addNewMemoRoom({ payload }) {
       yield put(addNewMemoRoomFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(addNewMemoRoomFailure(err));
+    if (err.response.data.error.message === "Invaild Verify Token") {
+      yield put(logoutRequest());
+    } else {
+      yield put(addNewMemoRoomFailure(err));
+    }
   }
 }
 
@@ -52,7 +62,11 @@ function* editMemoRoomTitle({ payload }) {
       yield put(editMemoRoomTitleFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(editMemoRoomTitleFailure(err));
+    if (err.response.data.error.message === "Invaild Verify Token") {
+      yield put(logoutRequest());
+    } else {
+      yield put(editMemoRoomTitleFailure(err));
+    }
   }
 }
 
@@ -66,7 +80,11 @@ function* removeMemoRoom({ payload }) {
       yield put(removeMemoRoomFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(removeMemoRoomFailure(err));
+    if (err.response.data.error.message === "Invaild Verify Token") {
+      yield put(logoutRequest());
+    } else {
+      yield put(removeMemoRoomFailure(err));
+    }
   }
 }
 
