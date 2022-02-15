@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+
+import { memoRoomInitializeState } from "../features/main/mainSlice";
+import { memoInitializeState } from "../features/memoroom/memoRoomSlice";
 
 import ROUTES from "../constants/routes";
 import Login from "../features/auth/Login";
@@ -17,6 +20,14 @@ import theme from "../utils/theme";
 
 function App() {
   const loginStatus = useSelector((state) => state.auth.isLogin);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!loginStatus) {
+      dispatch(memoRoomInitializeState());
+      dispatch(memoInitializeState());
+    }
+  }, [loginStatus]);
 
   return (
     <ThemeProvider theme={theme}>
