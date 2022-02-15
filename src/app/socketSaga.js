@@ -9,6 +9,8 @@ import {
   updateMemoStyleSuccess,
   updateMemoTextSuccess,
   addNewMemoSuccess,
+  leaveMemoRoomSuccess,
+  postVerifyTokenSuccess,
 } from "../features/memoroom/memoRoomSlice";
 
 const chatSocket = io(`${process.env.REACT_APP_SERVER_URI}/chat`);
@@ -104,6 +106,14 @@ function createMemoSocketChannel(socket) {
       emit(addNewMemoSuccess(newMemo));
     });
 
+    socket.on("withdraw room", (userId) => {
+      emit(leaveMemoRoomSuccess({ userId }));
+    });
+
+    socket.on("update participants", (participants, memoroomId) => {
+      emit(postVerifyTokenSuccess({ participants, memoroomId }));
+    });
+
     return () => {
       socket.off("join room");
       socket.off("memo/location");
@@ -112,6 +122,8 @@ function createMemoSocketChannel(socket) {
       socket.off("memo/text");
       socket.off("memo/style");
       socket.off("memo/add");
+      socket.off("withdraw room");
+      socket.off("update participants");
     };
   });
 }
@@ -163,6 +175,12 @@ const memoRoomSocket = {
   },
   addMemo(newMemo) {
     memoSocket.emit("memo/add", newMemo);
+  },
+  withdrawRoom(userId) {
+    memoSocket.emit("withdraw room", userId);
+  },
+  updateParticipants(participants, memoroomId) {
+    memoSocket.emit("update participants", participants, memoroomId);
   },
 };
 

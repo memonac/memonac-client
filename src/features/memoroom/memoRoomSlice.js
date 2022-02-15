@@ -6,6 +6,7 @@ export const slice = createSlice({
     isLoading: false,
     error: "",
     success: "",
+    owner: {},
     name: "",
     participants: {},
     memos: {},
@@ -29,6 +30,7 @@ export const slice = createSlice({
       state.isLoading = false;
       state.error = "";
       state.success = "";
+      state.owner = "";
       state.name = "";
       state.participants = {};
       state.memos = {};
@@ -42,10 +44,18 @@ export const slice = createSlice({
       state.isLoading = true;
     },
     getMemoListSuccess: (state, action) => {
-      const { participants, memos, slackToken, name, chats, chatLastIndex } =
-        action.payload;
+      const {
+        participants,
+        memos,
+        slackToken,
+        name,
+        chats,
+        chatLastIndex,
+        owner,
+      } = action.payload;
 
       state.name = name;
+      state.owner = owner;
       state.participants = participants;
       state.memos = memos;
       state.slackToken = slackToken;
@@ -54,8 +64,10 @@ export const slice = createSlice({
       state.chatLastIndex = chatLastIndex;
     },
     getMemoListFailure: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
+      const { response } = action.payload;
+
+      state.isChatLoading = false;
+      state.chatError = response.data.error.message;
     },
     addNewMemoRequest: (state) => {
       state.isLoading = true;
@@ -75,8 +87,10 @@ export const slice = createSlice({
       state.isLoading = false;
     },
     addNewMemoFailure: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
+      const { response } = action.payload;
+
+      state.isChatLoading = false;
+      state.chatError = response.data.error.message;
     },
     resetMemoList: (state) => {
       state.error = "";
@@ -94,8 +108,10 @@ export const slice = createSlice({
       delete state.memos[memoId];
     },
     removeMemoFailure: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
+      const { response } = action.payload;
+
+      state.isChatLoading = false;
+      state.chatError = response.data.error.message;
     },
     updateMemoStyleRequest: (state) => {
       state.isLoading = true;
@@ -109,8 +125,10 @@ export const slice = createSlice({
       state.memos[memoId].tags = memoTags;
     },
     updateMemoStyleFailure: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
+      const { response } = action.payload;
+
+      state.isChatLoading = false;
+      state.chatError = response.data.error.message;
     },
     updateMemoLocationRequest: (state) => {
       state.isLoading = true;
@@ -122,8 +140,10 @@ export const slice = createSlice({
       state.memos[memoId].location = [left, top];
     },
     updateMemoLocationFailure: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
+      const { response } = action.payload;
+
+      state.isChatLoading = false;
+      state.chatError = response.data.error.message;
     },
     updateMemoSizeRequest: (state) => {
       state.isLoading = true;
@@ -135,8 +155,10 @@ export const slice = createSlice({
       state.memos[memoId].size = [width, height];
     },
     updateMemoSizeFailure: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
+      const { response } = action.payload;
+
+      state.isChatLoading = false;
+      state.chatError = response.data.error.message;
     },
     updateMemoTextRequest: (state) => {
       state.isLoading = true;
@@ -148,8 +170,10 @@ export const slice = createSlice({
       state.memos[memoId].content = text;
     },
     updateMemoTextFailure: (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload;
+      const { response } = action.payload;
+
+      state.isChatLoading = false;
+      state.chatError = response.data.error.message;
     },
     joinRoom: (state, action) => {
       // 유저가 방에 참가 했을때
@@ -163,19 +187,19 @@ export const slice = createSlice({
       state.success = action.payload;
     },
     postSendMailFailure: (state, action) => {
-      const { message } = action.payload;
+      const { response } = action.payload;
 
-      state.isLoading = false;
-      state.error = message;
+      state.isChatLoading = false;
+      state.chatError = response.data.error.message;
     },
     postVerifyTokenRequest: (state) => {
       state.isLoading = true;
     },
     postVerifyTokenSuccess: (state, action) => {
-      const { userInfo } = action.payload;
-
+      const { participants } = action.payload;
+      
       state.isLoading = false;
-      state.participants = userInfo;
+      state.participants = participants;
     },
     postVerifyTokenFailure: (state, action) => {
       const { response } = action.payload;
@@ -194,6 +218,21 @@ export const slice = createSlice({
       state.chatLastIndex = lastIndex;
     },
     getChatListFailure: (state, action) => {
+      const { response } = action.payload;
+
+      state.isChatLoading = false;
+      state.chatError = response.data.error.message;
+    },
+    leaveMemoRoomRequest: (state) => {
+      state.isLoading = true;
+    },
+    leaveMemoRoomSuccess: (state, action) => {
+      const { userId } = action.payload;
+
+      state.isLoading = false;
+      delete state.participants[userId];
+    },
+    leaveMemoRoomFailure: (state, action) => {
       const { response } = action.payload;
 
       state.isChatLoading = false;
@@ -245,6 +284,9 @@ export const {
   getChatListRequest,
   getChatListSuccess,
   getChatListFailure,
+  leaveMemoRoomRequest,
+  leaveMemoRoomSuccess,
+  leaveMemoRoomFailure,
   memoInitializeState,
 } = slice.actions;
 

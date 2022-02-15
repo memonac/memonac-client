@@ -111,4 +111,15 @@ memoApi.updateMemoSize = async ({
   return response.data;
 };
 
+memoApi.leaveMemoRoom = async ({ userId, memoroomId }) => {
+  const response = await axios.put(
+    `users/${userId}/memorooms/${memoroomId}/leave`,
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};
+
 export default memoApi;

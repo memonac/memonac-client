@@ -37,6 +37,9 @@ import {
   getChatListRequest,
   getChatListSuccess,
   getChatListFailure,
+  leaveMemoRoomRequest,
+  leaveMemoRoomSuccess,
+  leaveMemoRoomFailure,
 } from "./memoRoomSlice";
 
 import { logoutRequest } from "../auth/authSlice";
@@ -103,6 +106,11 @@ function* postVerifyToken({ payload }) {
 
     if (serverResponse.result === "success") {
       yield put(postVerifyTokenSuccess(serverResponse.data));
+      yield fork(
+        memoRoomSocket.updateParticipants,
+        serverResponse.data.participants,
+        payload.memoroomId
+      );
     } else {
       yield put(postVerifyTokenFailure(serverResponse.error));
     }
@@ -218,6 +226,21 @@ function* getChatList({ payload }) {
   }
 }
 
+function* leaveMemoRoom({ payload }) {
+  try {
+    const serverResponse = yield call(memoApi.leaveMemoRoom, payload);
+
+    if (serverResponse.result === "success") {
+      yield put(leaveMemoRoomSuccess(payload));
+      yield fork(memoRoomSocket.withdrawRoom, payload.userId);
+    } else {
+      yield put(leaveMemoRoomFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(leaveMemoRoomFailure(err));
+  }
+}
+
 function* getMemoRoomWatcher() {
   yield takeEvery(getMemoListRequest, getMemoList);
 }
@@ -258,6 +281,10 @@ function* getChatWatcher() {
   yield takeLatest(getChatListRequest, getChatList);
 }
 
+function* leaveMemoRoomWatcher() {
+  yield takeLatest(leaveMemoRoomRequest, leaveMemoRoom);
+}
+
 export function* memoRoomSaga() {
   yield all([
     fork(getMemoRoomWatcher),
@@ -270,5 +297,6 @@ export function* memoRoomSaga() {
     fork(updateMemoSizeWatcher),
     fork(updateMemoLocationWatcher),
     fork(getChatWatcher),
+    fork(leaveMemoRoomWatcher),
   ]);
 }
