@@ -1,24 +1,16 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-
 import PropTypes from "prop-types";
-
-import {
-  editMemoRoomTitleRequest,
-  removeMemoRoomRequest,
-} from "../../features/main/mainSlice";
 
 import hashtag from "../../assets/images/hashtag.png";
 import menu from "../../assets/images/menu.png";
 import clickedMenu from "../../assets/images/click-menu.png";
 import pen from "../../assets/images/pen.png";
 import wastebasket from "../../assets/images/wastebasket.png";
-import ModalContainer from "../Modal";
-import TextInput from "../TextInput";
-import Button from "../Button";
+import EditRoomTitleModal from "./EditRoomTitleModal";
 
 import { MemoRoomContainer } from "./MemoroomBox.style";
+import DeleteRoomModal from "./DeleteRoomModal";
 
 const MemoRoomBox = ({ id, roomName, tags }) => {
   const [clickMemoRoomMenu, setClickMemoRoomMenu] = useState(false);
@@ -26,9 +18,6 @@ const MemoRoomBox = ({ id, roomName, tags }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const currentUserId = useSelector((state) => state.auth.id);
-
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   function handleMemoroomBoxClick() {
@@ -49,32 +38,6 @@ const MemoRoomBox = ({ id, roomName, tags }) => {
 
   function handlePenButtonClick() {
     setIsEditModalOpen(!isEditModalOpen);
-  }
-
-  function handleTitleInputEditSubmit(event) {
-    event.preventDefault();
-    const { name } = event.target;
-
-    dispatch(
-      editMemoRoomTitleRequest({
-        userId: currentUserId,
-        memoRoomId: id,
-        name: name.value,
-      })
-    );
-    setIsEditModalOpen(false);
-    setClickMemoRoomMenu(false);
-  }
-
-  function handleDeleteButtonClick() {
-    dispatch(
-      removeMemoRoomRequest({
-        userId: currentUserId,
-        memoRoomId: id,
-      })
-    );
-    setIsDeleteModalOpen(false);
-    setClickMemoRoomMenu(false);
   }
 
   return (
@@ -117,35 +80,18 @@ const MemoRoomBox = ({ id, roomName, tags }) => {
               />
             </div>
           </div>
-          <ModalContainer
+          <EditRoomTitleModal
+            id={id}
             isOpen={isEditModalOpen}
-            title="Edit Room Name"
-            onClose={setIsEditModalOpen}
-          >
-            <form onSubmit={handleTitleInputEditSubmit}>
-              <TextInput
-                type="text"
-                name="name"
-                defaultValue={roomName}
-                placeholder="Please Enter Name"
-                width={200}
-              />
-              <Button text="EDIT" width={100} />
-            </form>
-          </ModalContainer>
-          <ModalContainer
+            setIsOpen={setIsEditModalOpen}
+            setIsMenuOpen={setClickMemoRoomMenu}
+            roomName={roomName}
+          />
+          <DeleteRoomModal
+            id={id}
             isOpen={isDeleteModalOpen}
-            title="Delete Room"
-            onClose={setIsDeleteModalOpen}
-            height={200}
-          >
-            <div>ARE YOU GONNA DELETE THIS ROOM?</div>
-            <Button
-              text="DELETE"
-              width={100}
-              onClick={handleDeleteButtonClick}
-            />
-          </ModalContainer>
+            setIsOpen={setIsDeleteModalOpen}
+          />
         </>
       )}
       {clickMemoRoomHashTag && (
@@ -175,10 +121,10 @@ const MemoRoomBox = ({ id, roomName, tags }) => {
   );
 };
 
-export default MemoRoomBox;
-
 MemoRoomBox.propTypes = {
   id: PropTypes.string.isRequired,
   roomName: PropTypes.string.isRequired,
   tags: PropTypes.array,
 };
+
+export default MemoRoomBox;

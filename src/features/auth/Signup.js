@@ -30,7 +30,7 @@ const SignupContainer = styled.div`
   }
 
   .error-message {
-    color: red;
+    color: #f03c3c;
   }
 `;
 

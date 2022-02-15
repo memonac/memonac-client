@@ -54,6 +54,14 @@ function createMemoSocketChannel(socket) {
       // 누군가 내가 들어왔을때 토스트 알림
     });
 
+    socket.on("withdraw room", (userId) => {
+      emit(leaveMemoRoomSuccess({ userId }));
+    });
+
+    socket.on("update participants", (participants, memoroomId) => {
+      emit(postVerifyTokenSuccess({ participants, memoroomId }));
+    });
+
     socket.on("memo/location", (memoId, left, top) => {
       emit(
         updateMemoLocationSuccess({
@@ -106,24 +114,16 @@ function createMemoSocketChannel(socket) {
       emit(addNewMemoSuccess(newMemo));
     });
 
-    socket.on("withdraw room", (userId) => {
-      emit(leaveMemoRoomSuccess({ userId }));
-    });
-
-    socket.on("update participants", (participants, memoroomId) => {
-      emit(postVerifyTokenSuccess({ participants, memoroomId }));
-    });
-
     return () => {
       socket.off("join room");
+      socket.off("withdraw room");
+      socket.off("update participants");
       socket.off("memo/location");
       socket.off("memo/delete");
       socket.off("memo/size");
       socket.off("memo/text");
       socket.off("memo/style");
       socket.off("memo/add");
-      socket.off("withdraw room");
-      socket.off("update participants");
     };
   });
 }
@@ -158,6 +158,12 @@ const memoRoomSocket = {
   sendMessage(message, date) {
     chatSocket.emit("send message", message, date);
   },
+  withdrawRoom(userId) {
+    memoSocket.emit("withdraw room", userId);
+  },
+  updateParticipants(participants, memoroomId) {
+    memoSocket.emit("update participants", participants, memoroomId);
+  },
   updateMemoLocation(memoId, left, top) {
     memoSocket.emit("memo/location", memoId, left, top);
   },
@@ -175,12 +181,6 @@ const memoRoomSocket = {
   },
   addMemo(newMemo) {
     memoSocket.emit("memo/add", newMemo);
-  },
-  withdrawRoom(userId) {
-    memoSocket.emit("withdraw room", userId);
-  },
-  updateParticipants(participants, memoroomId) {
-    memoSocket.emit("update participants", participants, memoroomId);
   },
 };
 

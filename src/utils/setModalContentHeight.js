@@ -8,6 +8,7 @@ function setModalContentHeight(height, width) {
       bottom: 0,
       backgroundColor: "rgba(192, 192, 192, 0.75)",
       backdropFilter: "blur(5px)",
+      zIndex: 2,
     },
     content: {
       position: "absolute",
