@@ -133,7 +133,7 @@ function Memo({ id, info, tag }) {
     }
   }
 
-  const date = info.alarmDate ? new Date(info.alarmDate) : "";
+  const date = new Date(info.alarmDate);
 
   return (
     <MemoContainer

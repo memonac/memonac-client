@@ -47,7 +47,7 @@ function AudioRecord({ userId, memoroomId, memoId }) {
 
       analyser.onaudioprocess = function (event) {
         if (event.playbackTime > 180) {
-          stream.getAudioTracks().forEach(function (track) {
+          stream.getAudioTracks().forEach((track) => {
             track.stop();
           });
           mediaRecorder.stop();
@@ -72,7 +72,7 @@ function AudioRecord({ userId, memoroomId, memoId }) {
       setOnRec(true);
     };
 
-    stream.getAudioTracks().forEach(function (track) {
+    stream.getAudioTracks().forEach((track) => {
       track.stop();
     });
 
@@ -123,7 +123,7 @@ function AudioRecord({ userId, memoroomId, memoId }) {
   );
 }
 
-AudioRecord.prototypes = {
+AudioRecord.propTypes = {
   userId: PropTypes.string.isRequired,
   memoroomId: PropTypes.string.isRequired,
   memoId: PropTypes.string.isRequired,
