@@ -76,21 +76,24 @@ function Main() {
         </Sidebar>
         <RoomList>
           {loadingStatus && <Loading />}
-          {Object.entries(memoRooms).map(([roomId, room]) => {
-            const filteredTagsLength = new Set([...room.tags, ...selectedTags])
-              .size;
+          {!loadingStatus &&
+            Object.entries(memoRooms).map(([roomId, room]) => {
+              const filteredTagsLength = new Set([
+                ...room.tags,
+                ...selectedTags,
+              ]).size;
 
-            if (room.tags.length === filteredTagsLength) {
-              return (
-                <MemoRoomBox
-                  key={roomId}
-                  id={roomId}
-                  roomName={room.name}
-                  tags={room.tags}
-                />
-              );
-            }
-          })}
+              if (room.tags.length === filteredTagsLength) {
+                return (
+                  <MemoRoomBox
+                    key={roomId}
+                    id={roomId}
+                    roomName={room.name}
+                    tags={room.tags}
+                  />
+                );
+              }
+            })}
         </RoomList>
       </MainWrapper>
     </>

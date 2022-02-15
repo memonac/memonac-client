@@ -42,7 +42,6 @@ import {
 import { memoRoomSocket } from "../../app/socketSaga";
 import memoApi from "../../utils/api/memo";
 import nodemailerApi from "../../utils/api/nodemailer";
-import { memoRoomSocket } from "../../app/socketSaga";
 import chatApi from "../../utils/api/chat";
 
 function* getMemoList({ payload }) {

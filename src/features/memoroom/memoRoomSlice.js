@@ -90,6 +90,7 @@ export const slice = createSlice({
     updateMemoStyleSuccess: (state, action) => {
       const { memoId, memoColor, alarmDate, memoTags } = action.payload;
 
+      state.isLoading = false;
       state.memos[memoId].color = memoColor;
       state.memos[memoId].alarmDate = alarmDate;
       state.memos[memoId].tags = memoTags;
@@ -104,6 +105,7 @@ export const slice = createSlice({
     updateMemoLocationSuccess: (state, action) => {
       const { memoId, left, top } = action.payload;
 
+      state.isLoading = false;
       state.memos[memoId].location = [left, top];
     },
     updateMemoLocationFailure: (state, action) => {
@@ -116,6 +118,7 @@ export const slice = createSlice({
     updateMemoSizeSuccess: (state, action) => {
       const { memoId, width, height } = action.payload;
 
+      state.isLoading = false;
       state.memos[memoId].size = [width, height];
     },
     updateMemoSizeFailure: (state, action) => {
@@ -128,6 +131,7 @@ export const slice = createSlice({
     updateMemoTextSuccess: (state, action) => {
       const { memoId, text } = action.payload;
 
+      state.isLoading = false;
       state.memos[memoId].content = text;
     },
     updateMemoTextFailure: (state, action) => {

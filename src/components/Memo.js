@@ -140,13 +140,10 @@ function Memo({ id, info, tag }) {
     }
   }
 
-<<<<<<< HEAD
   function handleEditMemoMenuClick() {
     setIsEditMenuOpen(true);
   }
 
-=======
->>>>>>> 3323bb751af54362d07863e231a73341b8d12ecf
   const date = info.alarmDate ? new Date(info.alarmDate) : "";
 
   return (
