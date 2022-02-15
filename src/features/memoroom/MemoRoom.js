@@ -20,7 +20,6 @@ import {
   getMemoListRequest,
   resetMemoList,
   postSendMailRequest,
-  receiveMessage,
   updateMemoLocationRequest,
 } from "./memoRoomSlice";
 import NewMemoModal from "./NewMemoModal";
@@ -71,6 +70,8 @@ function MemoRoom() {
   const participants = useSelector((state) => state.memoRoom.participants);
   const userName = useSelector((state) => state.auth.name);
   const chats = useSelector((state) => state.memoRoom.chats);
+  const chatLastIndex = useSelector((state) => state.memoRoom.chatLastIndex);
+
   const [inputInfo, setinputInfo] = useState({});
 
   const { memoroomId } = useParams();
@@ -182,16 +183,7 @@ function MemoRoom() {
 
     const inputMessage = event.target.message.value;
     const date = new Date();
-    dispatch(
-      receiveMessage({
-        user: {
-          id: userId,
-          name: userName,
-        },
-        message: inputMessage,
-        date: date,
-      })
-    );
+
     setinputInfo({ message: inputMessage, date });
     event.target.message.value = "";
   }
@@ -260,6 +252,8 @@ function MemoRoom() {
         chatList={chats}
         isOpen={isChatOpen}
         currentUserId={userId}
+        currentMemoRoomId={memoroomId}
+        chatLastIndex={chatLastIndex}
       />
       <div className="memo-wrapper" ref={drop}>
         {memoList.map(([memoId, memoInfo]) => (

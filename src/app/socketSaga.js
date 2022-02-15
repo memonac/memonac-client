@@ -8,6 +8,7 @@ import {
   updateMemoSizeSuccess,
   updateMemoStyleSuccess,
   updateMemoTextSuccess,
+  addNewMemoSuccess,
 } from "../features/memoroom/memoRoomSlice";
 
 const chatSocket = io(`${process.env.REACT_APP_SERVER_URI}/chat`);
@@ -23,12 +24,13 @@ function createChatSocketChannel(socket) {
       // 누군가 내가 들어왔을때 토스트 알림
     });
 
-    socket.on("receive message", (userId, userName, message, date) => {
+    socket.on("receive message", (userId, userName, message, date, id) => {
       emit(
         receiveMessage({
           user: { id: userId, name: userName },
           message,
-          date: new Date(date),
+          date,
+          id,
         })
       );
     });
@@ -98,6 +100,10 @@ function createMemoSocketChannel(socket) {
       );
     });
 
+    socket.on("memo/add", (newMemo) => {
+      emit(addNewMemoSuccess(newMemo));
+    });
+
     return () => {
       socket.off("join room");
       socket.off("memo/location");
@@ -105,6 +111,7 @@ function createMemoSocketChannel(socket) {
       socket.off("memo/size");
       socket.off("memo/text");
       socket.off("memo/style");
+      socket.off("memo/add");
     };
   });
 }
@@ -153,6 +160,9 @@ const memoRoomSocket = {
   },
   updateMemoStyle({ memoId, memoColor, alarmDate, memoTags }) {
     memoSocket.emit("memo/style", memoId, memoColor, alarmDate, memoTags);
+  },
+  addMemo(newMemo) {
+    memoSocket.emit("memo/add", newMemo);
   },
 };
 

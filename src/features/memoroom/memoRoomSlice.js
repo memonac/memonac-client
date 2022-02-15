@@ -12,13 +12,16 @@ export const slice = createSlice({
     /* memoId: {
       formType: "text",
       content: "abcdefg",
-      location: [x, y],
+      location: [x, y],np
       size: [120, 100],
       color: "red",
       alarmDate: "2022-02-03 00:00",
       tags: ["good", "hello"]
     } */
     chats: [],
+    isChatLoading: false,
+    chatLastIndex: null,
+    chatError: "",
     slackToken: "",
   },
   reducers: {
@@ -26,7 +29,8 @@ export const slice = createSlice({
       state.isLoading = true;
     },
     getMemoListSuccess: (state, action) => {
-      const { participants, memos, slackToken, name, chats } = action.payload;
+      const { participants, memos, slackToken, name, chats, chatLastIndex } =
+        action.payload;
 
       state.name = name;
       state.participants = participants;
@@ -34,6 +38,7 @@ export const slice = createSlice({
       state.slackToken = slackToken;
       state.chats = chats;
       state.isLoading = false;
+      state.chatLastIndex = chatLastIndex;
     },
     getMemoListFailure: (state, action) => {
       state.isLoading = false;
@@ -161,13 +166,30 @@ export const slice = createSlice({
       state.isLoading = false;
       state.error = response.data.error.message;
     },
+    getChatListRequest: (state) => {
+      state.isChatLoading = true;
+    },
+    getChatListSuccess: (state, action) => {
+      const { chats, lastIndex } = action.payload;
+
+      state.isChatLoading = false;
+      state.chats = chats.concat(state.chats);
+      state.chatLastIndex = lastIndex;
+    },
+    getChatListFailure: (state, action) => {
+      const { response } = action.payload;
+
+      state.isChatLoading = false;
+      state.chatError = response.data.error.message;
+    },
     receiveMessage: (state, action) => {
-      const { user, message, date } = action.payload;
+      const { user, message, date, id } = action.payload;
 
       state.chats.push({
         user,
         message,
         sendDate: date,
+        _id: id,
       });
     },
   },
@@ -203,6 +225,9 @@ export const {
   postVerifyTokenRequest,
   postVerifyTokenSuccess,
   postVerifyTokenFailure,
+  getChatListRequest,
+  getChatListSuccess,
+  getChatListFailure,
 } = slice.actions;
 
 export default slice.reducer;

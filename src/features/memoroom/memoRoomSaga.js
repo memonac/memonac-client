@@ -34,10 +34,16 @@ import {
   postVerifyTokenSuccess,
   postVerifyTokenFailure,
   postVerifyTokenRequest,
+  getChatListRequest,
+  getChatListSuccess,
+  getChatListFailure,
 } from "./memoRoomSlice";
+
+import { memoRoomSocket } from "../../app/socketSaga";
 import memoApi from "../../utils/api/memo";
 import nodemailerApi from "../../utils/api/nodemailer";
 import { memoRoomSocket } from "../../app/socketSaga";
+import chatApi from "../../utils/api/chat";
 
 function* getMemoList({ payload }) {
   try {
@@ -55,6 +61,7 @@ function* addNewMemo({ payload }) {
 
     if (serverResponse.result === "success") {
       yield put(addNewMemoSuccess(serverResponse.data));
+      yield fork(memoRoomSocket.addMemo, serverResponse.data);
     } else {
       yield put(addNewMemoFailure(serverResponse.error));
     }
@@ -176,6 +183,20 @@ function* updateMemoLocation({ payload }) {
   }
 }
 
+function* getChatList({ payload }) {
+  try {
+    const serverResponse = yield call(chatApi.getNextChatInfo, payload);
+
+    if (serverResponse.result === "success") {
+      yield put(getChatListSuccess(serverResponse.data));
+    } else {
+      yield put(getChatListFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(getChatListFailure(err));
+  }
+}
+
 function* getMemoRoomWatcher() {
   yield takeEvery(getMemoListRequest, getMemoList);
 }
@@ -212,6 +233,10 @@ function* updateMemoLocationWatcher() {
   yield takeLatest(updateMemoLocationRequest, updateMemoLocation);
 }
 
+function* getChatWatcher() {
+  yield takeLatest(getChatListRequest, getChatList);
+}
+
 export function* memoRoomSaga() {
   yield all([
     fork(getMemoRoomWatcher),
@@ -223,5 +248,6 @@ export function* memoRoomSaga() {
     fork(updateMemoTextWatcher),
     fork(updateMemoSizeWatcher),
     fork(updateMemoLocationWatcher),
+    fork(getChatWatcher),
   ]);
 }
