@@ -12,7 +12,7 @@ export const slice = createSlice({
     /* memoId: {
       formType: "text",
       content: "abcdefg",
-      location: [x, y],np
+      location: [x, y],
       size: [120, 100],
       color: "red",
       alarmDate: "2022-02-03 00:00",
