@@ -8,6 +8,7 @@ import Button from "../../components/Button";
 import Memo from "../../components/Memo";
 import Header from "../../components/Header";
 import Profile from "../../components/Profile";
+import Loading from "../../components/Loading";
 import { DraggableMemo } from "../../components/DraggableMemo";
 import ModalContainer from "../../components/Modal";
 import TextInput from "../../components/TextInput";
@@ -20,8 +21,7 @@ import {
   getMemoListRequest,
   resetMemoList,
   postSendMailRequest,
-  receiveMessage,
-  updateMemoLocation,
+  updateMemoLocationRequest,
 } from "./memoRoomSlice";
 import NewMemoModal from "./NewMemoModal";
 
@@ -62,14 +62,15 @@ function MemoRoom() {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
+  const userId = useSelector((state) => state.auth.id);
+  const userName = useSelector((state) => state.auth.name);
+
+  const loadingStatus = useSelector((state) => state.memoRoom.isLoading);
   const error = useSelector((state) => state.memoRoom.error);
   const success = useSelector((state) => state.memoRoom.success);
   const memos = useSelector((state) => state.memoRoom.memos);
-
   const memoRoomName = useSelector((state) => state.memoRoom.name);
-  const userId = useSelector((state) => state.auth.id);
   const participants = useSelector((state) => state.memoRoom.participants);
-  const userName = useSelector((state) => state.auth.name);
   const chats = useSelector((state) => state.memoRoom.chats);
   const chatLastIndex = useSelector((state) => state.memoRoom.chatLastIndex);
 
@@ -118,8 +119,15 @@ function MemoRoom() {
 
   const moveMemo = useCallback(
     (id, left, top) => {
-      memoRoomSocket.updateMemoLocation(id, left, top);
-      dispatch(updateMemoLocation({ memoId: id, left, top }));
+      dispatch(
+        updateMemoLocationRequest({
+          userId,
+          memoroomId,
+          memoId: id,
+          left,
+          top,
+        })
+      );
     },
     [memos]
   );
@@ -249,18 +257,21 @@ function MemoRoom() {
         currentMemoRoomId={memoroomId}
         chatLastIndex={chatLastIndex}
       />
-      <div className="memo-wrapper" ref={drop}>
-        {memoList.map(([memoId, memoInfo]) => (
-          <DraggableMemo
-            key={memoId}
-            id={memoId}
-            left={memoInfo.location[0]}
-            top={memoInfo.location[1]}
-          >
-            <Memo id={memoId} info={memoInfo} tag={memoTagInfo[memoId]} />
-          </DraggableMemo>
-        ))}
-      </div>
+      {loadingStatus && <Loading />}
+      {!loadingStatus && (
+        <div className="memo-wrapper" ref={drop}>
+          {memoList.map(([memoId, memoInfo]) => (
+            <DraggableMemo
+              key={memoId}
+              id={memoId}
+              left={memoInfo.location[0]}
+              top={memoInfo.location[1]}
+            >
+              <Memo id={memoId} info={memoInfo} tag={memoTagInfo[memoId]} />
+            </DraggableMemo>
+          ))}
+        </div>
+      )}
     </MemoRoomContainer>
   );
 }

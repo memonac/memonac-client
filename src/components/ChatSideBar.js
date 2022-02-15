@@ -1,5 +1,6 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, { useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import { getChatListRequest } from "../features/memoroom/memoRoomSlice";
 
 import styled from "styled-components";

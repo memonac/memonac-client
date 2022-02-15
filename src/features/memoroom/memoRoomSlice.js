@@ -12,7 +12,7 @@ export const slice = createSlice({
     /* memoId: {
       formType: "text",
       content: "abcdefg",
-      location: [x, y],np
+      location: [x, y],
       size: [120, 100],
       color: "red",
       alarmDate: "2022-02-03 00:00",
@@ -25,6 +25,19 @@ export const slice = createSlice({
     slackToken: "",
   },
   reducers: {
+    memoInitializeState: (state) => {
+      state.isLoading = false;
+      state.error = "";
+      state.success = "";
+      state.name = "";
+      state.participants = {};
+      state.memos = {};
+      state.chats = [];
+      state.isChatLoading = false;
+      state.chatLastIndex = null;
+      state.chatError = "";
+      state.slackToken = "";
+    },
     getMemoListRequest: (state) => {
       state.isLoading = true;
     },
@@ -71,26 +84,72 @@ export const slice = createSlice({
       state.participants = [];
       state.memos = {};
     },
-    removeMemo: (state, action) => {
+    removeMemoRequest: (state) => {
+      state.isLoading = true;
+    },
+    removeMemoSuccess: (state, action) => {
       const { memoId } = action.payload;
 
       state.isLoading = false;
       delete state.memos[memoId];
     },
-    updateMemoLocation: (state, action) => {
+    removeMemoFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    updateMemoStyleRequest: (state) => {
+      state.isLoading = true;
+    },
+    updateMemoStyleSuccess: (state, action) => {
+      const { memoId, memoColor, alarmDate, memoTags } = action.payload;
+
+      state.isLoading = false;
+      state.memos[memoId].color = memoColor;
+      state.memos[memoId].alarmDate = alarmDate;
+      state.memos[memoId].tags = memoTags;
+    },
+    updateMemoStyleFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    updateMemoLocationRequest: (state) => {
+      state.isLoading = true;
+    },
+    updateMemoLocationSuccess: (state, action) => {
       const { memoId, left, top } = action.payload;
 
+      state.isLoading = false;
       state.memos[memoId].location = [left, top];
     },
-    updateMemoSize: (state, action) => {
+    updateMemoLocationFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    updateMemoSizeRequest: (state) => {
+      state.isLoading = true;
+    },
+    updateMemoSizeSuccess: (state, action) => {
       const { memoId, width, height } = action.payload;
 
+      state.isLoading = false;
       state.memos[memoId].size = [width, height];
     },
-    updateMemoText: (state, action) => {
+    updateMemoSizeFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    updateMemoTextRequest: (state) => {
+      state.isLoading = true;
+    },
+    updateMemoTextSuccess: (state, action) => {
       const { memoId, text } = action.payload;
 
+      state.isLoading = false;
       state.memos[memoId].content = text;
+    },
+    updateMemoTextFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
     },
     joinRoom: (state, action) => {
       // 유저가 방에 참가 했을때
@@ -173,10 +232,21 @@ export const {
   addNewMemoRequest,
   addNewMemoSuccess,
   addNewMemoFailure,
-  removeMemo,
-  updateMemoLocation,
-  updateMemoSize,
-  updateMemoText,
+  removeMemoRequest,
+  removeMemoSuccess,
+  removeMemoFailure,
+  updateMemoTextRequest,
+  updateMemoTextSuccess,
+  updateMemoTextFailure,
+  updateMemoStyleRequest,
+  updateMemoStyleSuccess,
+  updateMemoStyleFailure,
+  updateMemoLocationRequest,
+  updateMemoLocationSuccess,
+  updateMemoLocationFailure,
+  updateMemoSizeRequest,
+  updateMemoSizeSuccess,
+  updateMemoSizeFailure,
   resetMemoList,
   receiveMessage,
   postSendMailRequest,
@@ -188,6 +258,7 @@ export const {
   getChatListRequest,
   getChatListSuccess,
   getChatListFailure,
+  memoInitializeState,
   addAudioFileRequest,
   addAudioFileSuccess,
   addAudioFileFailure,

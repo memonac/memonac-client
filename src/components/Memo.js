@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router";
 
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { debounce } from "lodash";
 
-import { removeMemoRequest } from "../features/memoroom/memoRoomSlice";
 import AudioRecord from "./Audio";
 import close from "../assets/images/close.png";
-import { memoRoomSocket } from "../app/socketSaga";
+import memoMenu from "../assets/images/memoMenu.png";
+import EditMemoModal from "../features/memoroom/EditMemoModal";
 import {
-  removeMemo,
-  updateMemoSize,
-  updateMemoText,
+  removeMemoRequest,
+  updateMemoSizeRequest,
+  updateMemoTextRequest,
 } from "../features/memoroom/memoRoomSlice";
-import { useParams } from "react-router";
 
 const MemoContainer = styled.div`
   display: flex;
@@ -33,11 +33,13 @@ const MemoContainer = styled.div`
   box-shadow: 10px 10px 24px 0px rgba(0, 0, 0, 0.25);
   resize: both;
 
+  .memo-menu,
   .close {
     float: right;
-    width: 10px;
+    width: 15px;
     margin-top: 10px;
     margin-right: 10px;
+    padding-left: 5px;
     cursor: pointer;
   }
 
@@ -91,20 +93,27 @@ const MemoContainer = styled.div`
 
 function Memo({ id, info, tag }) {
   const [memoText, setMemoText] = useState("");
+  const [isEditMenuOpen, setIsEditMenuOpen] = useState(false);
 
   const targetMemo = useSelector((state) => state.memoRoom.memos)[id];
-  const currentUserId = useSelector((state) => state.auth.id);
-  const dispatch = useDispatch();
+  const userId = useSelector((state) => state.auth.id);
   const { memoroomId } = useParams();
+  const dispatch = useDispatch();
 
   function handleMemoTextChange({ target }) {
     printTextValue(target.value);
   }
 
   const printTextValue = debounce((text) => {
-    memoRoomSocket.updateMemoText(id, text);
-    dispatch(updateMemoText({ memoId: id, text }));
-  }, 200);
+    dispatch(
+      updateMemoTextRequest({
+        userId,
+        memoroomId,
+        memoId: id,
+        text,
+      })
+    );
+  }, 300);
 
   useEffect(() => {
     if (targetMemo.formType === "text") {
@@ -113,27 +122,34 @@ function Memo({ id, info, tag }) {
   }, [targetMemo.content]);
 
   function handleRemoveMemoClick() {
-    memoRoomSocket.deleteMemo(id);
-    dispatch(removeMemo({ memoId: id }));
+    dispatch(
+      removeMemoRequest({
+        userId,
+        memoroomId,
+        memoId: id,
+      })
+    );
   }
 
   function handleMemoSizeMouseUp({ target }) {
     if (target.id === "memoContainer") {
-      const resizedWidth = target.offsetWidth;
-      const resizedHeight = target.offsetHeight;
-
-      memoRoomSocket.updateMemoSize(id, resizedWidth, resizedHeight);
       dispatch(
-        updateMemoSize({
+        updateMemoSizeRequest({
+          userId,
+          memoroomId,
           memoId: id,
-          width: resizedWidth,
-          height: resizedHeight,
+          width: target.offsetWidth,
+          height: target.offsetHeight,
         })
       );
     }
   }
 
-  const date = new Date(info.alarmDate);
+  function handleEditMemoMenuClick() {
+    setIsEditMenuOpen(true);
+  }
+
+  const date = info.alarmDate ? new Date(info.alarmDate) : "";
 
   return (
     <MemoContainer
@@ -146,6 +162,18 @@ function Memo({ id, info, tag }) {
     >
       <div>
         <img className="close" src={close} onClick={handleRemoveMemoClick} />
+        <img
+          className="memo-menu"
+          src={memoMenu}
+          onClick={handleEditMemoMenuClick}
+        />
+        {isEditMenuOpen && (
+          <EditMemoModal
+            isOpen={isEditMenuOpen}
+            setIsOpen={setIsEditMenuOpen}
+            memoId={id}
+          />
+        )}
       </div>
       {info.formType === "text" && (
         <div className="textarea-wrapper">
@@ -161,11 +189,7 @@ function Memo({ id, info, tag }) {
       )}
       {info.formType === "voice" && (
         <div className="textarea-wrapper voice">
-          <AudioRecord
-            userId={currentUserId}
-            memoroomId={memoroomId}
-            memoId={id}
-          />
+          <AudioRecord userId={userId} memoroomId={memoroomId} memoId={id} />
         </div>
       )}
       <div className="memo-info-wrapper">

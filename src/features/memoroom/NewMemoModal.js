@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
 import PropTypes from "prop-types";
 
 import ModalContainer from "../../components/Modal";
@@ -8,64 +7,11 @@ import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
 import { addNewMemoRequest } from "./memoRoomSlice";
 
-const NewMemoFormContainer = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 550px;
-  padding: 15px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.5);
-
-  .error-message {
-    color: #dd4a48;
-  }
-`;
-
-const MemoOptionContainer = styled.div`
-  display: flex;
-  align-items: center;
-  height: 30px;
-  padding: 20px;
-  line-height: 25px;
-
-  .memo-type-container {
-    display: flex;
-    width: 250px;
-  }
-
-  .memo-option-title {
-    font-size: 25px;
-  }
-
-  .red-color {
-    color: #ea907a;
-  }
-
-  .blue-color {
-    color: #b5eaea;
-  }
-
-  .green-color {
-    color: #c9e4c5;
-  }
-
-  .purple-color {
-    color: #f7dbf0;
-  }
-
-  .white-color {
-    color: #ffffff;
-  }
-
-  .orange-color {
-    color: #ffdcb8;
-  }
-`;
-
-const SubmitButtonContainer = styled.div`
-  margin: 0 auto;
-`;
+import {
+  MemoFormContainer,
+  MemoOptionContainer,
+  SubmitButtonContainer,
+} from "../memoroom/MemoModal.style";
 
 function NewMemoModal({ isOpen, setIsOpen, roomId }) {
   const [isImageType, setIsImageType] = useState(false);
@@ -81,6 +27,22 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
     const { memoType, memoColor, alarmDate, alarmTime, memoTags } =
       event.target;
 
+    const formData = new FormData();
+
+    if (alarmDate.value) {
+      const date = new Date(
+        `${alarmDate.value} ${alarmTime?.value}`
+      ).toISOString();
+      formData.append("alarmDate", date);
+    } else {
+      if (alarmTime.value) {
+        setHasInputError("You cannot set only time without Date");
+        return;
+      }
+
+      formData.append("alarmDate", "");
+    }
+
     if (memoType.value === "image" && !uploadedImage) {
       setHasInputError("You should upload an image file.");
       return;
@@ -94,14 +56,11 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
       return;
     }
 
-    const formData = new FormData();
     formData.append("memoRoomId", roomId);
     formData.append("author", currentUserId);
     formData.append("memoType", memoType.value);
     formData.append("imageFile", uploadedImage);
     formData.append("memoColor", memoColor.value);
-    formData.append("alarmDate", alarmDate?.value);
-    formData.append("alarmTime", alarmTime?.value);
     formData.append("memoTags", memoTags.value);
 
     dispatch(addNewMemoRequest(formData));
@@ -129,7 +88,7 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
       width={650}
       height={500}
     >
-      <NewMemoFormContainer
+      <MemoFormContainer
         onSubmit={handleNewMemoSubmit}
         className="new-memo-container"
       >
@@ -205,7 +164,7 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
           )}
           <Button text="SAVE" width={200} />
         </SubmitButtonContainer>
-      </NewMemoFormContainer>
+      </MemoFormContainer>
     </ModalContainer>
   );
 }
