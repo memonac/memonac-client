@@ -68,6 +68,7 @@ export const MemoRoomContainer = styled.div`
     display: flex;
     justify-content: center;
     position: absolute;
+    overflow: hidden;
     width: 100%;
     top: -30%;
     left: 0;

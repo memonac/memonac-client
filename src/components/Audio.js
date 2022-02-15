@@ -9,7 +9,7 @@ import { addAudioFileRequest } from "../features/memoroom/memoRoomSlice";
 
 const AudioWrapper = styled.div`
   audio {
-    width: 150px;
+    width: 190px;
   }
 `;
 
@@ -93,7 +93,6 @@ function AudioRecord({ userId, memoroomId, memoId }) {
     formData.append("audio", sound);
 
     dispatch(addAudioFileRequest({ userId, memoroomId, memoId, formData }));
-    console.log(sound);
   }, [audioUrl]);
 
   return (
