@@ -154,10 +154,10 @@ export const slice = createSlice({
       state.isLoading = true;
     },
     addAudioFileSuccess: (state, action) => {
-      const { userId, memoroomId, memoId, audioUrl } = action.payload;
+      const { memoId, audioUrl } = action.payload;
 
-      state.memos[memoId].content = audioUrl;
       state.isLoading = false;
+      state.memos[memoId].content = audioUrl;
     },
     addAudioFileFailure: (state, action) => {
       state.isLoading = false;

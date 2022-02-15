@@ -63,6 +63,8 @@ memoApi.addAudioFile = async ({ userId, memoroomId, memoId, formData }) => {
       withCredentials: true,
     }
   );
+
+  return response.data;
 };
 
 export default memoApi;

@@ -1,6 +1,8 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+
+import PropTypes from "prop-types";
 
 import Button from "./Button";
 import { addAudioFileRequest } from "../features/memoroom/memoRoomSlice";
@@ -18,36 +20,25 @@ function AudioRecord({ userId, memoroomId, memoId }) {
   const [source, setSource] = useState("");
   const [analyser, setAnalyser] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
-  const [awsAudioUrl, setAwsAudioUrl] = useState("");
 
   const dispatch = useDispatch();
 
-  const updatedMemo = useSelector((state) => state.memoRoom.memos);
+  const updatedMemo = useSelector((state) => state.memoRoom.memos)[memoId];
 
-  useEffect(() => {
-    if (updatedMemo[memoId].content) {
-      console.log("url", updatedMemo[memoId].content);
-      setAwsAudioUrl(updatedMemo[memoId].content);
-    }
-  }, [awsAudioUrl]);
-
-  console.log("update>>>", updatedMemo[memoId]);
-
-  const onRecAudio = () => {
-    // 음원정보를 담은 노드를 생성하거나 음원을 실행또는 디코딩 시키는 일을 한다
+  function onRecAudio() {
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    // 자바스크립트를 통해 음원의 진행상태에 직접접근에 사용된다.
     const analyser = audioCtx.createScriptProcessor(0, 1, 1);
+
     setAnalyser(analyser);
 
     function makeSound(stream) {
-      // 내 컴퓨터의 마이크나 다른 소스를 통해 발생한 오디오 스트림의 정보를 보여준다.
       const source = audioCtx.createMediaStreamSource(stream);
+
       setSource(source);
       source.connect(analyser);
       analyser.connect(audioCtx.destination);
     }
-    // 마이크 사용 권한 획득
+
     navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorder.start();
@@ -55,19 +46,18 @@ function AudioRecord({ userId, memoroomId, memoId }) {
       setMedia(mediaRecorder);
       makeSound(stream);
 
-      analyser.onaudioprocess = function (e) {
-        // 3분(180초) 지나면 자동으로 음성 저장 및 녹음 중지
-        if (e.playbackTime > 180) {
+      analyser.onaudioprocess = function (event) {
+        if (event.playbackTime > 180) {
           stream.getAudioTracks().forEach(function (track) {
             track.stop();
           });
           mediaRecorder.stop();
-          // 메서드가 호출 된 노드 연결 해제
+
           analyser.disconnect();
           audioCtx.createMediaStreamSource(stream).disconnect();
 
-          mediaRecorder.ondataavailable = function (e) {
-            setAudioUrl(e.data);
+          mediaRecorder.ondataavailable = function (event) {
+            setAudioUrl(event.data);
             setOnRec(true);
           };
         } else {
@@ -75,30 +65,25 @@ function AudioRecord({ userId, memoroomId, memoId }) {
         }
       };
     });
-  };
+  }
 
-  // 사용자가 음성 녹음을 중지했을 때
-  const offRecAudio = () => {
-    // dataavailable 이벤트로 Blob 데이터에 대한 응답을 받을 수 있음
-    media.ondataavailable = function (e) {
-      setAudioUrl(e.data);
+  function offRecAudio() {
+    media.ondataavailable = function (event) {
+      setAudioUrl(event.data);
       setOnRec(true);
     };
 
-    // 모든 트랙에서 stop()을 호출해 오디오 스트림을 정지
     stream.getAudioTracks().forEach(function (track) {
       track.stop();
     });
 
-    // 미디어 캡처 중지
     media.stop();
-    // 메서드가 호출 된 노드 연결 해제
+
     analyser.disconnect();
     source.disconnect();
-  };
+  }
 
   const onSubmitAudioFile = useCallback(() => {
-    // File 생성자를 사용해 파일로 변환
     const sound = new File([audioUrl], "mp3", {
       lastModified: new Date().getTime(),
       type: "audio/mpeg",
@@ -108,31 +93,40 @@ function AudioRecord({ userId, memoroomId, memoId }) {
     formData.append("audio", sound);
 
     dispatch(addAudioFileRequest({ userId, memoroomId, memoId, formData }));
-    console.log(sound); // File 정보 출력
+    console.log(sound);
   }, [audioUrl]);
 
   return (
     <AudioWrapper>
-      {onRec ? (
-        <Button text="RECORD" width={80} color="#3E497A" onClick={onRecAudio} />
-      ) : (
-        <Button text="STOP" width={80} color="#f03c3c" onClick={offRecAudio} />
-      )}
-      {!awsAudioUrl && (
-        <Button
-          text="SAVE"
-          width={80}
-          color="#3E497A"
-          onClick={onSubmitAudioFile}
-        />
-      )}
-      {awsAudioUrl && (
+      {updatedMemo.content && (
         <audio controls>
-          <source src={awsAudioUrl} />
+          <source src={updatedMemo.content} />
         </audio>
+      )}
+      {!updatedMemo.content && (
+        <>
+          <Button
+            text={onRec ? "RECORD" : "STOP"}
+            width={80}
+            color={onRec ? "#3E497A" : "#f03c3c"}
+            onClick={onRec ? onRecAudio : offRecAudio}
+          />
+          <Button
+            text="SAVE"
+            width={80}
+            color="#3E497A"
+            onClick={onSubmitAudioFile}
+          />
+        </>
       )}
     </AudioWrapper>
   );
 }
+
+AudioRecord.prototypes = {
+  userId: PropTypes.string.isRequired,
+  memoroomId: PropTypes.string.isRequired,
+  memoId: PropTypes.string.isRequired,
+};
 
 export default AudioRecord;
