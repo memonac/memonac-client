@@ -5,8 +5,8 @@ import { ThemeProvider } from "styled-components";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
-import { memoRoomInitialState } from "../features/main/mainSlice";
-import { memoInitialState } from "../features/memoroom/memoRoomSlice";
+import { memoRoomInitializeState } from "../features/main/mainSlice";
+import { memoInitializeState } from "../features/memoroom/memoRoomSlice";
 
 import ROUTES from "../constants/routes";
 import Login from "../features/auth/Login";
@@ -24,8 +24,8 @@ function App() {
 
   useEffect(() => {
     if (!loginStatus) {
-      dispatch(memoRoomInitialState());
-      dispatch(memoInitialState());
+      dispatch(memoRoomInitializeState());
+      dispatch(memoInitializeState());
     }
   }, [loginStatus]);
 

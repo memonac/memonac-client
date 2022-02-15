@@ -12,7 +12,7 @@ export const slice = createSlice({
     newMemoRoomId: "",
   },
   reducers: {
-    memoRoomInitialState: (state) => {
+    memoRoomInitializeState: (state) => {
       state.isLoading = false;
       state.error = "";
       state.memoRooms = {};
@@ -148,7 +148,7 @@ export const {
   removeMemoRoomRequest,
   removeMemoRoomSuccess,
   removeMemoRoomFailure,
-  memoRoomInitialState,
+  memoRoomInitializeState,
 } = slice.actions;
 
 export default slice.reducer;

@@ -19,6 +19,7 @@ import { logoutRequest } from "../auth/authSlice";
 
 function* getMemoRoomList({ payload }) {
   const { userId } = payload;
+
   if (payload) {
     try {
       const memoRoomList = yield call(mainApi.getMemoRoomList, userId);
