@@ -99,7 +99,9 @@ function AudioRecord({ userId, memoroomId, memoId }) {
     <AudioWrapper>
       {updatedMemo.content && (
         <audio controls>
-          <source src={updatedMemo.content} />
+          <source src={updatedMemo.content}>
+            <p>Your browser does not support HTML5 audio.</p>
+          </source>
         </audio>
       )}
       {!updatedMemo.content && (
