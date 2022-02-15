@@ -33,7 +33,6 @@ import memoApi from "../../utils/api/memo";
 import nodemailerApi from "../../utils/api/nodemailer";
 import chatApi from "../../utils/api/chat";
 import { memoRoomSocket } from "../../app/socketSaga";
-import { addNewMemoRoomSuccess } from "../main/mainSlice";
 
 function* getMemoList({ payload }) {
   try {
@@ -51,7 +50,6 @@ function* addNewMemo({ payload }) {
 
     if (serverResponse.result === "success") {
       yield put(addNewMemoSuccess(serverResponse.data));
-      yield fork(addNewMemoRoomSuccess, serverResponse.data);
     } else {
       yield put(addNewMemoFailure(serverResponse.error));
     }

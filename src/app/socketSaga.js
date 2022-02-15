@@ -7,7 +7,6 @@ import {
   removeMemo,
   updateMemoSize,
   updateMemoText,
-  addNewMemoSuccess,
   addAudioFileSuccess,
 } from "../features/memoroom/memoRoomSlice";
 
@@ -89,11 +88,6 @@ function createMemoSocketChannel(socket) {
       );
     });
 
-    socket.on("memo/add", (newMemo) => {
-      console.log("다른 사용자의 메모가 추가 되었다.");
-      emit(addNewMemoSuccess(newMemo));
-    });
-
     socket.on("memo/audio", (memoId, audioUrl) => {
       emit(
         addAudioFileSuccess({
@@ -109,7 +103,6 @@ function createMemoSocketChannel(socket) {
       socket.off("memo/delete");
       socket.off("memo/size");
       socket.off("memo/text");
-      socket.off("memo/add");
       socket.off("memo/audio");
     };
   });
@@ -156,9 +149,6 @@ const memoRoomSocket = {
   },
   updateMemoText(memoId, text) {
     memoSocket.emit("memo/text", memoId, text);
-  },
-  addMemo(newMemo) {
-    memoSocket.emit("memo/add", newMemo);
   },
   updateMemoAudio({ memoId, audioUrl }) {
     memoSocket.emit("memo/audio", memoId, audioUrl);
