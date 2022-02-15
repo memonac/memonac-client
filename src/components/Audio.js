@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-
 import PropTypes from "prop-types";
 
 import Button from "./Button";

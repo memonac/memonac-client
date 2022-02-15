@@ -93,7 +93,7 @@ function createMemoSocketChannel(socket) {
       console.log("다른 사용자의 메모가 추가 되었다.");
       emit(addNewMemoSuccess(newMemo));
     });
-    
+
     socket.on("memo/audio", (memoId, audioUrl) => {
       emit(
         addAudioFileSuccess({
@@ -102,7 +102,6 @@ function createMemoSocketChannel(socket) {
         })
       );
     });
-    
 
     return () => {
       socket.off("join room");
