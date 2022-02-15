@@ -39,6 +39,8 @@ import {
   getChatListFailure,
 } from "./memoRoomSlice";
 
+import { logoutRequest } from "../auth/authSlice";
+
 import { memoRoomSocket } from "../../app/socketSaga";
 import memoApi from "../../utils/api/memo";
 import nodemailerApi from "../../utils/api/nodemailer";
@@ -50,7 +52,11 @@ function* getMemoList({ payload }) {
 
     yield put(getMemoListSuccess(memoRoomData.data));
   } catch (err) {
-    yield put(getMemoListFailure(err.message));
+    if (err.response.data.error.message === "Expired Token") {
+      yield put(logoutRequest());
+    } else {
+      yield put(getMemoListFailure(err.message));
+    }
   }
 }
 
@@ -65,7 +71,11 @@ function* addNewMemo({ payload }) {
       yield put(addNewMemoFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(addNewMemoFailure(err));
+    if (err.response.data.error.message === "Expired Token") {
+      yield put(logoutRequest());
+    } else {
+      yield put(addNewMemoFailure(err));
+    }
   }
 }
 
@@ -79,7 +89,11 @@ function* postSendMail({ payload }) {
       yield put(postSendMailFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(postSendMailFailure(err));
+    if (err.response.data.error.message === "Expired Token") {
+      yield put(logoutRequest());
+    } else {
+      yield put(postSendMailFailure(err));
+    }
   }
 }
 
@@ -93,7 +107,11 @@ function* postVerifyToken({ payload }) {
       yield put(postVerifyTokenFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(postVerifyTokenFailure(err));
+    if (err.response.data.error.message === "Expired Token") {
+      yield put(logoutRequest());
+    } else {
+      yield put(postVerifyTokenFailure(err));
+    }
   }
 }
 
@@ -192,7 +210,11 @@ function* getChatList({ payload }) {
       yield put(getChatListFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(getChatListFailure(err));
+    if (err.response.data.error.message === "Expired Token") {
+      yield put(logoutRequest());
+    } else {
+      yield put(getChatListFailure(err));
+    }
   }
 }
 

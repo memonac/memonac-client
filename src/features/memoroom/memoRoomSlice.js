@@ -25,6 +25,19 @@ export const slice = createSlice({
     slackToken: "",
   },
   reducers: {
+    memoInitializeState: (state) => {
+      state.isLoading = false;
+      state.error = "";
+      state.success = "";
+      state.name = "";
+      state.participants = {};
+      state.memos = {};
+      state.chats = [];
+      state.isChatLoading = false;
+      state.chatLastIndex = null;
+      state.chatError = "";
+      state.slackToken = "";
+    },
     getMemoListRequest: (state) => {
       state.isLoading = true;
     },
@@ -232,6 +245,7 @@ export const {
   getChatListRequest,
   getChatListSuccess,
   getChatListFailure,
+  memoInitializeState,
 } = slice.actions;
 
 export default slice.reducer;
