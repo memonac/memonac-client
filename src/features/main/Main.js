@@ -83,6 +83,7 @@ function Main() {
                   key={roomId}
                   id={roomId}
                   roomName={room.name}
+                  participants={room.participants}
                   tags={room.tags}
                 />
               );

@@ -59,7 +59,7 @@ export const MemoRoomContainer = styled.div`
     justify-content: center;
     width: 300px;
     height: 50px;
-    border-top: 1px solid #cecece;
+    padding-top: 10px;
     background: #fefbf2;
     font-size: 15px;
   }
