@@ -23,9 +23,44 @@ memoApi.addNewMemo = async (formData) => {
   return response.data;
 };
 
-memoApi.removeNewMemo = async ({ userId, memoroomId, memoId }) => {
+memoApi.removeMemo = async ({ userId, memoroomId, memoId }) => {
   const response = await axios.delete(
     `users/${userId}/memorooms/${memoroomId}/memos/${memoId}`,
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};
+
+memoApi.updateMemoText = async ({ userId, memoroomId, memoId, text }) => {
+  const response = await axios.put(
+    `users/${userId}/memorooms/${memoroomId}/memos/${memoId}/text`,
+    text,
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};
+
+memoApi.updateMemoStyle = async ({
+  userId,
+  memoroomId,
+  memoId,
+  memoColor,
+  alarmDate,
+  memoTags,
+}) => {
+  const response = await axios.put(
+    `users/${userId}/memorooms/${memoroomId}/memos/${memoId}/style`,
+    {
+      memoColor,
+      alarmDate,
+      memoTags,
+    },
     {
       withCredentials: true,
     }
@@ -46,6 +81,27 @@ memoApi.updateMemoLocation = async ({
     {
       left,
       top,
+    },
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};
+
+memoApi.updateMemoSize = async ({
+  userId,
+  memoroomId,
+  memoId,
+  width,
+  height,
+}) => {
+  const response = await axios.put(
+    `users/${userId}/memorooms/${memoroomId}/memos/${memoId}/size`,
+    {
+      width,
+      height,
     },
     {
       withCredentials: true,

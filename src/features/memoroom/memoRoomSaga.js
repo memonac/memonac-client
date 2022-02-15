@@ -16,6 +16,18 @@ import {
   removeMemoRequest,
   removeMemoSuccess,
   removeMemoFailure,
+  updateMemoTextRequest,
+  updateMemoTextSuccess,
+  updateMemoTextFailure,
+  updateMemoStyleRequest,
+  updateMemoStyleSuccess,
+  updateMemoStyleFailure,
+  updateMemoLocationRequest,
+  updateMemoLocationSuccess,
+  updateMemoLocationFailure,
+  updateMemoSizeRequest,
+  updateMemoSizeSuccess,
+  updateMemoSizeFailure,
   postSendMailRequest,
   postSendMailSuccess,
   postSendMailFailure,
@@ -103,6 +115,91 @@ function* postVerifyToken({ payload }) {
   }
 }
 
+function* updateMemoStyle({ payload }) {
+  try {
+    const serverResponse = yield call(memoApi.updateMemoStyle, payload);
+
+    if (serverResponse.result === "success") {
+      yield put(updateMemoStyleSuccess(serverResponse.data));
+      yield fork(memoRoomSocket.updateMemoStyle, serverResponse.data);
+    } else {
+      yield put(updateMemoStyleFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(updateMemoStyleFailure(err));
+  }
+}
+
+function* removeMemo({ payload }) {
+  try {
+    const serverResponse = yield call(memoApi.removeMemo, payload);
+
+    if (serverResponse.result === "success") {
+      yield put(removeMemoSuccess(payload));
+      yield fork(memoRoomSocket.deleteMemo, payload.memoId);
+    } else {
+      yield put(removeMemoFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(removeMemoFailure(err));
+  }
+}
+
+function* updateMemoText({ payload }) {
+  try {
+    const serverResponse = yield call(memoApi.updateMemoText, payload);
+
+    if (serverResponse.result === "success") {
+      yield put(updateMemoTextSuccess(payload));
+      yield fork(memoRoomSocket.updateMemoText, payload.memoId, payload.text);
+    } else {
+      yield put(updateMemoTextFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(updateMemoTextFailure(err));
+  }
+}
+
+function* updateMemoSize({ payload }) {
+  try {
+    const serverResponse = yield call(memoApi.updateMemoSize, payload);
+
+    if (serverResponse.result === "success") {
+      yield put(updateMemoSizeSuccess(payload));
+      yield fork(
+        memoRoomSocket.updateMemoSize,
+        payload.memoId,
+        payload.width,
+        payload.height
+      );
+    } else {
+      yield put(updateMemoSizeFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(updateMemoSizeFailure(err));
+  }
+}
+
+function* updateMemoLocation({ payload }) {
+  try {
+    const serverResponse = yield call(memoApi.updateMemoLocation, payload);
+
+    if (serverResponse.result === "success") {
+      yield put(updateMemoLocationSuccess(payload));
+      yield fork(
+        memoRoomSocket.updateMemoLocation,
+        payload.memoId,
+        payload.left,
+        payload.top
+      );
+    } else {
+      yield put(updateMemoLocationFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(updateMemoLocationFailure(err));
+  }
+}
+
 function* getChatList({ payload }) {
   try {
     const serverResponse = yield call(chatApi.getNextChatInfo, payload);
@@ -137,6 +234,26 @@ function* watchPostVerifyToken() {
   yield takeLatest(postVerifyTokenRequest, postVerifyToken);
 }
 
+function* updateMemoStyleWatcher() {
+  yield takeLatest(updateMemoStyleRequest, updateMemoStyle);
+}
+
+function* removeMemoWatcher() {
+  yield takeLatest(removeMemoRequest, removeMemo);
+}
+
+function* updateMemoTextWatcher() {
+  yield takeLatest(updateMemoTextRequest, updateMemoText);
+}
+
+function* updateMemoSizeWatcher() {
+  yield takeLatest(updateMemoSizeRequest, updateMemoSize);
+}
+
+function* updateMemoLocationWatcher() {
+  yield takeLatest(updateMemoLocationRequest, updateMemoLocation);
+}
+
 function* getChatWatcher() {
   yield takeLatest(getChatListRequest, getChatList);
 }
@@ -147,6 +264,11 @@ export function* memoRoomSaga() {
     fork(addNewMemoWatcher),
     fork(watchPostSendMail),
     fork(watchPostVerifyToken),
+    fork(updateMemoStyleWatcher),
+    fork(removeMemoWatcher),
+    fork(updateMemoTextWatcher),
+    fork(updateMemoSizeWatcher),
+    fork(updateMemoLocationWatcher),
     fork(getChatWatcher),
   ]);
 }

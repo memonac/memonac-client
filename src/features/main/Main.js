@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 
 import styled from "styled-components";
 import propTypes from "prop-types";
+import Loading from "../../components/Loading";
 import MemoRoom from "../../features/memoroom/MemoRoom";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
@@ -26,6 +27,7 @@ function Main() {
   const displayedTags = useSelector((state) => state.main.displayedTags);
   const tagInfo = useSelector((state) => state.main.tagInfo);
   const memoRooms = useSelector((state) => state.main.memoRooms);
+  const loadingStatus = useSelector((state) => state.main.isLoading);
   const newMemoRoomId = useSelector((state) => state.main.newMemoRoomId);
   const userId = useSelector((state) => state.auth.id);
 
@@ -73,21 +75,25 @@ function Main() {
           })}
         </Sidebar>
         <RoomList>
-          {Object.entries(memoRooms).map(([roomId, room]) => {
-            const filteredTagsLength = new Set([...room.tags, ...selectedTags])
-              .size;
+          {loadingStatus && <Loading />}
+          {!loadingStatus &&
+            Object.entries(memoRooms).map(([roomId, room]) => {
+              const filteredTagsLength = new Set([
+                ...room.tags,
+                ...selectedTags,
+              ]).size;
 
-            if (room.tags.length === filteredTagsLength) {
-              return (
-                <MemoRoomBox
-                  key={roomId}
-                  id={roomId}
-                  roomName={room.name}
-                  tags={room.tags}
-                />
-              );
-            }
-          })}
+              if (room.tags.length === filteredTagsLength) {
+                return (
+                  <MemoRoomBox
+                    key={roomId}
+                    id={roomId}
+                    roomName={room.name}
+                    tags={room.tags}
+                  />
+                );
+              }
+            })}
         </RoomList>
       </MainWrapper>
     </>

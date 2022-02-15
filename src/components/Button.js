@@ -30,11 +30,11 @@ const Button = ({ text, onClick = noop, color, width }) => {
   );
 };
 
-export default Button;
-
 Button.propTypes = {
   text: PropTypes.string.isRequired,
   onClick: PropTypes.func,
   color: PropTypes.string,
-  width: PropTypes.number.isRequired,
+  width: PropTypes.number,
 };
+
+export default Button;

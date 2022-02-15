@@ -3,10 +3,11 @@ import { take, call, put } from "redux-saga/effects";
 import io from "socket.io-client";
 import {
   receiveMessage,
-  updateMemoLocation,
-  removeMemo,
-  updateMemoSize,
-  updateMemoText,
+  updateMemoLocationSuccess,
+  removeMemoSuccess,
+  updateMemoSizeSuccess,
+  updateMemoStyleSuccess,
+  updateMemoTextSuccess,
   addNewMemoSuccess,
 } from "../features/memoroom/memoRoomSlice";
 
@@ -53,7 +54,7 @@ function createMemoSocketChannel(socket) {
 
     socket.on("memo/location", (memoId, left, top) => {
       emit(
-        updateMemoLocation({
+        updateMemoLocationSuccess({
           memoId,
           left,
           top,
@@ -63,7 +64,7 @@ function createMemoSocketChannel(socket) {
 
     socket.on("memo/delete", (memoId) => {
       emit(
-        removeMemo({
+        removeMemoSuccess({
           memoId,
         })
       );
@@ -71,7 +72,7 @@ function createMemoSocketChannel(socket) {
 
     socket.on("memo/size", (memoId, width, height) => {
       emit(
-        updateMemoSize({
+        updateMemoSizeSuccess({
           memoId,
           width,
           height,
@@ -81,15 +82,25 @@ function createMemoSocketChannel(socket) {
 
     socket.on("memo/text", (memoId, text) => {
       emit(
-        updateMemoText({
+        updateMemoTextSuccess({
           memoId,
           text,
         })
       );
     });
 
+    socket.on("memo/style", (memoId, memoColor, alarmDate, memoTags) => {
+      emit(
+        updateMemoStyleSuccess({
+          memoId,
+          memoColor,
+          alarmDate,
+          memoTags,
+        })
+      );
+    });
+
     socket.on("memo/add", (newMemo) => {
-      console.log("다른 사용자의 메모가 추가 되었다.");
       emit(addNewMemoSuccess(newMemo));
     });
 
@@ -99,6 +110,7 @@ function createMemoSocketChannel(socket) {
       socket.off("memo/delete");
       socket.off("memo/size");
       socket.off("memo/text");
+      socket.off("memo/style");
       socket.off("memo/add");
     };
   });
@@ -145,6 +157,9 @@ const memoRoomSocket = {
   },
   updateMemoText(memoId, text) {
     memoSocket.emit("memo/text", memoId, text);
+  },
+  updateMemoStyle({ memoId, memoColor, alarmDate, memoTags }) {
+    memoSocket.emit("memo/style", memoId, memoColor, alarmDate, memoTags);
   },
   addMemo(newMemo) {
     memoSocket.emit("memo/add", newMemo);
