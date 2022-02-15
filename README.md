@@ -9,6 +9,13 @@ develop 브랜치에서 pull 받은 후 작업하면서 추가로 리팩토링 �
  - 특이 에러 케이스에 대해서 다시 한번 에러 핸들링 체크 필요(mongoDB error)
  - services >> memoroom.getAllMemoRoom flatMap으로 리팩토링 혹은 별도 함수를 따로 만들어 관리
 
+## feature/1015
+- memoRoom.js 추후 share 관련 컴포넌트로 분리 필요
+- error, success의 naming, 그리고 지역 변수로 관리될 필요가 있는지, 그에 따라 useEffect가 필요한지에 따라 추후 리팩토링 필요
+
+## feature/1016
+- Audio component 정리 필요
+
 ## feature/1017
  - formdata append 처리
  - 형식에 맞지 않는 파일 업로드 시, 에러 처리
