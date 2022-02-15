@@ -22,12 +22,16 @@ import {
   postVerifyTokenSuccess,
   postVerifyTokenFailure,
   postVerifyTokenRequest,
+  getChatListRequest,
+  getChatListSuccess,
+  getChatListFailure,
   addAudioFileRequest,
   addAudioFileSuccess,
   addAudioFileFailure,
 } from "./memoRoomSlice";
 import memoApi from "../../utils/api/memo";
 import nodemailerApi from "../../utils/api/nodemailer";
+import chatApi from "../../utils/api/chat";
 
 function* getMemoList({ payload }) {
   try {
@@ -50,22 +54,6 @@ function* addNewMemo({ payload }) {
     }
   } catch (err) {
     yield put(addNewMemoFailure(err));
-  }
-}
-
-function* removeMemo({ payload }) {
-  const { memoId } = payload;
-
-  try {
-    const serverResponse = yield call(memoApi.removeNewMemo, payload);
-
-    if (serverResponse.result === "success") {
-      yield put(removeMemoSuccess(memoId));
-    } else {
-      yield put(removeMemoFailure(serverResponse.error));
-    }
-  } catch (err) {
-    yield put(removeMemoFailure(err));
   }
 }
 
@@ -97,6 +85,20 @@ function* postVerifyToken({ payload }) {
   }
 }
 
+function* getChatList({ payload }) {
+  try {
+    const serverResponse = yield call(chatApi.getNextChatInfo, payload);
+
+    if (serverResponse.result === "success") {
+      yield put(getChatListSuccess(serverResponse.data));
+    } else {
+      yield put(getChatListFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(getChatListFailure(err));
+  }
+}
+
 function* addAudioFile({ payload }) {
   try {
     const serverResponse = yield call(memoApi.addAudioFile, payload);
@@ -119,16 +121,16 @@ function* addNewMemoWatcher() {
   yield takeLatest(addNewMemoRequest, addNewMemo);
 }
 
-function* removeMemoWatcher() {
-  yield takeLatest(removeMemoRequest, removeMemo);
-}
-
 function* watchPostSendMail() {
   yield takeLatest(postSendMailRequest, postSendMail);
 }
 
 function* watchPostVerifyToken() {
   yield takeLatest(postVerifyTokenRequest, postVerifyToken);
+}
+
+function* getChatWatcher() {
+  yield takeLatest(getChatListRequest, getChatList);
 }
 
 function* watchAddAudioFile() {
@@ -139,9 +141,9 @@ export function* memoRoomSaga() {
   yield all([
     fork(getMemoRoomWatcher),
     fork(addNewMemoWatcher),
-    fork(removeMemoWatcher),
     fork(watchPostSendMail),
     fork(watchPostVerifyToken),
+    fork(getChatWatcher),
     fork(watchAddAudioFile),
   ]);
 }
