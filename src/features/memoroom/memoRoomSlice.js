@@ -209,6 +209,19 @@ export const slice = createSlice({
         _id: id,
       });
     },
+    addAudioFileRequest: (state) => {
+      state.isLoading = true;
+    },
+    addAudioFileSuccess: (state, action) => {
+      const { memoId, audioUrl } = action.payload;
+
+      state.isLoading = false;
+      state.memos[memoId].content = audioUrl;
+    },
+    addAudioFileFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -246,6 +259,9 @@ export const {
   getChatListSuccess,
   getChatListFailure,
   memoInitializeState,
+  addAudioFileRequest,
+  addAudioFileSuccess,
+  addAudioFileFailure,
 } = slice.actions;
 
 export default slice.reducer;

@@ -9,6 +9,13 @@ develop 브랜치에서 pull 받은 후 작업하면서 추가로 리팩토링 �
  - 특이 에러 케이스에 대해서 다시 한번 에러 핸들링 체크 필요(mongoDB error)
  - services >> memoroom.getAllMemoRoom flatMap으로 리팩토링 혹은 별도 함수를 따로 만들어 관리
 
+## feature/1015
+- memoRoom.js 추후 share 관련 컴포넌트로 분리 필요
+- error, success의 naming, 그리고 지역 변수로 관리될 필요가 있는지, 그에 따라 useEffect가 필요한지에 따라 추후 리팩토링 필요
+
+## feature/1016
+- Audio component 정리 필요
+
 ## feature/1017
  - formdata append 처리
  - 형식에 맞지 않는 파일 업로드 시, 에러 처리
@@ -27,7 +34,6 @@ develop 브랜치에서 pull 받은 후 작업하면서 추가로 리팩토링 �
 ## feature/1024
  - dnd 위치값 em으로 변경 필요 (현재 100VH, 100VW로 되어있음)
 
-<<<<<<< HEAD
 ## feature/1026
  - 태그 검색 로직 useCallback 없애고 debounce로만 구현
 
@@ -37,8 +43,6 @@ develop 브랜치에서 pull 받은 후 작업하면서 추가로 리팩토링 �
  - react-dnd 외부영역 스크롤 방지
  - 메모 사이즈 동시 렌더링 체크 필요
 
-=======
 ## feature/1029
 - new memo 새로운 메모 만들시에 해당 메모룸에 참가하고 있는 사용자에게도 보여주어야 하므로 axios로
   먼저 요청후 요청이 성공한다면 socket 통신으로 해당 추가된 메모 정보를 전달 하는것으로 수정
->>>>>>> 3323bb751af54362d07863e231a73341b8d12ecf

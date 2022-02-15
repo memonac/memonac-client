@@ -37,6 +37,9 @@ import {
   getChatListRequest,
   getChatListSuccess,
   getChatListFailure,
+  addAudioFileRequest,
+  addAudioFileSuccess,
+  addAudioFileFailure,
 } from "./memoRoomSlice";
 
 import { logoutRequest } from "../auth/authSlice";
@@ -218,6 +221,21 @@ function* getChatList({ payload }) {
   }
 }
 
+function* addAudioFile({ payload }) {
+  try {
+    const serverResponse = yield call(memoApi.addAudioFile, payload);
+
+    if (serverResponse.result === "success") {
+      yield put(addAudioFileSuccess(serverResponse.data));
+      yield fork(memoRoomSocket.updateMemoAudio, serverResponse.data);
+    } else {
+      yield put(addAudioFileFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(addAudioFileFailure(err));
+  }
+}
+
 function* getMemoRoomWatcher() {
   yield takeEvery(getMemoListRequest, getMemoList);
 }
@@ -258,6 +276,10 @@ function* getChatWatcher() {
   yield takeLatest(getChatListRequest, getChatList);
 }
 
+function* watchAddAudioFile() {
+  yield takeLatest(addAudioFileRequest, addAudioFile);
+}
+
 export function* memoRoomSaga() {
   yield all([
     fork(getMemoRoomWatcher),
@@ -270,5 +292,6 @@ export function* memoRoomSaga() {
     fork(updateMemoSizeWatcher),
     fork(updateMemoLocationWatcher),
     fork(getChatWatcher),
+    fork(watchAddAudioFile),
   ]);
 }

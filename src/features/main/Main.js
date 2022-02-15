@@ -4,8 +4,8 @@ import { useNavigate } from "react-router";
 
 import styled from "styled-components";
 import propTypes from "prop-types";
+
 import Loading from "../../components/Loading";
-import MemoRoom from "../../features/memoroom/MemoRoom";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import Tag from "../../components/Tag";
@@ -89,6 +89,7 @@ function Main() {
                     key={roomId}
                     id={roomId}
                     roomName={room.name}
+                    participants={room.participants}
                     tags={room.tags}
                   />
                 );
@@ -100,8 +101,8 @@ function Main() {
   );
 }
 
-export default Main;
-
 MainWrapper.propTypes = {
   children: propTypes.element.isRequired,
 };
+
+export default Main;

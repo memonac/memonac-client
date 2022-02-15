@@ -7,6 +7,7 @@ export const slice = createSlice({
     error: "",
     memoRooms: {},
     tags: [],
+    participants: [],
     displayedTags: [],
     tagInfo: {},
     newMemoRoomId: "",

@@ -17,10 +17,11 @@ import wastebasket from "../../assets/images/wastebasket.png";
 import ModalContainer from "../Modal";
 import TextInput from "../TextInput";
 import Button from "../Button";
+import Profile from "../Profile";
 
 import { MemoRoomContainer } from "./MemoroomBox.style";
 
-const MemoRoomBox = ({ id, roomName, tags }) => {
+const MemoRoomBox = ({ id, roomName, participants, tags }) => {
   const [clickMemoRoomMenu, setClickMemoRoomMenu] = useState(false);
   const [clickMemoRoomHashTag, setClickMemoRoomHashTag] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -90,7 +91,13 @@ const MemoRoomBox = ({ id, roomName, tags }) => {
         </div>
         <div onClick={handleMemoroomBoxClick} className="memoroom-content">
           <div className="room-name">{roomName}</div>
-          <div className="participant"></div>
+          <div className="participant-box">
+            <div className="participant">
+              {participants.map((name) => (
+                <Profile key={name} firstName={name[0]} />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
       {clickMemoRoomMenu && (
@@ -181,4 +188,5 @@ MemoRoomBox.propTypes = {
   id: PropTypes.string.isRequired,
   roomName: PropTypes.string.isRequired,
   tags: PropTypes.array,
+  participants: PropTypes.array,
 };
