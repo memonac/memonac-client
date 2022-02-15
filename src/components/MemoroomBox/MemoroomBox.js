@@ -91,10 +91,12 @@ const MemoRoomBox = ({ id, roomName, participants, tags }) => {
         </div>
         <div onClick={handleMemoroomBoxClick} className="memoroom-content">
           <div className="room-name">{roomName}</div>
-          <div className="participant">
-            {participants.map((name) => (
-              <Profile key={name} firstName={name[0]} />
-            ))}
+          <div className="participant-box">
+            <div className="participant">
+              {participants.map((name) => (
+                <Profile key={name} firstName={name[0]} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
