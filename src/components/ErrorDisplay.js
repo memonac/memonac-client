@@ -1,7 +1,8 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 import Button from "./Button";
 import { initiateErrorState } from "../features/auth/authSlice";
@@ -24,11 +25,9 @@ const ErrorContainer = styled.div`
   }
 `;
 
-function ErrorDisplay() {
+function ErrorDisplay({ text = "An error has been occurred!" }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const errorMessage = useSelector((state) => state.auth.error);
 
   function handleHomeButtonClick() {
     navigate(-1);
@@ -37,11 +36,15 @@ function ErrorDisplay() {
 
   return (
     <ErrorContainer>
-      <div className="error-title">An error has been occurred!</div>
-      <div className="error-detail">{errorMessage}</div>
+      <div className="error-title">{text}</div>
+      <div className="error-detail">{}</div>
       <Button text="Back" onClick={handleHomeButtonClick} width={200} />
     </ErrorContainer>
   );
 }
+
+ErrorDisplay.propTypes = {
+  text: PropTypes.string,
+};
 
 export default ErrorDisplay;
