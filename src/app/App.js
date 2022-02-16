@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { ThemeProvider } from "styled-components";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
@@ -15,7 +14,6 @@ import MemoRoom from "../features/memoroom/MemoRoom";
 import VerifyInvitedUser from "../components/VerifyInvitedUser";
 import ErrorDisplay from "../components/ErrorDisplay";
 import GlobalStyles from "../utils/GlobalStyles";
-import theme from "../utils/theme";
 
 function App() {
   const loginStatus = useSelector((state) => state.auth.isLogin);
@@ -29,7 +27,7 @@ function App() {
   }, [loginStatus]);
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <GlobalStyles />
       <Routes>
         {loginStatus && (
@@ -60,7 +58,7 @@ function App() {
           element={<ErrorDisplay text="Not Found" />}
         />
       </Routes>
-    </ThemeProvider>
+    </>
   );
 }
 
