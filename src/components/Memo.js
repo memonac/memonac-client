@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { debounce } from "lodash";
@@ -86,7 +86,10 @@ const MemoContainer = styled.div`
   }
 
   .voice {
-    margin: 70px 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
   }
 `;
 
