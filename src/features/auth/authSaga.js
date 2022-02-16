@@ -86,12 +86,13 @@ function* userSignup(action) {
     });
 
     if (serverResponse.result === "success") {
-      yield put(
-        loginSuccess({
-          email,
-          name,
-        })
-      );
+      // yield put(
+      //   loginSuccess({
+      //     email,
+      //     name,
+      //   })
+      // );
+      yield put(loginSuccess(serverResponse.data));
     } else {
       yield put(loginFailure(serverResponse.error));
     }
