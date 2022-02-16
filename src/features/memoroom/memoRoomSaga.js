@@ -6,6 +6,12 @@ import {
   takeLatest,
   fork,
 } from "redux-saga/effects";
+
+import nodemailerApi from "../../utils/api/nodemailer";
+import memoApi from "../../utils/api/memo";
+import chatApi from "../../utils/api/chat";
+import { memoRoomSocket } from "../../app/socketSaga";
+import { logoutRequest } from "../auth/authSlice";
 import {
   getMemoListRequest,
   getMemoListSuccess,
@@ -45,21 +51,12 @@ import {
   addAudioFileFailure,
 } from "./memoRoomSlice";
 
-import { logoutRequest } from "../auth/authSlice";
-
-import { memoRoomSocket } from "../../app/socketSaga";
-import memoApi from "../../utils/api/memo";
-import nodemailerApi from "../../utils/api/nodemailer";
-import chatApi from "../../utils/api/chat";
-
 function* getMemoList({ payload }) {
   try {
     const memoRoomData = yield call(memoApi.getMemoList, payload);
 
     yield put(getMemoListSuccess(memoRoomData.data));
   } catch (err) {
-    // console.log(err.message); // Request failed with status code 400
-    console.log(err.response);
     if (err.response.data.error.message === "Expired Token") {
       yield put(logoutRequest());
     } else {
@@ -198,7 +195,6 @@ function* updateMemoLocation({ payload }) {
     const serverResponse = yield call(memoApi.updateMemoLocation, payload);
 
     if (serverResponse.result === "success") {
-      // yield put(updateMemoLocationSuccess(payload));
       yield fork(
         memoRoomSocket.updateMemoLocation,
         payload.memoId,

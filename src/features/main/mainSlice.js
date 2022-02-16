@@ -51,6 +51,7 @@ export const slice = createSlice({
 
       if (searchedText === "") {
         state.displayedTags = state.tags;
+
         return;
       }
 

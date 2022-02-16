@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import Button from "../../components/Button";
@@ -31,11 +31,11 @@ const LoginContainer = styled.div`
 `;
 
 function Login() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   const userError = useSelector((state) => state.auth.error);
   const userAuth = useSelector((state) => state.auth.isLogin);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (userAuth) {

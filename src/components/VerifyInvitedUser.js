@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { useLocation } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
 import { postVerifyTokenRequest } from "../features/memoroom/memoRoomSlice";
@@ -22,16 +22,15 @@ const NotificationContainer = styled.div`
 `;
 
 function VerifyInvitedUser() {
-  const { memoroomId } = useParams();
-  const { search } = useLocation();
-  const searchParams = new URLSearchParams(search);
-  const token = searchParams.get("token");
-
   const user = useSelector((state) => state.memoRoom.participants);
   const error = useSelector((state) => state.memoRoom.error);
 
+  const { memoroomId } = useParams();
+  const { search } = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const searchParams = new URLSearchParams(search);
+  const token = searchParams.get("token");
 
   useEffect(() => {
     dispatch(postVerifyTokenRequest({ memoroomId, token }));

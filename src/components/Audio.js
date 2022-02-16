@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
 import PropTypes from "prop-types";
+import styled from "styled-components";
 
-import Button from "./Button";
 import { addAudioFileRequest } from "../features/memoroom/memoRoomSlice";
+import Button from "./Button";
 
 const AudioWrapper = styled.div`
   audio {
@@ -20,9 +20,9 @@ function AudioRecord({ userId, memoroomId, memoId }) {
   const [analyser, setAnalyser] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
 
-  const dispatch = useDispatch();
-
   const updatedMemo = useSelector((state) => state.memoRoom.memos)[memoId];
+
+  const dispatch = useDispatch();
 
   function onRecAudio() {
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -83,13 +83,13 @@ function AudioRecord({ userId, memoroomId, memoId }) {
   }
 
   const onSubmitAudioFile = useCallback(() => {
-    const sound = new File([audioUrl], "mp3", {
+    const recordedAudio = new File([audioUrl], "mp3", {
       lastModified: new Date().getTime(),
       type: "audio/mpeg",
     });
 
     const formData = new FormData();
-    formData.append("audio", sound);
+    formData.append("audio", recordedAudio);
 
     dispatch(addAudioFileRequest({ userId, memoroomId, memoId, formData }));
   }, [audioUrl]);
@@ -106,13 +106,13 @@ function AudioRecord({ userId, memoroomId, memoId }) {
           <Button
             text={onRec ? "RECORD" : "STOP"}
             width={80}
-            color={onRec ? "#3E497A" : "#f03c3c"}
+            color={onRec ? "#3e497a" : "#f03c3c"}
             onClick={onRec ? onRecAudio : offRecAudio}
           />
           <Button
             text="SAVE"
             width={80}
-            color="#3E497A"
+            color="#3e497a"
             onClick={onSubmitAudioFile}
           />
         </>

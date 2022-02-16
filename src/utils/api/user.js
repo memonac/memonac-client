@@ -2,7 +2,7 @@ import axios from "./axiosInstance";
 
 const userApi = {};
 
-userApi.getlogin = async (token) => {
+userApi.getLogin = async (token) => {
   const response = await axios.get("/login", {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -13,7 +13,7 @@ userApi.getlogin = async (token) => {
   return response.data;
 };
 
-userApi.postsignup = async ({ token, email, name }) => {
+userApi.postSignup = async ({ token, email, name }) => {
   const response = await axios.post(
     "/signup",
     {
@@ -31,7 +31,7 @@ userApi.postsignup = async ({ token, email, name }) => {
   return response.data;
 };
 
-userApi.getlogout = async () => {
+userApi.getLogout = async () => {
   const response = await axios.get("/logout", {
     withCredentials: true,
   });

@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
-
-import ModalContainer from "../../components/Modal";
-import Button from "../../components/Button";
-import TextInput from "../../components/TextInput";
-import { addNewMemoRequest } from "./memoRoomSlice";
-
 import {
   MemoFormContainer,
   MemoOptionContainer,
   SubmitButtonContainer,
 } from "../memoroom/MemoModal.style";
+
+import ModalContainer from "../../components/Modal";
+import Button from "../../components/Button";
+import TextInput from "../../components/TextInput";
+import { addNewMemoRequest } from "./memoRoomSlice";
 
 function NewMemoModal({ isOpen, setIsOpen, roomId }) {
   const [isImageType, setIsImageType] = useState(false);
@@ -19,6 +18,7 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
   const [uploadedImage, setUploadedImage] = useState(undefined);
 
   const currentUserId = useSelector((state) => state.auth.id);
+
   const dispatch = useDispatch();
 
   function handleNewMemoSubmit(event) {
@@ -53,6 +53,7 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
       new Date(`${alarmDate.value} ${alarmTime.value}`) <= new Date()
     ) {
       setHasInputError("Alarm Date cannot be faster then now.");
+
       return;
     }
 

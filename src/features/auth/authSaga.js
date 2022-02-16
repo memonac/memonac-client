@@ -1,5 +1,6 @@
 import { put, call, takeLatest, all, fork } from "redux-saga/effects";
 
+import userApi from "../../utils/api/user";
 import { authenication } from "../../configs/firebase";
 import {
   signOut,
@@ -8,7 +9,6 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-
 import {
   signupRequest,
   loginRequest,
@@ -18,7 +18,6 @@ import {
   logoutSuccess,
   logoutFailure,
 } from "./authSlice";
-import userApi from "../../utils/api/user";
 
 function* userLogin({ payload }) {
   try {
@@ -31,7 +30,7 @@ function* userLogin({ payload }) {
       );
       const { accessToken: token } = firebaseResponse.user;
 
-      const serverResponse = yield call(userApi.getlogin, token);
+      const serverResponse = yield call(userApi.getLogin, token);
 
       if (serverResponse.result === "success") {
         yield put(
@@ -49,7 +48,7 @@ function* userLogin({ payload }) {
       const firebaseResponse = yield signInWithPopup(authenication, provider);
       const { accessToken: token } = firebaseResponse.user;
 
-      const serverResponse = yield call(userApi.getlogin, token);
+      const serverResponse = yield call(userApi.getLogin, token);
 
       if (serverResponse.result === "success") {
         yield put(
@@ -79,7 +78,7 @@ function* userSignup(action) {
     );
 
     const { accessToken: token } = firebaseResponse.user;
-    const serverResponse = yield call(userApi.postsignup, {
+    const serverResponse = yield call(userApi.postSignup, {
       token,
       email,
       name,
@@ -105,7 +104,7 @@ function* userLogout() {
   try {
     yield signOut(authenication);
 
-    const serverResponse = yield call(userApi.getlogout);
+    const serverResponse = yield call(userApi.getLogout);
 
     if (serverResponse.result === "success") {
       yield put(logoutSuccess());
