@@ -153,11 +153,13 @@ function MemoRoom() {
     event.preventDefault();
 
     const { email } = event.target;
-    const participant = Object.entries(participants).find(([id, data]) => {
-      email.value === data.email;
-    });
+    const isNotParticipant = Object.entries(participants).every(
+      ([id, data]) => {
+        email.value !== data.email;
+      }
+    );
 
-    if (!participant) {
+    if (isNotParticipant) {
       dispatch(postSendMailRequest({ userId, memoroomId, email: email.value }));
 
       return;
