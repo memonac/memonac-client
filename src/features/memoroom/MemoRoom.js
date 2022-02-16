@@ -21,6 +21,7 @@ import {
   resetMemoList,
   postSendMailRequest,
   updateMemoLocationRequest,
+  updateMemoLocationSuccess,
 } from "./memoRoomSlice";
 import NewMemoModal from "./NewMemoModal";
 import LeaveMemoRoomModal from "./LeaveMemoRoomModal";
@@ -121,6 +122,15 @@ function MemoRoom() {
 
   const moveMemo = useCallback(
     (id, left, top) => {
+      dispatch(
+        updateMemoLocationSuccess({
+          userId,
+          memoroomId,
+          memoId: id,
+          left,
+          top,
+        })
+      );
       dispatch(
         updateMemoLocationRequest({
           userId,

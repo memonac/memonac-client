@@ -118,7 +118,7 @@ memoApi.leaveMemoRoom = async ({ userId, memoroomId }) => {
       withCredentials: true,
     }
   );
-  
+
   return response.data;
 };
 

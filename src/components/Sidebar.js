@@ -7,7 +7,9 @@ const SidebarContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 300px;
-  min-height: 665px;
+  /* min-height: 665px; */
+  padding-left: 35px;
+  background-color: #ffe699;
 
   .tags-wrapper {
     display: grid;

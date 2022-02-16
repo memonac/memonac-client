@@ -20,11 +20,11 @@ export const slice = createSlice({
       state.isLogin = false;
     },
     loginSuccess: (state, action) => {
-      const { email, name, userId } = action.payload;
+      const { email, name, id } = action.payload;
 
       state.isLogin = true;
       state.error = "";
-      state.id = userId;
+      state.id = id;
       state.email = email;
       state.name = name;
     },

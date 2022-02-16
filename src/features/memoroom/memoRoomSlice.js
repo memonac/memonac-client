@@ -122,12 +122,12 @@ export const slice = createSlice({
       state.chatError = response.data.error.message;
     },
     updateMemoLocationRequest: (state) => {
-      state.isLoading = true;
+      // state.isLoading = true;
     },
     updateMemoLocationSuccess: (state, action) => {
       const { memoId, left, top } = action.payload;
 
-      state.isLoading = false;
+      // state.isLoading = false;
       state.memos[memoId].location = [left, top];
     },
     updateMemoLocationFailure: (state, action) => {
@@ -188,7 +188,7 @@ export const slice = createSlice({
     },
     postVerifyTokenSuccess: (state, action) => {
       const { participants } = action.payload;
-      
+
       state.isLoading = false;
       state.participants = participants;
     },
