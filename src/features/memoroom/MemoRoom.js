@@ -8,7 +8,6 @@ import Button from "../../components/Button";
 import Memo from "../../components/Memo";
 import Header from "../../components/Header";
 import Profile from "../../components/Profile";
-import Loading from "../../components/Loading";
 import { DraggableMemo } from "../../components/DraggableMemo";
 import ChatSideBar from "../../components/ChatSideBar";
 import { memoRoomSocket } from "../../app/socketSaga";
@@ -18,13 +17,16 @@ import {
   getMemoListRequest,
   resetMemoList,
   updateMemoLocationRequest,
+  updateMemoLocationSuccess,
 } from "./memoRoomSlice";
 import NewMemoModal from "./NewMemoModal";
+import LeaveMemoRoomModal from "./LeaveMemoRoomModal";
 import SendMailModal from "./SendMailModal";
 
 const MemoRoomContainer = styled.div`
   .memo-wrapper {
     position: relative;
+    overflow: hidden;
     width: 100vw;
     height: 100vh;
   }
@@ -53,14 +55,16 @@ const MemoRoomContainer = styled.div`
 `;
 
 function MemoRoom() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isNewModalOpen, setIsNewModalOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
-  const [inputInfo, setInputInfo] = useState({});
+  const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
 
   const userId = useSelector((state) => state.auth.id);
   const userName = useSelector((state) => state.auth.name);
-  const loadingStatus = useSelector((state) => state.memoRoom.isLoading);
+
+  const [inputInfo, setInputInfo] = useState({});
+
   const memos = useSelector((state) => state.memoRoom.memos);
   const memoRoomName = useSelector((state) => state.memoRoom.name);
   const participants = useSelector((state) => state.memoRoom.participants);
@@ -94,6 +98,15 @@ function MemoRoom() {
 
   const moveMemo = useCallback(
     (id, left, top) => {
+      dispatch(
+        updateMemoLocationSuccess({
+          userId,
+          memoroomId,
+          memoId: id,
+          left,
+          top,
+        })
+      );
       dispatch(
         updateMemoLocationRequest({
           userId,
@@ -149,11 +162,15 @@ function MemoRoom() {
   }
 
   function handleNewMemoModalClick() {
-    setIsModalOpen(true);
+    setIsNewModalOpen(true);
   }
 
   function handleModalCloseClick() {
-    setIsModalOpen(false);
+    setIsNewModalOpen(false);
+  }
+
+  function handleLeaveMemoRoomButtonClick() {
+    setIsLeaveModalOpen(true);
   }
 
   return (
@@ -167,10 +184,10 @@ function MemoRoom() {
             width={100}
           />
           <Button text="New" width={100} onClick={handleNewMemoModalClick} />
-          {isModalOpen && (
+          {isNewModalOpen && (
             <NewMemoModal
               roomId={memoroomId}
-              isOpen={isModalOpen}
+              isOpen={isNewModalOpen}
               setIsOpen={handleModalCloseClick}
             />
           )}
@@ -180,11 +197,23 @@ function MemoRoom() {
             <Profile key={id} firstName={data.name[0]} />
           ))}
           <Button
-            text="share"
+            text="Share"
             color="#3E497A"
             width={100}
             onClick={handleShareButtonClick}
           />
+          <Button
+            text="Leave"
+            color="#362706"
+            width={100}
+            onClick={handleLeaveMemoRoomButtonClick}
+          />
+          {isLeaveModalOpen && (
+            <LeaveMemoRoomModal
+              isOpen={isLeaveModalOpen}
+              setIsOpen={setIsLeaveModalOpen}
+            />
+          )}
           <SendMailModal
             isOpen={isShareModalOpen}
             setIsOpen={setIsShareModalOpen}
@@ -199,21 +228,18 @@ function MemoRoom() {
         currentMemoRoomId={memoroomId}
         chatLastIndex={chatLastIndex}
       />
-      {loadingStatus && <Loading />}
-      {!loadingStatus && (
-        <div className="memo-wrapper" ref={drop}>
-          {memoList.map(([memoId, memoInfo]) => (
-            <DraggableMemo
-              key={memoId}
-              id={memoId}
-              left={memoInfo.location[0]}
-              top={memoInfo.location[1]}
-            >
-              <Memo id={memoId} info={memoInfo} tag={memoTagInfo[memoId]} />
-            </DraggableMemo>
-          ))}
-        </div>
-      )}
+      <div className="memo-wrapper" ref={drop}>
+        {memoList.map(([memoId, memoInfo]) => (
+          <DraggableMemo
+            key={memoId}
+            id={memoId}
+            left={memoInfo.location[0]}
+            top={memoInfo.location[1]}
+          >
+            <Memo id={memoId} info={memoInfo} tag={memoTagInfo[memoId]} />
+          </DraggableMemo>
+        ))}
+      </div>
     </MemoRoomContainer>
   );
 }

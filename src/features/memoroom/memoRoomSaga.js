@@ -43,6 +43,9 @@ import {
   getChatListRequest,
   getChatListSuccess,
   getChatListFailure,
+  leaveMemoRoomRequest,
+  leaveMemoRoomSuccess,
+  leaveMemoRoomFailure,
   addAudioFileRequest,
   addAudioFileSuccess,
   addAudioFileFailure,
@@ -76,7 +79,7 @@ function* addNewMemo({ payload }) {
     if (err.response.data.error.message === "Expired Token") {
       yield put(logoutRequest());
     } else {
-      yield put(addNewMemoFailure(err));
+      yield put(addNewMemoFailure(err.message));
     }
   }
 }
@@ -94,7 +97,7 @@ function* postSendMail({ payload }) {
     if (err.response.data.error.message === "Expired Token") {
       yield put(logoutRequest());
     } else {
-      yield put(postSendMailFailure(err));
+      yield put(postSendMailFailure(err.message));
     }
   }
 }
@@ -105,6 +108,11 @@ function* postVerifyToken({ payload }) {
 
     if (serverResponse.result === "success") {
       yield put(postVerifyTokenSuccess(serverResponse.data));
+      yield fork(
+        memoRoomSocket.updateParticipants,
+        serverResponse.data.participants,
+        payload.memoroomId
+      );
     } else {
       yield put(postVerifyTokenFailure(serverResponse.error));
     }
@@ -112,7 +120,7 @@ function* postVerifyToken({ payload }) {
     if (err.response.data.error.message === "Expired Token") {
       yield put(logoutRequest());
     } else {
-      yield put(postVerifyTokenFailure(err));
+      yield put(postVerifyTokenFailure(err.message));
     }
   }
 }
@@ -128,7 +136,7 @@ function* updateMemoStyle({ payload }) {
       yield put(updateMemoStyleFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(updateMemoStyleFailure(err));
+    yield put(updateMemoStyleFailure(err.message));
   }
 }
 
@@ -143,7 +151,7 @@ function* removeMemo({ payload }) {
       yield put(removeMemoFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(removeMemoFailure(err));
+    yield put(removeMemoFailure(err.message));
   }
 }
 
@@ -158,7 +166,7 @@ function* updateMemoText({ payload }) {
       yield put(updateMemoTextFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(updateMemoTextFailure(err));
+    yield put(updateMemoTextFailure(err.message));
   }
 }
 
@@ -178,7 +186,7 @@ function* updateMemoSize({ payload }) {
       yield put(updateMemoSizeFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(updateMemoSizeFailure(err));
+    yield put(updateMemoSizeFailure(err.message));
   }
 }
 
@@ -187,7 +195,6 @@ function* updateMemoLocation({ payload }) {
     const serverResponse = yield call(memoApi.updateMemoLocation, payload);
 
     if (serverResponse.result === "success") {
-      yield put(updateMemoLocationSuccess(payload));
       yield fork(
         memoRoomSocket.updateMemoLocation,
         payload.memoId,
@@ -198,7 +205,7 @@ function* updateMemoLocation({ payload }) {
       yield put(updateMemoLocationFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(updateMemoLocationFailure(err));
+    yield put(updateMemoLocationFailure(err.message));
   }
 }
 
@@ -215,8 +222,23 @@ function* getChatList({ payload }) {
     if (err.response.data.error.message === "Expired Token") {
       yield put(logoutRequest());
     } else {
-      yield put(getChatListFailure(err));
+      yield put(getChatListFailure(err.message));
     }
+  }
+}
+
+function* leaveMemoRoom({ payload }) {
+  try {
+    const serverResponse = yield call(memoApi.leaveMemoRoom, payload);
+
+    if (serverResponse.result === "success") {
+      yield put(leaveMemoRoomSuccess(payload));
+      yield fork(memoRoomSocket.withdrawRoom, payload.userId);
+    } else {
+      yield put(leaveMemoRoomFailure(serverResponse.error));
+    }
+  } catch (err) {
+    yield put(leaveMemoRoomFailure(err.message));
   }
 }
 
@@ -231,7 +253,7 @@ function* addAudioFile({ payload }) {
       yield put(addAudioFileFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(addAudioFileFailure(err));
+    yield put(addAudioFileFailure(err.message));
   }
 }
 
@@ -275,6 +297,10 @@ function* getChatWatcher() {
   yield takeLatest(getChatListRequest, getChatList);
 }
 
+function* leaveMemoRoomWatcher() {
+  yield takeLatest(leaveMemoRoomRequest, leaveMemoRoom);
+}
+
 function* watchAddAudioFile() {
   yield takeLatest(addAudioFileRequest, addAudioFile);
 }
@@ -291,6 +317,7 @@ export function* memoRoomSaga() {
     fork(updateMemoSizeWatcher),
     fork(updateMemoLocationWatcher),
     fork(getChatWatcher),
+    fork(leaveMemoRoomWatcher),
     fork(watchAddAudioFile),
   ]);
 }

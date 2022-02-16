@@ -61,7 +61,7 @@ function Nav() {
         type="text"
         name="tagname"
         placeholder="Search with Tags"
-        width={260}
+        width={330}
         onInputTextChange={handleInputTextChange}
         inputText={inputText}
       />

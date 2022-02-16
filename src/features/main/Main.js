@@ -16,8 +16,7 @@ import { getMemoRoomListRequest } from "./mainSlice";
 const MainWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(1, 300px 2fr);
-  padding: 0 20px;
-  margin: 0 50px;
+  margin: 0 70px;
 `;
 
 function Main() {

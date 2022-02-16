@@ -9,8 +9,8 @@ export const MemoRoomContainer = styled.div`
   width: 300px;
   height: 300px;
   margin: 0 10px 20px 0;
-  border-radius: 20px;
   background: #ffc300;
+  box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, 0.2);
 
   img {
     width: 40px;
@@ -96,7 +96,6 @@ export const MemoRoomContainer = styled.div`
     position: absolute;
     width: 300px;
     height: 300px;
-    border-radius: 20px;
     background: rgba(0, 0, 0, 0.6);
   }
 

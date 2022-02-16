@@ -14,6 +14,10 @@ const LoadingContainer = styled.div`
     font-size: 70px;
   }
 
+  .lemon-images {
+    display: flex;
+  }
+
   .loading-image {
     width: 50px;
     padding: 20px;
@@ -38,7 +42,9 @@ function Loading() {
     <LoadingContainer>
       <div className="loading-title">Loading</div>
       <div className="lemon-images">
-        {lemonImages.map((singleImage) => singleImage)}
+        {lemonImages.map((singleImage, index) => (
+          <div key={index}>{singleImage}</div>
+        ))}
       </div>
     </LoadingContainer>
   );
