@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
@@ -28,6 +28,7 @@ const ErrorContainer = styled.div`
 function ErrorDisplay({ text = "An error has been occurred!" }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { state } = useLocation();
 
   function handleHomeButtonClick() {
     navigate(-1);
@@ -37,7 +38,7 @@ function ErrorDisplay({ text = "An error has been occurred!" }) {
   return (
     <ErrorContainer>
       <div className="error-title">{text}</div>
-      <div className="error-detail">{}</div>
+      <div className="error-detail">{state}</div>
       <Button text="Back" onClick={handleHomeButtonClick} width={200} />
     </ErrorContainer>
   );
