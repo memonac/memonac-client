@@ -90,9 +90,10 @@ const MemoRoomBox = ({ id, roomName, participants, tags }) => {
           <div className="room-name">{roomName}</div>
           <div className="participant-box">
             <div className="participant">
-              {participants.map((name) => (
-                <Profile key={name} firstName={name[0]} />
-              ))}
+              {participants &&
+                participants.map((name) => (
+                  <Profile key={name} firstName={name[0]} />
+                ))}
             </div>
           </div>
         </div>
