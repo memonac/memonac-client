@@ -1,11 +1,9 @@
 import React, { useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
+import styled from "styled-components";
 
 import { getChatListRequest } from "../features/memoroom/memoRoomSlice";
-
-import styled from "styled-components";
-import PropTypes from "prop-types";
-
 import ChatLine from "./ChatLine";
 import TextInput from "./TextInput";
 import Button from "./Button";
@@ -33,10 +31,11 @@ function ChatSideBar({
   currentMemoRoomId,
   chatLastIndex,
 }) {
-  const userId = useSelector((state) => state.auth.id);
-
   const scrollRef = useRef();
   const targetRef = useRef();
+
+  const userId = useSelector((state) => state.auth.id);
+
   const dispatch = useDispatch();
 
   const defaultOption = {
@@ -103,7 +102,7 @@ function ChatSideBar({
       <div>
         <form onSubmit={onSubmitInputText}>
           <TextInput typd="text" name="message" width={200} />
-          <Button text="보내기" />
+          <Button text="SEND" />
         </form>
       </div>
     </ChatSideBarContainer>
