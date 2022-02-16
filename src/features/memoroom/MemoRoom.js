@@ -60,16 +60,11 @@ function MemoRoom() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
 
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-
   const userId = useSelector((state) => state.auth.id);
   const userName = useSelector((state) => state.auth.name);
 
   const [inputInfo, setInputInfo] = useState({});
 
-  const userId = useSelector((state) => state.auth.id);
-  const userName = useSelector((state) => state.auth.name);
   const memos = useSelector((state) => state.memoRoom.memos);
   const memoRoomName = useSelector((state) => state.memoRoom.name);
   const participants = useSelector((state) => state.memoRoom.participants);
