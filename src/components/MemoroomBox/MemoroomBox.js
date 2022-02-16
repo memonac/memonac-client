@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-
 import PropTypes from "prop-types";
 
 import {
   editMemoRoomTitleRequest,
   removeMemoRoomRequest,
 } from "../../features/main/mainSlice";
-
 import hashtag from "../../assets/images/hashtag.png";
 import menu from "../../assets/images/menu.png";
 import clickedMenu from "../../assets/images/click-menu.png";
@@ -18,7 +16,6 @@ import ModalContainer from "../Modal";
 import TextInput from "../TextInput";
 import Button from "../Button";
 import Profile from "../Profile";
-
 import { MemoRoomContainer } from "./MemoroomBox.style";
 
 const MemoRoomBox = ({ id, roomName, participants, tags }) => {
@@ -182,11 +179,11 @@ const MemoRoomBox = ({ id, roomName, participants, tags }) => {
   );
 };
 
-export default MemoRoomBox;
-
 MemoRoomBox.propTypes = {
   id: PropTypes.string.isRequired,
   roomName: PropTypes.string.isRequired,
   tags: PropTypes.array,
   participants: PropTypes.array,
 };
+
+export default MemoRoomBox;
