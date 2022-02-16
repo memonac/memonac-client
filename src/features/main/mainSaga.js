@@ -1,4 +1,7 @@
 import { all, put, call, takeLatest, fork } from "redux-saga/effects";
+
+import mainApi from "../../utils/api/main";
+import { logoutRequest } from "../auth/authSlice";
 import {
   getMemoRoomListRequest,
   getMemoRoomListSuccess,
@@ -13,9 +16,6 @@ import {
   removeMemoRoomSuccess,
   removeMemoRoomFailure,
 } from "./mainSlice";
-import mainApi from "../../utils/api/main";
-
-import { logoutRequest } from "../auth/authSlice";
 
 function* getMemoRoomList({ payload }) {
   const { userId } = payload;
