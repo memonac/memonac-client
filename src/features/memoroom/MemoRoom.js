@@ -14,7 +14,6 @@ import ModalContainer from "../../components/Modal";
 import TextInput from "../../components/TextInput";
 import ChatSideBar from "../../components/ChatSideBar";
 import backIcon from "../../assets/images/back.png";
-
 import { memoRoomSocket } from "../../app/socketSaga";
 import { resetNewMemoRoomId } from "../main/mainSlice";
 import {
@@ -61,10 +60,10 @@ function MemoRoom() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [inputInfo, setinputInfo] = useState({});
 
   const userId = useSelector((state) => state.auth.id);
   const userName = useSelector((state) => state.auth.name);
-
   const loadingStatus = useSelector((state) => state.memoRoom.isLoading);
   const error = useSelector((state) => state.memoRoom.error);
   const success = useSelector((state) => state.memoRoom.success);
@@ -74,11 +73,9 @@ function MemoRoom() {
   const chats = useSelector((state) => state.memoRoom.chats);
   const chatLastIndex = useSelector((state) => state.memoRoom.chatLastIndex);
 
-  const [inputInfo, setinputInfo] = useState({});
-
-  const { memoroomId } = useParams();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { memoroomId } = useParams();
 
   useEffect(() => {
     dispatch(getMemoListRequest({ userId, memoroomId }));
@@ -233,7 +230,7 @@ function MemoRoom() {
             onClose={setIsShareModalOpen}
           >
             <div className="notification">
-              ☝🏻 가입된 사용자만 초대할 수 있습니다
+              ☝🏻 Only registered users can be invited.
             </div>
             <form onSubmit={handleInvitationMailSubmit}>
               <TextInput

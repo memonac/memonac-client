@@ -7,21 +7,21 @@ import ModalContainer from "../../components/Modal";
 import TextInput from "../../components/TextInput";
 import Button from "../../components/Button";
 import RadioButton from "../../components/RadioButton";
-
+import changeIntoDateString from "../../utils/changeIntoDateString";
 import { updateMemoStyleRequest } from "../memoroom/memoRoomSlice";
 import {
   MemoFormContainer,
   MemoOptionContainer,
   SubmitButtonContainer,
 } from "../memoroom/MemoModal.style";
-import changeIntoDateString from "../../utils/changeIntoDateString";
 
 function EditMemoModal({ isOpen, setIsOpen, memoId }) {
   const [hasInputError, setHasInputError] = useState(false);
 
-  const dispatch = useDispatch();
   const targetMemo = useSelector((state) => state.memoRoom.memos)[memoId];
   const userId = useSelector((state) => state.auth.id);
+
+  const dispatch = useDispatch();
   const { memoroomId } = useParams();
 
   function handleEditButtonClick(event) {

@@ -6,6 +6,12 @@ import {
   takeLatest,
   fork,
 } from "redux-saga/effects";
+
+import nodemailerApi from "../../utils/api/nodemailer";
+import memoApi from "../../utils/api/memo";
+import chatApi from "../../utils/api/chat";
+import { memoRoomSocket } from "../../app/socketSaga";
+import { logoutRequest } from "../auth/authSlice";
 import {
   getMemoListRequest,
   getMemoListSuccess,
@@ -41,13 +47,6 @@ import {
   addAudioFileSuccess,
   addAudioFileFailure,
 } from "./memoRoomSlice";
-
-import { logoutRequest } from "../auth/authSlice";
-
-import { memoRoomSocket } from "../../app/socketSaga";
-import memoApi from "../../utils/api/memo";
-import nodemailerApi from "../../utils/api/nodemailer";
-import chatApi from "../../utils/api/chat";
 
 function* getMemoList({ payload }) {
   try {
