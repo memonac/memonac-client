@@ -60,7 +60,7 @@ function MemoRoom() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [inputInfo, setinputInfo] = useState({});
+  const [inputInfo, setInputInfo] = useState({});
 
   const userId = useSelector((state) => state.auth.id);
   const userName = useSelector((state) => state.auth.name);
@@ -183,7 +183,7 @@ function MemoRoom() {
     const inputMessage = event.target.message.value;
     const date = new Date();
 
-    setinputInfo({ message: inputMessage, date });
+    setInputInfo({ message: inputMessage, date });
     event.target.message.value = "";
   }
 
