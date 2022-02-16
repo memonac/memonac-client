@@ -118,6 +118,18 @@ memoApi.leaveMemoRoom = async ({ userId, memoroomId }) => {
       withCredentials: true,
     }
   );
+  
+  return response.data;
+};
+
+memoApi.addAudioFile = async ({ userId, memoroomId, memoId, formData }) => {
+  const response = await axios.post(
+    `users/${userId}/memorooms/${memoroomId}/memos/${memoId}/sound`,
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
 
   return response.data;
 };

@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { debounce } from "lodash";
 
+import AudioRecord from "./Audio";
 import close from "../assets/images/close.png";
 import memoMenu from "../assets/images/memoMenu.png";
 import EditMemoModal from "../features/memoroom/EditMemoModal";
@@ -83,6 +84,10 @@ const MemoContainer = styled.div`
     height: 100%;
     margin-top: 10px;
     margin-bottom: 20px;
+  }
+
+  .voice {
+    margin: 70px 28px;
   }
 `;
 
@@ -181,6 +186,11 @@ function Memo({ id, info, tag }) {
       )}
       {info.formType === "image" && (
         <div className="textarea-wrapper image"></div>
+      )}
+      {info.formType === "voice" && (
+        <div className="textarea-wrapper voice">
+          <AudioRecord userId={userId} memoroomId={memoroomId} memoId={id} />
+        </div>
       )}
       <div className="memo-info-wrapper">
         <p>{tag.split(",").map((singleTag) => `#${singleTag} `)}</p>

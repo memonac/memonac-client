@@ -11,6 +11,7 @@ import {
   addNewMemoSuccess,
   leaveMemoRoomSuccess,
   postVerifyTokenSuccess,
+  addAudioFileSuccess,
 } from "../features/memoroom/memoRoomSlice";
 
 const chatSocket = io(`${process.env.REACT_APP_SERVER_URI}/chat`);
@@ -114,6 +115,15 @@ function createMemoSocketChannel(socket) {
       emit(addNewMemoSuccess(newMemo));
     });
 
+    socket.on("memo/audio", (memoId, audioUrl) => {
+      emit(
+        addAudioFileSuccess({
+          memoId,
+          audioUrl,
+        })
+      );
+    });
+
     return () => {
       socket.off("join room");
       socket.off("withdraw room");
@@ -124,6 +134,7 @@ function createMemoSocketChannel(socket) {
       socket.off("memo/text");
       socket.off("memo/style");
       socket.off("memo/add");
+      socket.off("memo/audio");
     };
   });
 }
@@ -181,6 +192,9 @@ const memoRoomSocket = {
   },
   addMemo(newMemo) {
     memoSocket.emit("memo/add", newMemo);
+  },
+  updateMemoAudio({ memoId, audioUrl }) {
+    memoSocket.emit("memo/audio", memoId, audioUrl);
   },
 };
 

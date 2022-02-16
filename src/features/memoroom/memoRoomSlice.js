@@ -10,15 +10,6 @@ export const slice = createSlice({
     name: "",
     participants: {},
     memos: {},
-    /* memoId: {
-      formType: "text",
-      content: "abcdefg",
-      location: [x, y],
-      size: [120, 100],
-      color: "red",
-      alarmDate: "2022-02-03 00:00",
-      tags: ["good", "hello"]
-    } */
     chats: [],
     isChatLoading: false,
     chatLastIndex: null,
@@ -248,6 +239,19 @@ export const slice = createSlice({
         _id: id,
       });
     },
+    addAudioFileRequest: (state) => {
+      state.isLoading = true;
+    },
+    addAudioFileSuccess: (state, action) => {
+      const { memoId, audioUrl } = action.payload;
+
+      state.isLoading = false;
+      state.memos[memoId].content = audioUrl;
+    },
+    addAudioFileFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -288,6 +292,9 @@ export const {
   leaveMemoRoomSuccess,
   leaveMemoRoomFailure,
   memoInitializeState,
+  addAudioFileRequest,
+  addAudioFileSuccess,
+  addAudioFileFailure,
 } = slice.actions;
 
 export default slice.reducer;
