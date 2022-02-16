@@ -11,7 +11,7 @@ function SendMailModal({ isOpen, setIsOpen }) {
   const [message, setMessage] = useState("");
 
   const userId = useSelector((state) => state.auth.id);
-  const sendMailError = useSelector((state) => state.memoRoom.error);
+  const sendMailError = useSelector((state) => state.memoRoom.sendMailError);
   const sendMailSuccess = useSelector(
     (state) => state.memoRoom.sendMailSuccess
   );
@@ -36,13 +36,11 @@ function SendMailModal({ isOpen, setIsOpen }) {
     event.preventDefault();
 
     const { email } = event.target;
-    const isNotParticipant = Object.entries(participants).every(
-      ([id, data]) => {
-        email.value !== data.email;
-      }
-    );
+    const isParticipant = Object.entries(participants).filter(([id, data]) => {
+      return email.value === data.email;
+    });
 
-    if (!isNotParticipant) {
+    if (!isParticipant.length) {
       dispatch(postSendMailRequest({ userId, memoroomId, email: email.value }));
 
       return;
