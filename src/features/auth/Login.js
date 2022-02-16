@@ -31,11 +31,11 @@ const LoginContainer = styled.div`
 `;
 
 function Login() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   const userError = useSelector((state) => state.auth.error);
   const userAuth = useSelector((state) => state.auth.isLogin);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (userAuth) {
