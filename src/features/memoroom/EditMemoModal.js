@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
 import ModalContainer from "../../components/Modal";
@@ -21,8 +21,8 @@ function EditMemoModal({ isOpen, setIsOpen, memoId }) {
   const targetMemo = useSelector((state) => state.memoRoom.memos)[memoId];
   const userId = useSelector((state) => state.auth.id);
 
-  const dispatch = useDispatch();
   const { memoroomId } = useParams();
+  const dispatch = useDispatch();
 
   function handleEditButtonClick(event) {
     event.preventDefault();

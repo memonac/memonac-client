@@ -18,6 +18,7 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
   const [uploadedImage, setUploadedImage] = useState(undefined);
 
   const currentUserId = useSelector((state) => state.auth.id);
+
   const dispatch = useDispatch();
 
   function handleNewMemoSubmit(event) {

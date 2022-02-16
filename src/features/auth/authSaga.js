@@ -89,6 +89,7 @@ function* userSignup(action) {
         loginSuccess({
           email,
           name,
+          id: serverResponse.data.userId,
         })
       );
     } else {
