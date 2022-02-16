@@ -22,16 +22,16 @@ const NotificationContainer = styled.div`
 `;
 
 function VerifyInvitedUser() {
-  const { memoroomId } = useParams();
-  const { search } = useLocation();
-  const searchParams = new URLSearchParams(search);
-  const token = searchParams.get("token");
-
   const user = useSelector((state) => state.memoRoom.participants);
   const error = useSelector((state) => state.memoRoom.error);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { memoroomId } = useParams();
+  const { search } = useLocation();
+  const searchParams = new URLSearchParams(search);
+  const token = searchParams.get("token");
 
   useEffect(() => {
     dispatch(postVerifyTokenRequest({ memoroomId, token }));
