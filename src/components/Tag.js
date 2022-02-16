@@ -1,8 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-
-import styled from "styled-components";
 import PropTypes from "prop-types";
+import styled from "styled-components";
 
 import { setTagInfo } from "../features/main/mainSlice";
 
@@ -38,9 +37,9 @@ function Tag({ text, isSelected }) {
   );
 }
 
-export default Tag;
-
 Tag.propTypes = {
   text: PropTypes.string.isRequired,
   isSelected: PropTypes.bool.isRequired,
 };
+
+export default Tag;

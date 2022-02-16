@@ -1,7 +1,6 @@
 import React from "react";
-
-import styled from "styled-components";
 import PropTypes from "prop-types";
+import styled from "styled-components";
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -49,10 +48,10 @@ function Header({ title, left, right }) {
   );
 }
 
-export default Header;
-
 Header.propTypes = {
   title: PropTypes.string,
   left: PropTypes.element,
   right: PropTypes.element,
 };
+
+export default Header;

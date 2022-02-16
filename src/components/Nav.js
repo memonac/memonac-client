@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
 import styled from "styled-components";
 import { debounce } from "lodash";
 
-import Button from "./Button";
-import TextInput from "./TextInput";
-import ModalContainer from "./Modal";
 import { logoutRequest } from "../features/auth/authSlice";
 import {
   addNewMemoRoomRequest,
   setDisplayedTag,
   resetMemoRoom,
 } from "../features/main/mainSlice";
+import Button from "./Button";
+import TextInput from "./TextInput";
+import ModalContainer from "./Modal";
 
 const NavContainer = styled.div`
   display: flex;

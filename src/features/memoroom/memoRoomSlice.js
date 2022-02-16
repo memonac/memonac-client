@@ -4,8 +4,9 @@ export const slice = createSlice({
   name: "memoRoom",
   initialState: {
     isLoading: false,
+    sendMailError: "",
+    sendMailSuccess: false,
     error: "",
-    success: "",
     name: "",
     participants: {},
     memos: {},
@@ -28,7 +29,8 @@ export const slice = createSlice({
     memoInitializeState: (state) => {
       state.isLoading = false;
       state.error = "";
-      state.success = "";
+      state.sendMailError = "";
+      state.sendMailSuccess = false;
       state.name = "";
       state.participants = {};
       state.memos = {};
@@ -157,10 +159,12 @@ export const slice = createSlice({
     },
     postSendMailRequest: (state) => {
       state.isLoading = true;
+      state.sendMailSuccess = false;
     },
-    postSendMailSuccess: (state, action) => {
+    postSendMailSuccess: (state) => {
       state.isLoading = false;
-      state.success = action.payload;
+      state.sendMailSuccess = true;
+      state.sendMailError = "";
     },
     postSendMailFailure: (state, action) => {
       const { message } = action.payload;

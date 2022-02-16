@@ -1,28 +1,28 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
 import ModalContainer from "../../components/Modal";
 import TextInput from "../../components/TextInput";
 import Button from "../../components/Button";
 import RadioButton from "../../components/RadioButton";
-
+import changeIntoDateString from "../../utils/changeIntoDateString";
 import { updateMemoStyleRequest } from "../memoroom/memoRoomSlice";
 import {
   MemoFormContainer,
   MemoOptionContainer,
   SubmitButtonContainer,
 } from "../memoroom/MemoModal.style";
-import changeIntoDateString from "../../utils/changeIntoDateString";
 
 function EditMemoModal({ isOpen, setIsOpen, memoId }) {
   const [hasInputError, setHasInputError] = useState(false);
 
-  const dispatch = useDispatch();
   const targetMemo = useSelector((state) => state.memoRoom.memos)[memoId];
   const userId = useSelector((state) => state.auth.id);
+
   const { memoroomId } = useParams();
+  const dispatch = useDispatch();
 
   function handleEditButtonClick(event) {
     event.preventDefault();

@@ -1,7 +1,6 @@
 import React from "react";
-
-import styled from "styled-components";
 import PropTypes from "prop-types";
+import styled from "styled-components";
 
 const RoomListContainer = styled.div`
   display: grid;
@@ -15,8 +14,8 @@ function RoomList({ children }) {
   return <RoomListContainer>{children}</RoomListContainer>;
 }
 
-export default RoomList;
-
 RoomList.propTypes = {
   children: PropTypes.node,
 };
+
+export default RoomList;

@@ -2,6 +2,7 @@ import React from "react";
 import ReactModal from "react-modal";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+
 import setModalContentHeight from "../utils/setModalContentHeight";
 
 ReactModal.setAppElement("#root");
@@ -71,8 +72,6 @@ function ModalContainer({
   );
 }
 
-export default ModalContainer;
-
 ModalContainer.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
@@ -81,3 +80,5 @@ ModalContainer.propTypes = {
   children: PropTypes.node.isRequired,
   onClose: PropTypes.func.isRequired,
 };
+
+export default ModalContainer;

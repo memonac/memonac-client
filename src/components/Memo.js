@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
-
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { debounce } from "lodash";
 
-import AudioRecord from "./Audio";
 import close from "../assets/images/close.png";
 import memoMenu from "../assets/images/memoMenu.png";
 import EditMemoModal from "../features/memoroom/EditMemoModal";
@@ -15,6 +13,7 @@ import {
   updateMemoSizeRequest,
   updateMemoTextRequest,
 } from "../features/memoroom/memoRoomSlice";
+import AudioRecord from "./Audio";
 
 const MemoContainer = styled.div`
   display: flex;
@@ -87,7 +86,10 @@ const MemoContainer = styled.div`
   }
 
   .voice {
-    margin: 70px 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
   }
 `;
 
@@ -97,8 +99,8 @@ function Memo({ id, info, tag }) {
 
   const targetMemo = useSelector((state) => state.memoRoom.memos)[id];
   const userId = useSelector((state) => state.auth.id);
-  const { memoroomId } = useParams();
   const dispatch = useDispatch();
+  const { memoroomId } = useParams();
 
   function handleMemoTextChange({ target }) {
     printTextValue(target.value);
