@@ -43,7 +43,6 @@ function* addNewMemoRoom({ payload }) {
       yield put(addNewMemoRoomSuccess(serverResponse.data));
     }
   } catch (err) {
-    console.dir(err);
     if (err.response.data.error.message === "Expired Token") {
       yield put(logoutRequest());
     } else {
