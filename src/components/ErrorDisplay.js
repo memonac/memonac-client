@@ -1,12 +1,14 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
-import Button from "./Button";
 import { initiateErrorState } from "../features/auth/authSlice";
 import { initiateMainErrorState } from "../features/main/mainSlice";
+
+import Button from "./Button";
+
 import ROUTES from "../constants/routes";
 
 const ErrorContainer = styled.div`

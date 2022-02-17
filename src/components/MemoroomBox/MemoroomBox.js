@@ -2,15 +2,16 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import PropTypes from "prop-types";
 
-import hashtag from "../../assets/images/hashtag.png";
-import menu from "../../assets/images/menu.png";
-import clickedMenu from "../../assets/images/click-menu.png";
-import pen from "../../assets/images/pen.png";
-import wastebasket from "../../assets/images/wastebasket.png";
 import EditRoomTitleModal from "./EditRoomTitleModal";
+import DeleteRoomModal from "./DeleteRoomModal";
 import Profile from "../Profile";
 import { MemoRoomContainer } from "./MemoroomBox.style";
-import DeleteRoomModal from "./DeleteRoomModal";
+
+import wastebasket from "../../assets/images/wastebasket.png";
+import clickedMenu from "../../assets/images/click-menu.png";
+import hashtag from "../../assets/images/hashtag.png";
+import menu from "../../assets/images/menu.png";
+import pen from "../../assets/images/pen.png";
 
 const MemoRoomBox = ({ id, roomName, participants, tags }) => {
   const [clickMemoRoomMenu, setClickMemoRoomMenu] = useState(false);

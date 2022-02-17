@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
+
+import { addNewMemoRequest } from "./memoRoomSlice";
+
+import Button from "../../components/Button";
+import TextInput from "../../components/TextInput";
+import ModalContainer from "../../components/Modal";
+import RadioButton from "../../components/RadioButton";
 import {
   MemoFormContainer,
   MemoOptionContainer,
   SubmitButtonContainer,
 } from "../memoroom/MemoModal.style";
 
-import ModalContainer from "../../components/Modal";
-import Button from "../../components/Button";
-import TextInput from "../../components/TextInput";
-import { addNewMemoRequest } from "./memoRoomSlice";
+import { ERROR_MESSAGE } from "../../constants/response";
 
 function NewMemoModal({ isOpen, setIsOpen, roomId }) {
   const [isImageType, setIsImageType] = useState(false);
@@ -36,7 +40,7 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
       formData.append("alarmDate", date);
     } else {
       if (alarmTime.value) {
-        setHasInputError("You cannot set only time without Date");
+        setHasInputError(ERROR_MESSAGE.cannotSetTimeWithoutDate);
         return;
       }
 
@@ -44,7 +48,7 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
     }
 
     if (memoType.value === "image" && !uploadedImage) {
-      setHasInputError("You should upload an image file.");
+      setHasInputError(ERROR_MESSAGE.shoudUploadImageFile);
       return;
     }
 
@@ -52,8 +56,7 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
       alarmDate?.value &&
       new Date(`${alarmDate.value} ${alarmTime.value}`) <= new Date()
     ) {
-      setHasInputError("Alarm Date cannot be faster then now.");
-
+      setHasInputError(ERROR_MESSAGE.cannotSetDateFasterThenNow);
       return;
     }
 
@@ -132,18 +135,42 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
         </MemoOptionContainer>
         <MemoOptionContainer>
           <div className="memo-option-title">COLORS : </div>
-          <input type="radio" name="memoColor" value="#ea907a" required />
-          <div className="red-color">RED</div>
-          <input type="radio" name="memoColor" value="#b5eaea" />
-          <div className="blue-color">BLUE</div>
-          <input type="radio" name="memoColor" value="#c9e4c5" />
-          <div className="green-color">GREEN</div>
-          <input type="radio" name="memoColor" value="#f7dbf0" />
-          <div className="purple-color">PURPLE</div>
-          <input type="radio" name="memoColor" value="#ffffff" />
-          <div className="white-color">WHITE</div>
-          <input type="radio" name="memoColor" value="#ffdcb8" />
-          <div className="orange-color">ORANGE</div>
+          <RadioButton
+            name="memoColor"
+            value="#ea907a"
+            color="#ea907a"
+            text="RED"
+          />
+          <RadioButton
+            name="memoColor"
+            value="#b5eaea"
+            color="#b5eaea"
+            text="BLUE"
+          />
+          <RadioButton
+            name="memoColor"
+            value="#c9e4c5"
+            color="#c9e4c5"
+            text="GREEN"
+          />
+          <RadioButton
+            name="memoColor"
+            value="#f7dbf0"
+            color="#f7dbf0"
+            text="PURPLE"
+          />
+          <RadioButton
+            name="memoColor"
+            value="#ffffff"
+            color="#ffffff"
+            text="WHITE"
+          />
+          <RadioButton
+            name="memoColor"
+            value="#ffdcb8"
+            color="#ffdcb8"
+            text="ORANGE"
+          />
         </MemoOptionContainer>
         <MemoOptionContainer>
           <div className="memo-option-title">ALARM-DATE (SELECT) : </div>

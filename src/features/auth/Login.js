@@ -4,10 +4,13 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 
-import Button from "../../components/Button";
-import ROUTES from "../../constants/routes";
-import TextInput from "../../components/TextInput";
 import { loginRequest } from "../auth/authSlice";
+
+import Button from "../../components/Button";
+import TextInput from "../../components/TextInput";
+
+import ROUTES from "../../constants/routes";
+import { ERROR_NAME, ERROR_MESSAGE } from "../../constants/response";
 
 const LoginContainer = styled.div`
   display: flex;
@@ -31,10 +34,10 @@ const LoginContainer = styled.div`
 `;
 
 function Login() {
+  const [invalidUserError, setInvalidUserError] = useState("");
+
   const userError = useSelector((state) => state.auth.error);
   const userAuth = useSelector((state) => state.auth.isLogin);
-
-  const [invalidUserError, setInvalidUserError] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -45,13 +48,13 @@ function Login() {
       return;
     }
 
-    if (!userAuth && userError === "auth/user-not-found") {
-      setInvalidUserError("The ID does not exist.");
+    if (!userAuth && userError === ERROR_NAME.userNotFound) {
+      setInvalidUserError(ERROR_MESSAGE.userNotFound);
       return;
     }
 
-    if (!userAuth && userError === "auth/wrong-password") {
-      setInvalidUserError("The password is incorrect.");
+    if (!userAuth && userError === ERROR_NAME.wrongPassword) {
+      setInvalidUserError(ERROR_MESSAGE.wrongPassword);
       return;
     }
 

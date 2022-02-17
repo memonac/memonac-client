@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
+
+import { postSendMailRequest } from "./memoRoomSlice";
 
 import Button from "../../components/Button";
 import ModalContainer from "../../components/Modal";
 import TextInput from "../../components/TextInput";
-import { postSendMailRequest } from "./memoRoomSlice";
+
+import { MESSAGE } from "../../constants/response";
 
 function SendMailModal({ isOpen, setIsOpen }) {
   const [message, setMessage] = useState("");
@@ -26,7 +30,7 @@ function SendMailModal({ isOpen, setIsOpen }) {
     }
 
     if (sendMailSuccess) {
-      setMessage("Success to send mail 👍🏻 ");
+      setMessage(MESSAGE.successToSendMail);
     }
 
     return () => setMessage("");
@@ -46,7 +50,7 @@ function SendMailModal({ isOpen, setIsOpen }) {
       return;
     }
 
-    setMessage("❗️ Already participated member");
+    setMessage(MESSAGE.alreadyParticipatedMember);
   }
 
   return (
@@ -71,5 +75,10 @@ function SendMailModal({ isOpen, setIsOpen }) {
     </ModalContainer>
   );
 }
+
+SendMailModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  setIsOpen: PropTypes.func.isRequired,
+};
 
 export default SendMailModal;

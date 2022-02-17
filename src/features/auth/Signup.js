@@ -3,10 +3,13 @@ import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
+import { signupRequest, initiateErrorState } from "../auth/authSlice";
+
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
+
 import ROUTES from "../../constants/routes";
-import { signupRequest, initiateErrorState } from "../auth/authSlice";
+import { ERROR_NAME, ERROR_MESSAGE } from "../../constants/response";
 
 const SignupContainer = styled.div`
   display: flex;
@@ -56,12 +59,12 @@ function Signup() {
     const { email, name, password, checkPassword } = event.target;
 
     if (password.value.length < 8) {
-      setInputError("Password length cannot be less than 8.");
+      setInputError(ERROR_MESSAGE.passwordLengthVerification);
       return;
     }
 
     if (password.value !== checkPassword.value) {
-      setInputError("Passwords do not match.");
+      setInputError(ERROR_MESSAGE.passwordNotMatch);
       return;
     }
 
@@ -85,8 +88,8 @@ function Signup() {
       return;
     }
 
-    if (!userAuth && userError === "auth/email-already-in-use") {
-      setInvalidUserError("이미 존재하는 아이디 입니다.");
+    if (!userAuth && userError === ERROR_NAME.emailAlreadyInUse) {
+      setInvalidUserError(ERROR_MESSAGE.emailAlreadyInUse);
       return;
     }
 

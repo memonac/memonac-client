@@ -129,7 +129,6 @@ export const slice = createSlice({
     updateMemoLocationSuccess: (state, action) => {
       const { memoId, left, top } = action.payload;
 
-      // state.isLoading = false;
       state.memos[memoId].location = [left, top];
     },
     updateMemoLocationFailure: (state, action) => {
@@ -167,10 +166,6 @@ export const slice = createSlice({
 
       state.isLoading = false;
       state.error = message;
-    },
-    joinRoom: (state, action) => {
-      // 유저가 방에 참가 했을때
-      // 해당 상태로 관리
     },
     postSendMailRequest: (state) => {
       state.isLoading = true;

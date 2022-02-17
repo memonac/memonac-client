@@ -5,15 +5,17 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { debounce } from "lodash";
 
-import close from "../assets/images/close.png";
-import memoMenu from "../assets/images/memoMenu.png";
-import EditMemoModal from "../features/memoroom/EditMemoModal";
 import {
   removeMemoRequest,
   updateMemoSizeRequest,
   updateMemoTextRequest,
 } from "../features/memoroom/memoRoomSlice";
+
+import EditMemoModal from "../features/memoroom/EditMemoModal";
 import AudioRecord from "./Audio";
+
+import close from "../assets/images/close.png";
+import memoMenu from "../assets/images/memoMenu.png";
 
 const MemoContainer = styled.div`
   display: flex;
@@ -99,8 +101,15 @@ function Memo({ id, info, tag }) {
 
   const targetMemo = useSelector((state) => state.memoRoom.memos)[id];
   const userId = useSelector((state) => state.auth.id);
-  const dispatch = useDispatch();
+
   const { memoroomId } = useParams();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (targetMemo.formType === "text") {
+      setMemoText(targetMemo.content);
+    }
+  }, [targetMemo.content]);
 
   function handleMemoTextChange({ target }) {
     printTextValue(target.value);
@@ -116,12 +125,6 @@ function Memo({ id, info, tag }) {
       })
     );
   }, 300);
-
-  useEffect(() => {
-    if (targetMemo.formType === "text") {
-      setMemoText(targetMemo.content);
-    }
-  }, [targetMemo.content]);
 
   function handleRemoveMemoClick() {
     dispatch(

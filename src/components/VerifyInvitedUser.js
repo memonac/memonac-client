@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
 import { postVerifyTokenRequest } from "../features/memoroom/memoRoomSlice";
-import ROUTES from "../constants/routes";
+
 import Button from "./Button";
+
+import ROUTES from "../constants/routes";
 
 const NotificationContainer = styled.div`
   display: flex;
@@ -27,8 +29,10 @@ function VerifyInvitedUser() {
 
   const { memoroomId } = useParams();
   const { search } = useLocation();
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const searchParams = new URLSearchParams(search);
   const token = searchParams.get("token");
 
@@ -36,11 +40,11 @@ function VerifyInvitedUser() {
     dispatch(postVerifyTokenRequest({ memoroomId, token }));
   }, []);
 
-  if (user) {
+  function handleLoginButtonClick() {
     navigate(ROUTES.login);
   }
 
-  function handleLoginButtonClick() {
+  if (user) {
     navigate(ROUTES.login);
   }
 

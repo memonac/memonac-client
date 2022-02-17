@@ -29,7 +29,6 @@ import {
   updateMemoStyleSuccess,
   updateMemoStyleFailure,
   updateMemoLocationRequest,
-  updateMemoLocationSuccess,
   updateMemoLocationFailure,
   updateMemoSizeRequest,
   updateMemoSizeSuccess,
@@ -51,13 +50,15 @@ import {
   addAudioFileFailure,
 } from "./memoRoomSlice";
 
+import { ERROR_NAME, RESULT } from "../../constants/response";
+
 function* getMemoList({ payload }) {
   try {
     const memoRoomData = yield call(memoApi.getMemoList, payload);
 
     yield put(getMemoListSuccess(memoRoomData.data));
   } catch (err) {
-    if (err.response.data.error.message === "Expired Token") {
+    if (err.response.data.error.message === ERROR_NAME.expiredToken) {
       yield put(logoutRequest());
     } else {
       yield put(getMemoListFailure(err));
@@ -69,12 +70,12 @@ function* addNewMemo({ payload }) {
   try {
     const serverResponse = yield call(memoApi.addNewMemo, payload);
 
-    if (serverResponse.result === "success") {
+    if (serverResponse.result === RESULT.success) {
       yield put(addNewMemoSuccess(serverResponse.data));
       yield fork(memoRoomSocket.addMemo, serverResponse.data);
     }
   } catch (err) {
-    if (err.response.data.error.message === "Expired Token") {
+    if (err.response.data.error.message === ERROR_NAME.expiredToken) {
       yield put(logoutRequest());
     } else {
       yield put(addNewMemoFailure(err));
@@ -86,11 +87,11 @@ function* postSendMail({ payload }) {
   try {
     const serverResponse = yield call(nodemailerApi.postSendMail, payload);
 
-    if (serverResponse.result === "success") {
+    if (serverResponse.result === RESULT.success) {
       yield put(postSendMailSuccess(serverResponse.result));
     }
   } catch (err) {
-    if (err.response.data.error.message === "Expired Token") {
+    if (err.response.data.error.message === ERROR_NAME.expiredToken) {
       yield put(logoutRequest());
     } else {
       yield put(postSendMailFailure(err));
@@ -102,7 +103,7 @@ function* postVerifyToken({ payload }) {
   try {
     const serverResponse = yield call(nodemailerApi.postVerifyToken, payload);
 
-    if (serverResponse.result === "success") {
+    if (serverResponse.result === RESULT.success) {
       yield put(postVerifyTokenSuccess(serverResponse.data));
       yield fork(
         memoRoomSocket.updateParticipants,
@@ -111,7 +112,7 @@ function* postVerifyToken({ payload }) {
       );
     }
   } catch (err) {
-    if (err.response.data.error.message === "Expired Token") {
+    if (err.response.data.error.message === ERROR_NAME.expiredToken) {
       yield put(logoutRequest());
     } else {
       yield put(postVerifyTokenFailure(err));
@@ -123,7 +124,7 @@ function* updateMemoStyle({ payload }) {
   try {
     const serverResponse = yield call(memoApi.updateMemoStyle, payload);
 
-    if (serverResponse.result === "success") {
+    if (serverResponse.result === RESULT.success) {
       yield put(updateMemoStyleSuccess(serverResponse.data));
       yield fork(memoRoomSocket.updateMemoStyle, serverResponse.data);
     }
@@ -136,7 +137,7 @@ function* removeMemo({ payload }) {
   try {
     const serverResponse = yield call(memoApi.removeMemo, payload);
 
-    if (serverResponse.result === "success") {
+    if (serverResponse.result === RESULT.success) {
       yield put(removeMemoSuccess(payload));
       yield fork(memoRoomSocket.deleteMemo, payload.memoId);
     }
@@ -149,7 +150,7 @@ function* updateMemoText({ payload }) {
   try {
     const serverResponse = yield call(memoApi.updateMemoText, payload);
 
-    if (serverResponse.result === "success") {
+    if (serverResponse.result === RESULT.success) {
       yield put(updateMemoTextSuccess(payload));
       yield fork(memoRoomSocket.updateMemoText, payload.memoId, payload.text);
     }
@@ -162,7 +163,7 @@ function* updateMemoSize({ payload }) {
   try {
     const serverResponse = yield call(memoApi.updateMemoSize, payload);
 
-    if (serverResponse.result === "success") {
+    if (serverResponse.result === RESULT.success) {
       yield put(updateMemoSizeSuccess(payload));
       yield fork(
         memoRoomSocket.updateMemoSize,
@@ -180,7 +181,7 @@ function* updateMemoLocation({ payload }) {
   try {
     const serverResponse = yield call(memoApi.updateMemoLocation, payload);
 
-    if (serverResponse.result === "success") {
+    if (serverResponse.result === RESULT.success) {
       yield fork(
         memoRoomSocket.updateMemoLocation,
         payload.memoId,
@@ -197,11 +198,11 @@ function* getChatList({ payload }) {
   try {
     const serverResponse = yield call(chatApi.getNextChatInfo, payload);
 
-    if (serverResponse.result === "success") {
+    if (serverResponse.result === RESULT.success) {
       yield put(getChatListSuccess(serverResponse.data));
     }
   } catch (err) {
-    if (err.response.data.error.message === "Expired Token") {
+    if (err.response.data.error.message === ERROR_NAME.expiredToken) {
       yield put(logoutRequest());
     } else {
       yield put(getChatListFailure(err));
@@ -213,7 +214,7 @@ function* leaveMemoRoom({ payload }) {
   try {
     const serverResponse = yield call(memoApi.leaveMemoRoom, payload);
 
-    if (serverResponse.result === "success") {
+    if (serverResponse.result === RESULT.success) {
       yield put(leaveMemoRoomSuccess(payload));
       yield fork(memoRoomSocket.withdrawRoom, payload.userId);
     }
@@ -226,7 +227,7 @@ function* addAudioFile({ payload }) {
   try {
     const serverResponse = yield call(memoApi.addAudioFile, payload);
 
-    if (serverResponse.result === "success") {
+    if (serverResponse.result === RESULT.success) {
       yield put(addAudioFileSuccess(serverResponse.data));
       yield fork(memoRoomSocket.updateMemoAudio, serverResponse.data);
     }
