@@ -124,7 +124,7 @@ export const slice = createSlice({
       state.error = message;
     },
     updateMemoLocationRequest: (state) => {
-      // state.isLoading = true;
+      state.isLoading = true;
     },
     updateMemoLocationSuccess: (state, action) => {
       const { memoId, left, top } = action.payload;
