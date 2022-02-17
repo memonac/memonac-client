@@ -123,6 +123,9 @@ export const slice = createSlice({
       state.isLoading = false;
       state.error = message;
     },
+    updateMemoLocationRequest: (state) => {
+      // state.isLoading = true;
+    },
     updateMemoLocationSuccess: (state, action) => {
       const { memoId, left, top } = action.payload;
 
@@ -269,6 +272,7 @@ export const {
   updateMemoStyleRequest,
   updateMemoStyleSuccess,
   updateMemoStyleFailure,
+  updateMemoLocationRequest,
   updateMemoLocationSuccess,
   updateMemoLocationFailure,
   updateMemoSizeRequest,
