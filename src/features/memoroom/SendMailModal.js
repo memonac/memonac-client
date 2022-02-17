@@ -8,6 +8,8 @@ import Button from "../../components/Button";
 import ModalContainer from "../../components/Modal";
 import TextInput from "../../components/TextInput";
 
+import { MESSAGE } from "../../constants/response";
+
 function SendMailModal({ isOpen, setIsOpen }) {
   const [message, setMessage] = useState("");
 
@@ -27,7 +29,7 @@ function SendMailModal({ isOpen, setIsOpen }) {
     }
 
     if (sendMailSuccess) {
-      setMessage("Success to send mail 👍🏻 ");
+      setMessage(MESSAGE.successToSendMail);
     }
 
     return () => setMessage("");
@@ -47,7 +49,7 @@ function SendMailModal({ isOpen, setIsOpen }) {
       return;
     }
 
-    setMessage("❗️ Already participated member");
+    setMessage(MESSAGE.alreadyParticipatedMember);
   }
 
   return (

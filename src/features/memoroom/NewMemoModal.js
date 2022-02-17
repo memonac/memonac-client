@@ -14,6 +14,8 @@ import {
   SubmitButtonContainer,
 } from "../memoroom/MemoModal.style";
 
+import { ERROR_MESSAGE } from "../../constants/response";
+
 function NewMemoModal({ isOpen, setIsOpen, roomId }) {
   const [isImageType, setIsImageType] = useState(false);
   const [hasInputError, setHasInputError] = useState(false);
@@ -38,7 +40,7 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
       formData.append("alarmDate", date);
     } else {
       if (alarmTime.value) {
-        setHasInputError("You cannot set only time without Date");
+        setHasInputError(ERROR_MESSAGE.cannotSetTimeWithoutDate);
         return;
       }
 
@@ -46,7 +48,7 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
     }
 
     if (memoType.value === "image" && !uploadedImage) {
-      setHasInputError("You should upload an image file.");
+      setHasInputError(ERROR_MESSAGE.shoudUploadImageFile);
       return;
     }
 
@@ -54,8 +56,7 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
       alarmDate?.value &&
       new Date(`${alarmDate.value} ${alarmTime.value}`) <= new Date()
     ) {
-      setHasInputError("Alarm Date cannot be faster then now.");
-
+      setHasInputError(ERROR_MESSAGE.cannotSetDateFasterThenNow);
       return;
     }
 

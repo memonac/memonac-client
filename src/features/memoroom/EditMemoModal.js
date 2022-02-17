@@ -16,6 +16,7 @@ import {
 } from "../memoroom/MemoModal.style";
 
 import changeIntoDateString from "../../utils/changeIntoDateString";
+import { ERROR_MESSAGE } from "../../constants/response";
 
 function EditMemoModal({ isOpen, setIsOpen, memoId }) {
   const [hasInputError, setHasInputError] = useState(false);
@@ -32,7 +33,7 @@ function EditMemoModal({ isOpen, setIsOpen, memoId }) {
     const { memoColor, alarmDate, alarmTime, memoTags } = event.target;
 
     if (!alarmDate.value && alarmTime.value) {
-      setHasInputError("You cannot set only time without Date");
+      setHasInputError(ERROR_MESSAGE.cannotSetTimeWithoutDate);
       return;
     }
 
@@ -40,7 +41,7 @@ function EditMemoModal({ isOpen, setIsOpen, memoId }) {
       alarmDate?.value &&
       new Date(`${alarmDate.value} ${alarmTime.value}`) <= new Date()
     ) {
-      setHasInputError("Alarm Date cannot be faster then now.");
+      setHasInputError(ERROR_MESSAGE.cannotSetDateFasterThenNow);
       return;
     }
 

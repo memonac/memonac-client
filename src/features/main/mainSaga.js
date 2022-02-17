@@ -17,6 +17,8 @@ import {
   removeMemoRoomFailure,
 } from "./mainSlice";
 
+import { ERROR_NAME, RESULT } from "../../constants/response";
+
 function* getMemoRoomList({ payload }) {
   const { userId } = payload;
 
@@ -26,7 +28,7 @@ function* getMemoRoomList({ payload }) {
 
       yield put(getMemoRoomListSuccess(memoRoomList.data));
     } catch (err) {
-      if (err.response.data.error.message === "Expired Token") {
+      if (err.response.data.error.message === ERROR_NAME.expiredToken) {
         yield put(logoutRequest());
       } else {
         yield put(getMemoRoomListFailure(err));
@@ -39,12 +41,12 @@ function* addNewMemoRoom({ payload }) {
   try {
     const serverResponse = yield call(mainApi.postNewMemoRoom, payload);
 
-    if (serverResponse.result === "success") {
+    if (serverResponse.result === RESULT.success) {
       yield put(addNewMemoRoomSuccess(serverResponse.data));
     }
   } catch (err) {
     console.dir(err);
-    if (err.response.data.error.message === "Expired Token") {
+    if (err.response.data.error.message === ERROR_NAME.expiredToken) {
       yield put(logoutRequest());
     } else {
       yield put(addNewMemoRoomFailure(err));
@@ -56,11 +58,11 @@ function* editMemoRoomTitle({ payload }) {
   try {
     const serverResponse = yield call(mainApi.putMemoRoomTitle, payload);
 
-    if (serverResponse.result === "success") {
+    if (serverResponse.result === RESULT.success) {
       yield put(editMemoRoomTitleSuccess(payload));
     }
   } catch (err) {
-    if (err.response.data.error.message === "Expired Token") {
+    if (err.response.data.error.message === ERROR_NAME.expiredToken) {
       yield put(logoutRequest());
     } else {
       yield put(editMemoRoomTitleFailure(err));
@@ -72,11 +74,11 @@ function* removeMemoRoom({ payload }) {
   try {
     const serverResponse = yield call(mainApi.deleteMemoRoomTitle, payload);
 
-    if (serverResponse.result === "success") {
+    if (serverResponse.result === RESULT.success) {
       yield put(removeMemoRoomSuccess(serverResponse.data));
     }
   } catch (err) {
-    if (err.response.data.error.message === "Expired Token") {
+    if (err.response.data.error.message === ERROR_NAME.expiredToken) {
       yield put(logoutRequest());
     } else {
       yield put(removeMemoRoomFailure(err));

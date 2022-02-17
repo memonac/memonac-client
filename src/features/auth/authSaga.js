@@ -20,6 +20,8 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 
+import { ERROR_NAME, ERROR_MESSAGE, RESULT } from "../../constants/response";
+
 function* userLogin({ payload }) {
   try {
     if (payload) {
@@ -33,7 +35,7 @@ function* userLogin({ payload }) {
 
       const serverResponse = yield call(userApi.getLogin, token);
 
-      if (serverResponse.result === "success") {
+      if (serverResponse.result === RESULT.success) {
         yield put(
           loginSuccess({
             email,
@@ -51,7 +53,7 @@ function* userLogin({ payload }) {
 
       const serverResponse = yield call(userApi.getLogin, token);
 
-      if (serverResponse.result === "success") {
+      if (serverResponse.result === RESULT.success) {
         yield put(
           loginSuccess({
             email: firebaseResponse.user.email,
@@ -64,18 +66,20 @@ function* userLogin({ payload }) {
       }
     }
   } catch (err) {
-    if (err.code === "auth/user-not-found") {
+    if (err.code === ERROR_NAME.userNotFound) {
       yield put(loginFailure({ message: err.code }));
       return;
     }
 
-    if (err.code === "auth/wrong-password") {
+    if (err.code === ERROR_NAME.wrongPassword) {
       yield put(loginFailure({ message: err.code }));
       return;
     }
 
-    if (err.code === "auth/too-many-requests") {
-      yield put(loginFailure({ message: "FirebaseError : too many requests" }));
+    if (err.code === ERROR_NAME.tooManyRequests) {
+      yield put(
+        loginFailure({ message: ERROR_MESSAGE.firebaseTooManyRequest })
+      );
       return;
     }
 
@@ -100,7 +104,7 @@ function* userSignup(action) {
       name,
     });
 
-    if (serverResponse.result === "success") {
+    if (serverResponse.result === RESULT.success) {
       yield put(
         loginSuccess({
           email,
@@ -114,7 +118,7 @@ function* userSignup(action) {
   } catch (err) {
     console.dir(err);
 
-    if (err.code === "auth/email-already-in-use") {
+    if (err.code === ERROR_NAME.emailAlreadyInUse) {
       yield put(loginFailure({ message: err.code }));
       return;
     }
@@ -129,7 +133,7 @@ function* userLogout() {
 
     const serverResponse = yield call(userApi.getLogout);
 
-    if (serverResponse.result === "success") {
+    if (serverResponse.result === RESULT.success) {
       yield put(logoutSuccess());
     } else {
       yield put(logoutFailure(serverResponse));
