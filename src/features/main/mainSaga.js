@@ -1,19 +1,111 @@
-import { all, put, call, takeEvery } from "redux-saga/effects";
-import { getAll } from "./mainSlice";
+import { all, put, call, takeLatest, fork } from "redux-saga/effects";
 
-function* getAllMemoList() {
+import mainApi from "../../utils/api/main";
+import { logoutRequest } from "../auth/authSlice";
+import {
+  getMemoRoomListRequest,
+  getMemoRoomListSuccess,
+  getMemoRoomListFailure,
+  addNewMemoRoomRequest,
+  addNewMemoRoomSuccess,
+  addNewMemoRoomFailure,
+  editMemoRoomTitleRequest,
+  editMemoRoomTitleSuccess,
+  editMemoRoomTitleFailure,
+  removeMemoRoomRequest,
+  removeMemoRoomSuccess,
+  removeMemoRoomFailure,
+} from "./mainSlice";
+
+import { ERROR_NAME, RESULT } from "../../constants/response";
+
+function* getMemoRoomList({ payload }) {
+  const { userId } = payload;
+
+  if (payload) {
+    try {
+      const memoRoomList = yield call(mainApi.getMemoRoomList, userId);
+
+      yield put(getMemoRoomListSuccess(memoRoomList.data));
+    } catch (err) {
+      if (err.response.data.error.message === ERROR_NAME.expiredToken) {
+        yield put(logoutRequest());
+      } else {
+        yield put(getMemoRoomListFailure(err));
+      }
+    }
+  }
+}
+
+function* addNewMemoRoom({ payload }) {
   try {
-    const memoList = yield call();
-    yield put(getAll(memoList));
+    const serverResponse = yield call(mainApi.postNewMemoRoom, payload);
+
+    if (serverResponse.result === RESULT.success) {
+      yield put(addNewMemoRoomSuccess(serverResponse.data));
+    }
   } catch (err) {
-    yield put();
+    if (err.response.data.error.message === ERROR_NAME.expiredToken) {
+      yield put(logoutRequest());
+    } else {
+      yield put(addNewMemoRoomFailure(err));
+    }
+  }
+}
+
+function* editMemoRoomTitle({ payload }) {
+  try {
+    const serverResponse = yield call(mainApi.putMemoRoomTitle, payload);
+
+    if (serverResponse.result === RESULT.success) {
+      yield put(editMemoRoomTitleSuccess(payload));
+    }
+  } catch (err) {
+    if (err.response.data.error.message === ERROR_NAME.expiredToken) {
+      yield put(logoutRequest());
+    } else {
+      yield put(editMemoRoomTitleFailure(err));
+    }
+  }
+}
+
+function* removeMemoRoom({ payload }) {
+  try {
+    const serverResponse = yield call(mainApi.deleteMemoRoomTitle, payload);
+
+    if (serverResponse.result === RESULT.success) {
+      yield put(removeMemoRoomSuccess(serverResponse.data));
+    }
+  } catch (err) {
+    if (err.response.data.error.message === ERROR_NAME.expiredToken) {
+      yield put(logoutRequest());
+    } else {
+      yield put(removeMemoRoomFailure(err));
+    }
   }
 }
 
 function* watchGetMemoList() {
-  yield takeEvery(getAll, getAllMemoList);
+  yield takeLatest(getMemoRoomListRequest, getMemoRoomList);
 }
 
-export default function* memoListSaga() {
-  yield all([watchGetMemoList()]);
+function* watchAddNewMemoRoom() {
+  yield takeLatest(addNewMemoRoomRequest, addNewMemoRoom);
+}
+
+function* watchEditMemoRoomTitle() {
+  yield takeLatest(editMemoRoomTitleRequest, editMemoRoomTitle);
+}
+
+function* watchRemoveMemoRoom() {
+  yield takeLatest(removeMemoRoomRequest, removeMemoRoom);
+}
+
+export function* memoListSaga() {
+  yield all([
+    fork(watchGetMemoList),
+    fork(watchAddNewMemoRoom),
+    fork(watchEditMemoRoomTitle),
+    fork(watchRemoveMemoRoom),
+  ]);
 }
