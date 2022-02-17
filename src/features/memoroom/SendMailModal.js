@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
 
 import { postSendMailRequest } from "./memoRoomSlice";
 
@@ -74,5 +75,10 @@ function SendMailModal({ isOpen, setIsOpen }) {
     </ModalContainer>
   );
 }
+
+SendMailModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  setIsOpen: PropTypes.func.isRequired,
+};
 
 export default SendMailModal;

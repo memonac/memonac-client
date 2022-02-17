@@ -29,7 +29,6 @@ import {
   updateMemoStyleSuccess,
   updateMemoStyleFailure,
   updateMemoLocationRequest,
-  updateMemoLocationSuccess,
   updateMemoLocationFailure,
   updateMemoSizeRequest,
   updateMemoSizeSuccess,

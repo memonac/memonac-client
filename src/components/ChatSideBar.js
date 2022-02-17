@@ -116,6 +116,7 @@ ChatSideBar.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   currentUserId: PropTypes.string.isRequired,
   currentMemoRoomId: PropTypes.string.isRequired,
+  chatLastIndex: PropTypes.oneOfType([PropTypes.number, null]),
 };
 
 export default ChatSideBar;
