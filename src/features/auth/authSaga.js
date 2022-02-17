@@ -116,8 +116,6 @@ function* userSignup(action) {
       yield put(loginFailure(serverResponse.error));
     }
   } catch (err) {
-    console.dir(err);
-
     if (err.code === ERROR_NAME.emailAlreadyInUse) {
       yield put(loginFailure({ message: err.code }));
       return;
