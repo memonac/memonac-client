@@ -46,12 +46,12 @@ function Login() {
     }
 
     if (!userAuth && userError === "auth/user-not-found") {
-      setInvalidUserError("존재하지 않는 아이디 입니다.");
+      setInvalidUserError("The ID does not exist.");
       return;
     }
 
     if (!userAuth && userError === "auth/wrong-password") {
-      setInvalidUserError("비밀번호가 맞지 않습니다.");
+      setInvalidUserError("The password is incorrect.");
       return;
     }
 
