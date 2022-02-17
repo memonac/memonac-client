@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
+import { leaveMemoRoomRequest } from "./memoRoomSlice";
+
 import ModalContainer from "../../components/Modal";
 import Button from "../../components/Button";
-import { leaveMemoRoomRequest } from "./memoRoomSlice";
 
 const ErrorText = styled.div`
   padding: 10px 0;
@@ -18,10 +19,10 @@ function LeaveMemoRoomModal({ isOpen, setIsOpen }) {
 
   const userId = useSelector((state) => state.auth.id);
   const memoroomOwnerId = useSelector((state) => state.memoRoom.owner);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { memoroomId } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   function handleLeaveButtonClick() {
     if (userId === memoroomOwnerId) {

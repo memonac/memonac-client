@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 
+import { loginRequest } from "../auth/authSlice";
+
 import Button from "../../components/Button";
 import ROUTES from "../../constants/routes";
 import TextInput from "../../components/TextInput";
-import { loginRequest } from "../auth/authSlice";
 
 const LoginContainer = styled.div`
   display: flex;
@@ -31,10 +32,10 @@ const LoginContainer = styled.div`
 `;
 
 function Login() {
+  const [invalidUserError, setInvalidUserError] = useState("");
+
   const userError = useSelector((state) => state.auth.error);
   const userAuth = useSelector((state) => state.auth.isLogin);
-
-  const [invalidUserError, setInvalidUserError] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

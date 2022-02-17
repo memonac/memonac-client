@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
+
+import { addNewMemoRequest } from "./memoRoomSlice";
+
+import Button from "../../components/Button";
+import TextInput from "../../components/TextInput";
+import ModalContainer from "../../components/Modal";
 import {
   MemoFormContainer,
   MemoOptionContainer,
   SubmitButtonContainer,
 } from "../memoroom/MemoModal.style";
-
-import ModalContainer from "../../components/Modal";
-import Button from "../../components/Button";
-import TextInput from "../../components/TextInput";
-import { addNewMemoRequest } from "./memoRoomSlice";
 
 function NewMemoModal({ isOpen, setIsOpen, roomId }) {
   const [isImageType, setIsImageType] = useState(false);

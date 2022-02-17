@@ -4,25 +4,29 @@ import { useSelector, useDispatch } from "react-redux";
 import { useDrop } from "react-dnd";
 import styled from "styled-components";
 
+import { resetNewMemoRoomId } from "../main/mainSlice";
+import { memoRoomSocket } from "../../app/socketSaga";
+
 import Button from "../../components/Button";
 import Memo from "../../components/Memo";
 import Header from "../../components/Header";
 import Profile from "../../components/Profile";
-import { DraggableMemo } from "../../components/DraggableMemo";
 import ChatSideBar from "../../components/ChatSideBar";
-import { memoRoomSocket } from "../../app/socketSaga";
+import { DraggableMemo } from "../../components/DraggableMemo";
+import NewMemoModal from "./NewMemoModal";
+import LeaveMemoRoomModal from "./LeaveMemoRoomModal";
+import SendMailModal from "./SendMailModal";
+
 import backIcon from "../../assets/images/back.png";
-import { resetNewMemoRoomId } from "../main/mainSlice";
+
+import ROUTES from "../../constants/routes";
+
 import {
   getMemoListRequest,
   resetMemoList,
   updateMemoLocationRequest,
   updateMemoLocationSuccess,
 } from "./memoRoomSlice";
-import NewMemoModal from "./NewMemoModal";
-import LeaveMemoRoomModal from "./LeaveMemoRoomModal";
-import SendMailModal from "./SendMailModal";
-import ROUTES from "../../constants/routes";
 
 const MemoRoomContainer = styled.div`
   .memo-wrapper {
@@ -60,11 +64,10 @@ function MemoRoom() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
+  const [inputInfo, setInputInfo] = useState({});
 
   const userId = useSelector((state) => state.auth.id);
   const userName = useSelector((state) => state.auth.name);
-
-  const [inputInfo, setInputInfo] = useState({});
 
   const memos = useSelector((state) => state.memoRoom.memos);
   const memoRoomName = useSelector((state) => state.memoRoom.name);

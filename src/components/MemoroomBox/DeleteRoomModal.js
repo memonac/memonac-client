@@ -4,6 +4,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 import { removeMemoRoomRequest } from "../../features/main/mainSlice";
+
 import ModalContainer from "../Modal";
 import Button from "../Button";
 
@@ -18,6 +19,7 @@ function DeleteRoomModal({ id, isOpen, setIsOpen }) {
   const currentUserId = useSelector((state) => state.auth.id);
   const memoroomOwnerId = useSelector((state) => state.main.memoRooms)[id]
     .owner;
+
   const dispatch = useDispatch();
 
   function handleDeleteButtonClick() {

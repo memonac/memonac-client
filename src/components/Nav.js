@@ -9,6 +9,7 @@ import {
   setDisplayedTag,
   resetMemoRoom,
 } from "../features/main/mainSlice";
+
 import Button from "./Button";
 import TextInput from "./TextInput";
 import ModalContainer from "./Modal";
@@ -29,11 +30,6 @@ function Nav() {
 
   const dispatch = useDispatch();
 
-  function handleInputTextChange({ target }) {
-    setInputText(target.value);
-    printvalue(target.value);
-  }
-
   useEffect(() => {
     dispatch(setDisplayedTag({ searchedText: inputText }));
   }, [debounceInput]);
@@ -42,6 +38,11 @@ function Nav() {
     debounce((text) => setDebounceInput(text), 300),
     []
   );
+
+  function handleInputTextChange({ target }) {
+    setInputText(target.value);
+    printvalue(target.value);
+  }
 
   function handleAddMemoRoomButtonClick() {
     setIsModalOpen(true);

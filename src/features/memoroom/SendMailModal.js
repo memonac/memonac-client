@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 
+import { postSendMailRequest } from "./memoRoomSlice";
+
 import Button from "../../components/Button";
 import ModalContainer from "../../components/Modal";
 import TextInput from "../../components/TextInput";
-import { postSendMailRequest } from "./memoRoomSlice";
 
 function SendMailModal({ isOpen, setIsOpen }) {
   const [message, setMessage] = useState("");

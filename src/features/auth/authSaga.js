@@ -1,14 +1,5 @@
 import { put, call, takeLatest, all, fork } from "redux-saga/effects";
 
-import userApi from "../../utils/api/user";
-import { authenication } from "../../configs/firebase";
-import {
-  signOut,
-  signInWithPopup,
-  GoogleAuthProvider,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
 import {
   signupRequest,
   loginRequest,
@@ -18,6 +9,16 @@ import {
   logoutSuccess,
   logoutFailure,
 } from "./authSlice";
+
+import userApi from "../../utils/api/user";
+import { authenication } from "../../configs/firebase";
+import {
+  signOut,
+  signInWithPopup,
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 function* userLogin({ payload }) {
   try {

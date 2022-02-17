@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import propTypes from "prop-types";
 import styled from "styled-components";
 
+import { getMemoRoomListRequest } from "./mainSlice";
+
 import Loading from "../../components/Loading";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
@@ -11,7 +13,7 @@ import Tag from "../../components/Tag";
 import Nav from "../../components/Nav";
 import RoomList from "../../components/RoomList";
 import MemoRoomBox from "../../components/MemoroomBox/MemoroomBox";
-import { getMemoRoomListRequest } from "./mainSlice";
+
 import ROUTES from "../../constants/routes";
 
 const MainWrapper = styled.div`
