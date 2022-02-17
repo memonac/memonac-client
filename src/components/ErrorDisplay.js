@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 
 import { initiateErrorState } from "../features/auth/authSlice";
 import { initiateMainErrorState } from "../features/main/mainSlice";
+import { memoInitializeState } from "../features/memoroom/memoRoomSlice";
 
 import Button from "./Button";
 
@@ -37,6 +38,7 @@ function ErrorDisplay({ text = "An error has been occurred!" }) {
   function handleHomeButtonClick() {
     dispatch(initiateErrorState());
     dispatch(initiateMainErrorState());
+    dispatch(memoInitializeState());
     navigate(ROUTES.home);
   }
 
