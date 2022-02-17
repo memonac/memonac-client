@@ -6,6 +6,8 @@ import PropTypes from "prop-types";
 
 import Button from "./Button";
 import { initiateErrorState } from "../features/auth/authSlice";
+import { initiateMainErrorState } from "../features/main/mainSlice";
+import ROUTES from "../constants/routes";
 
 const ErrorContainer = styled.div`
   display: flex;
@@ -31,15 +33,16 @@ function ErrorDisplay({ text = "An error has been occurred!" }) {
   const { state } = useLocation();
 
   function handleHomeButtonClick() {
-    navigate(-1);
     dispatch(initiateErrorState());
+    dispatch(initiateMainErrorState());
+    navigate(ROUTES.home);
   }
 
   return (
     <ErrorContainer>
       <div className="error-title">{text}</div>
       <div className="error-detail">{state}</div>
-      <Button text="Back" onClick={handleHomeButtonClick} width={200} />
+      <Button text="Home" onClick={handleHomeButtonClick} width={200} />
     </ErrorContainer>
   );
 }
