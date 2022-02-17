@@ -7,6 +7,7 @@ import { addNewMemoRequest } from "./memoRoomSlice";
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
 import ModalContainer from "../../components/Modal";
+import RadioButton from "../../components/RadioButton";
 import {
   MemoFormContainer,
   MemoOptionContainer,
@@ -133,18 +134,42 @@ function NewMemoModal({ isOpen, setIsOpen, roomId }) {
         </MemoOptionContainer>
         <MemoOptionContainer>
           <div className="memo-option-title">COLORS : </div>
-          <input type="radio" name="memoColor" value="#ea907a" required />
-          <div className="red-color">RED</div>
-          <input type="radio" name="memoColor" value="#b5eaea" />
-          <div className="blue-color">BLUE</div>
-          <input type="radio" name="memoColor" value="#c9e4c5" />
-          <div className="green-color">GREEN</div>
-          <input type="radio" name="memoColor" value="#f7dbf0" />
-          <div className="purple-color">PURPLE</div>
-          <input type="radio" name="memoColor" value="#ffffff" />
-          <div className="white-color">WHITE</div>
-          <input type="radio" name="memoColor" value="#ffdcb8" />
-          <div className="orange-color">ORANGE</div>
+          <RadioButton
+            name="memoColor"
+            value="#ea907a"
+            color="#ea907a"
+            text="RED"
+          />
+          <RadioButton
+            name="memoColor"
+            value="#b5eaea"
+            color="#b5eaea"
+            text="BLUE"
+          />
+          <RadioButton
+            name="memoColor"
+            value="#c9e4c5"
+            color="#c9e4c5"
+            text="GREEN"
+          />
+          <RadioButton
+            name="memoColor"
+            value="#f7dbf0"
+            color="#f7dbf0"
+            text="PURPLE"
+          />
+          <RadioButton
+            name="memoColor"
+            value="#ffffff"
+            color="#ffffff"
+            text="WHITE"
+          />
+          <RadioButton
+            name="memoColor"
+            value="#ffdcb8"
+            color="#ffdcb8"
+            text="ORANGE"
+          />
         </MemoOptionContainer>
         <MemoOptionContainer>
           <div className="memo-option-title">ALARM-DATE (SELECT) : </div>
