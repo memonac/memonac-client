@@ -30,10 +30,16 @@ function* rootSaga() {
   ]);
 }
 
+const middleware = [sagaMiddleware];
+
+if (process.env.NODE_ENV !== "production") {
+  middleware.push(logger);
+}
+
 const createStore = () => {
   const store = configureStore({
     reducer: reducer,
-    middleware: [sagaMiddleware, logger],
+    middleware,
   });
 
   sagaMiddleware.run(rootSaga);
