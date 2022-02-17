@@ -22,7 +22,7 @@ function SendMailModal({ isOpen, setIsOpen }) {
 
   useEffect(() => {
     if (sendMailError) {
-      setMessage("❗️ Failed to send mail");
+      setMessage(`❗️ ${sendMailError}`);
     }
 
     if (sendMailSuccess) {

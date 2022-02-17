@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -34,16 +34,29 @@ function Login() {
   const userError = useSelector((state) => state.auth.error);
   const userAuth = useSelector((state) => state.auth.isLogin);
 
+  const [invalidUserError, setInvalidUserError] = useState("");
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (userAuth) {
       navigate(ROUTES.home);
+      return;
+    }
+
+    if (!userAuth && userError === "auth/user-not-found") {
+      setInvalidUserError("The ID does not exist.");
+      return;
+    }
+
+    if (!userAuth && userError === "auth/wrong-password") {
+      setInvalidUserError("The password is incorrect.");
+      return;
     }
 
     if (userError.length) {
-      navigate(ROUTES.error);
+      navigate(ROUTES.error, { state: userError });
     }
   }, [userError, userAuth]);
 
@@ -90,6 +103,7 @@ function Login() {
         onClick={handleLoginWithGoogleButtonClick}
         width={300}
       />
+      <p>{invalidUserError}</p>
       <Link to={ROUTES.signup}>
         <div>Dont Have Account? Sign Up Now!</div>
       </Link>

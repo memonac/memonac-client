@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
 import ROUTES from "../../constants/routes";
-import { signupRequest } from "../auth/authSlice";
+import { signupRequest, initiateErrorState } from "../auth/authSlice";
 
 const SignupContainer = styled.div`
   display: flex;
@@ -32,10 +31,17 @@ const SignupContainer = styled.div`
   .error-message {
     color: #f03c3c;
   }
+
+  .back-login {
+    text-decoration: underline;
+    color: blue;
+    cursor: pointer;
+  }
 `;
 
 function Signup() {
   const [inputError, setInputError] = useState("");
+  const [invalidUserError, setInvalidUserError] = useState("");
 
   const userError = useSelector((state) => state.auth.error);
   const userAuth = useSelector((state) => state.auth.isLogin);
@@ -68,13 +74,24 @@ function Signup() {
     );
   }
 
-  useEffect(() => {
-    if (userError.length) {
-      navigate(ROUTES.error);
-    }
+  function handleHomeButtonClick() {
+    navigate(ROUTES.login);
+    dispatch(initiateErrorState());
+  }
 
+  useEffect(() => {
     if (userAuth) {
       navigate(ROUTES.home);
+      return;
+    }
+
+    if (!userAuth && userError === "auth/email-already-in-use") {
+      setInvalidUserError("이미 존재하는 아이디 입니다.");
+      return;
+    }
+
+    if (userError.length) {
+      navigate(ROUTES.error);
     }
   }, [userError, userAuth]);
 
@@ -112,9 +129,10 @@ function Signup() {
         {inputError && <div className="error-message">{inputError}</div>}
         <Button text="Sign Up" width={300} />
       </form>
-      <Link to={ROUTES.login}>
-        <div>Back</div>
-      </Link>
+      <p>{invalidUserError}</p>
+      <p className="back-login" onClick={handleHomeButtonClick}>
+        Back
+      </p>
     </SignupContainer>
   );
 }

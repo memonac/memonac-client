@@ -22,6 +22,7 @@ import {
 import NewMemoModal from "./NewMemoModal";
 import LeaveMemoRoomModal from "./LeaveMemoRoomModal";
 import SendMailModal from "./SendMailModal";
+import ROUTES from "../../constants/routes";
 
 const MemoRoomContainer = styled.div`
   .memo-wrapper {
@@ -70,10 +71,17 @@ function MemoRoom() {
   const participants = useSelector((state) => state.memoRoom.participants);
   const chats = useSelector((state) => state.memoRoom.chats);
   const chatLastIndex = useSelector((state) => state.memoRoom.chatLastIndex);
+  const error = useSelector((state) => state.memoRoom.error);
 
   const { memoroomId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (error.length) {
+      navigate(ROUTES.error, { state: error });
+    }
+  }, [error]);
 
   useEffect(() => {
     dispatch(getMemoListRequest({ userId, memoroomId }));

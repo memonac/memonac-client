@@ -41,8 +41,6 @@ function* addNewMemoRoom({ payload }) {
 
     if (serverResponse.result === "success") {
       yield put(addNewMemoRoomSuccess(serverResponse.data));
-    } else {
-      yield put(addNewMemoRoomFailure(serverResponse.error));
     }
   } catch (err) {
     if (err.response.data.error.message === "Expired Token") {
@@ -59,8 +57,6 @@ function* editMemoRoomTitle({ payload }) {
 
     if (serverResponse.result === "success") {
       yield put(editMemoRoomTitleSuccess(payload));
-    } else {
-      yield put(editMemoRoomTitleFailure(serverResponse.error));
     }
   } catch (err) {
     if (err.response.data.error.message === "Expired Token") {
@@ -77,8 +73,6 @@ function* removeMemoRoom({ payload }) {
 
     if (serverResponse.result === "success") {
       yield put(removeMemoRoomSuccess(serverResponse.data));
-    } else {
-      yield put(removeMemoRoomFailure(serverResponse.error));
     }
   } catch (err) {
     if (err.response.data.error.message === "Expired Token") {

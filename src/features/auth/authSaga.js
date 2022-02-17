@@ -63,6 +63,21 @@ function* userLogin({ payload }) {
       }
     }
   } catch (err) {
+    if (err.code === "auth/user-not-found") {
+      yield put(loginFailure({ message: err.code }));
+      return;
+    }
+
+    if (err.code === "auth/wrong-password") {
+      yield put(loginFailure({ message: err.code }));
+      return;
+    }
+
+    if (err.code === "auth/too-many-requests") {
+      yield put(loginFailure({ message: "FirebaseError : too many requests" }));
+      return;
+    }
+
     yield put(loginFailure(err));
   }
 }
@@ -96,6 +111,13 @@ function* userSignup(action) {
       yield put(loginFailure(serverResponse.error));
     }
   } catch (err) {
+    console.dir(err);
+
+    if (err.code === "auth/email-already-in-use") {
+      yield put(loginFailure({ message: err.code }));
+      return;
+    }
+
     yield put(loginFailure(err));
   }
 }

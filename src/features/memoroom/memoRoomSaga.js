@@ -60,7 +60,7 @@ function* getMemoList({ payload }) {
     if (err.response.data.error.message === "Expired Token") {
       yield put(logoutRequest());
     } else {
-      yield put(getMemoListFailure(err.message));
+      yield put(getMemoListFailure(err));
     }
   }
 }
@@ -72,14 +72,12 @@ function* addNewMemo({ payload }) {
     if (serverResponse.result === "success") {
       yield put(addNewMemoSuccess(serverResponse.data));
       yield fork(memoRoomSocket.addMemo, serverResponse.data);
-    } else {
-      yield put(addNewMemoFailure(serverResponse.error));
     }
   } catch (err) {
     if (err.response.data.error.message === "Expired Token") {
       yield put(logoutRequest());
     } else {
-      yield put(addNewMemoFailure(err.message));
+      yield put(addNewMemoFailure(err));
     }
   }
 }
@@ -90,14 +88,12 @@ function* postSendMail({ payload }) {
 
     if (serverResponse.result === "success") {
       yield put(postSendMailSuccess(serverResponse.result));
-    } else {
-      yield put(postSendMailFailure(serverResponse.error));
     }
   } catch (err) {
     if (err.response.data.error.message === "Expired Token") {
       yield put(logoutRequest());
     } else {
-      yield put(postSendMailFailure(err.message));
+      yield put(postSendMailFailure(err));
     }
   }
 }
@@ -113,14 +109,12 @@ function* postVerifyToken({ payload }) {
         serverResponse.data.participants,
         payload.memoroomId
       );
-    } else {
-      yield put(postVerifyTokenFailure(serverResponse.error));
     }
   } catch (err) {
     if (err.response.data.error.message === "Expired Token") {
       yield put(logoutRequest());
     } else {
-      yield put(postVerifyTokenFailure(err.message));
+      yield put(postVerifyTokenFailure(err));
     }
   }
 }
@@ -132,11 +126,9 @@ function* updateMemoStyle({ payload }) {
     if (serverResponse.result === "success") {
       yield put(updateMemoStyleSuccess(serverResponse.data));
       yield fork(memoRoomSocket.updateMemoStyle, serverResponse.data);
-    } else {
-      yield put(updateMemoStyleFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(updateMemoStyleFailure(err.message));
+    yield put(updateMemoStyleFailure(err));
   }
 }
 
@@ -147,11 +139,9 @@ function* removeMemo({ payload }) {
     if (serverResponse.result === "success") {
       yield put(removeMemoSuccess(payload));
       yield fork(memoRoomSocket.deleteMemo, payload.memoId);
-    } else {
-      yield put(removeMemoFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(removeMemoFailure(err.message));
+    yield put(removeMemoFailure(err));
   }
 }
 
@@ -162,11 +152,9 @@ function* updateMemoText({ payload }) {
     if (serverResponse.result === "success") {
       yield put(updateMemoTextSuccess(payload));
       yield fork(memoRoomSocket.updateMemoText, payload.memoId, payload.text);
-    } else {
-      yield put(updateMemoTextFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(updateMemoTextFailure(err.message));
+    yield put(updateMemoTextFailure(err));
   }
 }
 
@@ -182,11 +170,9 @@ function* updateMemoSize({ payload }) {
         payload.width,
         payload.height
       );
-    } else {
-      yield put(updateMemoSizeFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(updateMemoSizeFailure(err.message));
+    yield put(updateMemoSizeFailure(err));
   }
 }
 
@@ -201,11 +187,9 @@ function* updateMemoLocation({ payload }) {
         payload.left,
         payload.top
       );
-    } else {
-      yield put(updateMemoLocationFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(updateMemoLocationFailure(err.message));
+    yield put(updateMemoLocationFailure(err));
   }
 }
 
@@ -215,14 +199,12 @@ function* getChatList({ payload }) {
 
     if (serverResponse.result === "success") {
       yield put(getChatListSuccess(serverResponse.data));
-    } else {
-      yield put(getChatListFailure(serverResponse.error));
     }
   } catch (err) {
     if (err.response.data.error.message === "Expired Token") {
       yield put(logoutRequest());
     } else {
-      yield put(getChatListFailure(err.message));
+      yield put(getChatListFailure(err));
     }
   }
 }
@@ -234,11 +216,9 @@ function* leaveMemoRoom({ payload }) {
     if (serverResponse.result === "success") {
       yield put(leaveMemoRoomSuccess(payload));
       yield fork(memoRoomSocket.withdrawRoom, payload.userId);
-    } else {
-      yield put(leaveMemoRoomFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(leaveMemoRoomFailure(err.message));
+    yield put(leaveMemoRoomFailure(err));
   }
 }
 
@@ -249,11 +229,9 @@ function* addAudioFile({ payload }) {
     if (serverResponse.result === "success") {
       yield put(addAudioFileSuccess(serverResponse.data));
       yield fork(memoRoomSocket.updateMemoAudio, serverResponse.data);
-    } else {
-      yield put(addAudioFileFailure(serverResponse.error));
     }
   } catch (err) {
-    yield put(addAudioFileFailure(err.message));
+    yield put(addAudioFileFailure(err));
   }
 }
 

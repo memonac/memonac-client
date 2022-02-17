@@ -12,6 +12,7 @@ import Nav from "../../components/Nav";
 import RoomList from "../../components/RoomList";
 import MemoRoomBox from "../../components/MemoroomBox/MemoroomBox";
 import { getMemoRoomListRequest } from "./mainSlice";
+import ROUTES from "../../constants/routes";
 
 const MainWrapper = styled.div`
   display: grid;
@@ -28,9 +29,16 @@ function Main() {
   const loadingStatus = useSelector((state) => state.main.isLoading);
   const newMemoRoomId = useSelector((state) => state.main.newMemoRoomId);
   const userId = useSelector((state) => state.auth.id);
+  const error = useSelector((state) => state.main.error);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (error.length) {
+      navigate(ROUTES.error, { state: error });
+    }
+  }, [error]);
 
   useEffect(() => {
     if (newMemoRoomId) {
