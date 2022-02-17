@@ -14,56 +14,48 @@ import {
   addAudioFileSuccess,
 } from "../features/memoroom/memoRoomSlice";
 
-const chatSocket = io(`${process.env.REACT_APP_SERVER_URI}/chat`);
-const memoSocket = io(`${process.env.REACT_APP_SERVER_URI}/memo`);
+import { SOCKET_NAMESPACE, SOCKET_EVENT } from "../constants/socket";
+
+const chatSocket = io(
+  `${process.env.REACT_APP_SERVER_URI}${SOCKET_NAMESPACE.chat}`
+);
+const memoSocket = io(
+  `${process.env.REACT_APP_SERVER_URI}${SOCKET_NAMESPACE.memo}`
+);
 
 function createChatSocketChannel(socket) {
   return eventChannel((emit) => {
-    socket.on("connect", () => {
-      // 서버 연결 체크용
-    });
-
-    socket.on("join room", (userName) => {
-      // 누군가 내가 들어왔을때 토스트 알림
-    });
-
-    socket.on("receive message", (userId, userName, message, date, id) => {
-      emit(
-        receiveMessage({
-          user: { id: userId, name: userName },
-          message,
-          date,
-          id,
-        })
-      );
-    });
+    socket.on(
+      SOCKET_EVENT.receiveMessage,
+      (userId, userName, message, date, id) => {
+        emit(
+          receiveMessage({
+            user: { id: userId, name: userName },
+            message,
+            date,
+            id,
+          })
+        );
+      }
+    );
 
     return () => {
-      socket.off("join room");
-      socket.off("receive message");
+      socket.off(SOCKET_EVENT.receiveMessage);
     };
   });
 }
 
 function createMemoSocketChannel(socket) {
   return eventChannel((emit) => {
-    socket.on("connect", () => {
-      // 서버 연결 체크용
-    });
-
-    socket.on("join room", (userName) => {
-      // 누군가 내가 들어왔을때 토스트 알림
-    });
-
-    socket.on("withdraw room", (userId) => {
+    socket.on(SOCKET_EVENT.withdrawRoom, (userId) => {
       emit(leaveMemoRoomSuccess({ userId }));
     });
 
-    socket.on("update participants", (participants, memoroomId) => {
+    socket.on(SOCKET_EVENT.updateParticipants, (participants, memoroomId) => {
       emit(postVerifyTokenSuccess({ participants, memoroomId }));
     });
 
-    socket.on("memo/location", (memoId, left, top) => {
+    socket.on(SOCKET_EVENT.memoLocation, (memoId, left, top) => {
       emit(
         updateMemoLocationSuccess({
           memoId,
@@ -73,7 +65,7 @@ function createMemoSocketChannel(socket) {
       );
     });
 
-    socket.on("memo/delete", (memoId) => {
+    socket.on(SOCKET_EVENT.memoDelete, (memoId) => {
       emit(
         removeMemoSuccess({
           memoId,
@@ -81,7 +73,7 @@ function createMemoSocketChannel(socket) {
       );
     });
 
-    socket.on("memo/size", (memoId, width, height) => {
+    socket.on(SOCKET_EVENT.memoSize, (memoId, width, height) => {
       emit(
         updateMemoSizeSuccess({
           memoId,
@@ -91,7 +83,7 @@ function createMemoSocketChannel(socket) {
       );
     });
 
-    socket.on("memo/text", (memoId, text) => {
+    socket.on(SOCKET_EVENT.memoText, (memoId, text) => {
       emit(
         updateMemoTextSuccess({
           memoId,
@@ -100,22 +92,25 @@ function createMemoSocketChannel(socket) {
       );
     });
 
-    socket.on("memo/style", (memoId, memoColor, alarmDate, memoTags) => {
-      emit(
-        updateMemoStyleSuccess({
-          memoId,
-          memoColor,
-          alarmDate,
-          memoTags,
-        })
-      );
-    });
+    socket.on(
+      SOCKET_EVENT.memoStyle,
+      (memoId, memoColor, alarmDate, memoTags) => {
+        emit(
+          updateMemoStyleSuccess({
+            memoId,
+            memoColor,
+            alarmDate,
+            memoTags,
+          })
+        );
+      }
+    );
 
-    socket.on("memo/add", (newMemo) => {
+    socket.on(SOCKET_EVENT.memoAdd, (newMemo) => {
       emit(addNewMemoSuccess(newMemo));
     });
 
-    socket.on("memo/audio", (memoId, audioUrl) => {
+    socket.on(SOCKET_EVENT.memoAudio, (memoId, audioUrl) => {
       emit(
         addAudioFileSuccess({
           memoId,
@@ -125,16 +120,16 @@ function createMemoSocketChannel(socket) {
     });
 
     return () => {
-      socket.off("join room");
-      socket.off("withdraw room");
-      socket.off("update participants");
-      socket.off("memo/location");
-      socket.off("memo/delete");
-      socket.off("memo/size");
-      socket.off("memo/text");
-      socket.off("memo/style");
-      socket.off("memo/add");
-      socket.off("memo/audio");
+      socket.off(SOCKET_EVENT.joinRoom);
+      socket.off(SOCKET_EVENT.withdrawRoom);
+      socket.off(SOCKET_EVENT.updateParticipants);
+      socket.off(SOCKET_EVENT.memoLocation);
+      socket.off(SOCKET_EVENT.memoDelete);
+      socket.off(SOCKET_EVENT.memoSize);
+      socket.off(SOCKET_EVENT.memoText);
+      socket.off(SOCKET_EVENT.memoStyle);
+      socket.off(SOCKET_EVENT.memoAdd);
+      socket.off(SOCKET_EVENT.memoAudio);
     };
   });
 }
@@ -159,42 +154,48 @@ export function* memoSocketSaga() {
 
 const memoRoomSocket = {
   join(userId, userName, memoRoomId) {
-    chatSocket.emit("join room", userId, userName, memoRoomId);
-    memoSocket.emit("join room", userId, userName, memoRoomId);
+    chatSocket.emit(SOCKET_EVENT.joinRoom, userId, userName, memoRoomId);
+    memoSocket.emit(SOCKET_EVENT.joinRoom, userId, userName, memoRoomId);
   },
   leave(memoRoomId) {
-    chatSocket.emit("leave room", memoRoomId);
-    memoSocket.emit("leave room", memoRoomId);
+    chatSocket.emit(SOCKET_EVENT.leaveRoom, memoRoomId);
+    memoSocket.emit(SOCKET_EVENT.leaveRoom, memoRoomId);
   },
   sendMessage(message, date) {
-    chatSocket.emit("send message", message, date);
+    chatSocket.emit(SOCKET_EVENT.sendMessage, message, date);
   },
   withdrawRoom(userId) {
-    memoSocket.emit("withdraw room", userId);
+    memoSocket.emit(SOCKET_EVENT.withdrawRoom, userId);
   },
   updateParticipants(participants, memoroomId) {
-    memoSocket.emit("update participants", participants, memoroomId);
+    memoSocket.emit(SOCKET_EVENT.updateParticipants, participants, memoroomId);
   },
   updateMemoLocation(memoId, left, top) {
-    memoSocket.emit("memo/location", memoId, left, top);
+    memoSocket.emit(SOCKET_EVENT.memoLocation, memoId, left, top);
   },
   deleteMemo(memoId) {
-    memoSocket.emit("memo/delete", memoId);
+    memoSocket.emit(SOCKET_EVENT.memoDelete, memoId);
   },
   updateMemoSize(memoId, width, height) {
-    memoSocket.emit("memo/size", memoId, width, height);
+    memoSocket.emit(SOCKET_EVENT.memoSize, memoId, width, height);
   },
   updateMemoText(memoId, text) {
-    memoSocket.emit("memo/text", memoId, text);
+    memoSocket.emit(SOCKET_EVENT.memoText, memoId, text);
   },
   updateMemoStyle({ memoId, memoColor, alarmDate, memoTags }) {
-    memoSocket.emit("memo/style", memoId, memoColor, alarmDate, memoTags);
+    memoSocket.emit(
+      SOCKET_EVENT.memoStyle,
+      memoId,
+      memoColor,
+      alarmDate,
+      memoTags
+    );
   },
   addMemo(newMemo) {
-    memoSocket.emit("memo/add", newMemo);
+    memoSocket.emit(SOCKET_EVENT.memoAdd, newMemo);
   },
   updateMemoAudio({ memoId, audioUrl }) {
-    memoSocket.emit("memo/audio", memoId, audioUrl);
+    memoSocket.emit(SOCKET_EVENT.memoAudio, memoId, audioUrl);
   },
 };
 
