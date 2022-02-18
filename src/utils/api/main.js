@@ -3,9 +3,10 @@ import axios from "./axiosInstance";
 const mainApi = {};
 
 mainApi.getMemoRoomList = async (userId) => {
-  const response = await axios.get(`/users/${userId}/memorooms/`, {
-    withCredentials: true,
-  });
+  // const response = await axios.get(`/users/${userId}/memorooms/`, {
+  //   withCredentials: true,
+  // });
+  const response = await axios.get(`/users/${userId}/memorooms/`);
 
   return response.data;
 };
@@ -15,26 +16,20 @@ mainApi.postNewMemoRoom = async ({ userId, name }) => {
     `/users/${userId}/memorooms/`,
     {
       name,
-    },
-    {
-      withCredentials: true,
     }
+    // {
+    //   withCredentials: true,
+    // }
   );
 
   return response.data;
 };
 
 mainApi.putMemoRoomTitle = async ({ userId, memoRoomId, name }) => {
-  const response = await axios.put(
-    `/users/${userId}/memorooms/${memoRoomId}`,
-    {
-      memoRoomId,
-      name,
-    },
-    {
-      withCredentials: true,
-    }
-  );
+  const response = await axios.put(`/users/${userId}/memorooms/${memoRoomId}`, {
+    memoRoomId,
+    name,
+  });
 
   return response.data;
 };
@@ -44,9 +39,6 @@ mainApi.deleteMemoRoomTitle = async ({ userId, memoRoomId }) => {
     `/users/${userId}/memorooms/${memoRoomId}`,
     {
       memoRoomId,
-    },
-    {
-      withCredentials: true,
     }
   );
 
