@@ -14,10 +14,7 @@ memoApi.addNewMemo = async (formData) => {
 
   const response = await axios.post(
     `users/${author}/memorooms/${memoroomId}/memo/`,
-    formData,
-    {
-      withCredentials: true,
-    }
+    formData
   );
 
   return response.data;
@@ -25,10 +22,7 @@ memoApi.addNewMemo = async (formData) => {
 
 memoApi.removeMemo = async ({ userId, memoroomId, memoId }) => {
   const response = await axios.delete(
-    `users/${userId}/memorooms/${memoroomId}/memos/${memoId}`,
-    {
-      withCredentials: true,
-    }
+    `users/${userId}/memorooms/${memoroomId}/memos/${memoId}`
   );
 
   return response.data;
@@ -39,9 +33,6 @@ memoApi.updateMemoText = async ({ userId, memoroomId, memoId, text }) => {
     `users/${userId}/memorooms/${memoroomId}/memos/${memoId}/text`,
     {
       text,
-    },
-    {
-      withCredentials: true,
     }
   );
 
@@ -62,9 +53,6 @@ memoApi.updateMemoStyle = async ({
       memoColor,
       alarmDate,
       memoTags,
-    },
-    {
-      withCredentials: true,
     }
   );
 
@@ -83,9 +71,6 @@ memoApi.updateMemoLocation = async ({
     {
       left,
       top,
-    },
-    {
-      withCredentials: true,
     }
   );
 
@@ -104,9 +89,6 @@ memoApi.updateMemoSize = async ({
     {
       width,
       height,
-    },
-    {
-      withCredentials: true,
     }
   );
 
@@ -115,10 +97,7 @@ memoApi.updateMemoSize = async ({
 
 memoApi.leaveMemoRoom = async ({ userId, memoroomId }) => {
   const response = await axios.put(
-    `users/${userId}/memorooms/${memoroomId}/leave`,
-    {
-      withCredentials: true,
-    }
+    `users/${userId}/memorooms/${memoroomId}/leave`
   );
 
   return response.data;
@@ -127,10 +106,7 @@ memoApi.leaveMemoRoom = async ({ userId, memoroomId }) => {
 memoApi.addAudioFile = async ({ userId, memoroomId, memoId, formData }) => {
   const response = await axios.post(
     `users/${userId}/memorooms/${memoroomId}/memos/${memoId}/sound`,
-    formData,
-    {
-      withCredentials: true,
-    }
+    formData
   );
 
   return response.data;

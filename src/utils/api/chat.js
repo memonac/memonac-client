@@ -4,10 +4,7 @@ const chatApi = {};
 
 chatApi.getNextChatInfo = async ({ userId, memoroomId, chatLastIndex }) => {
   const response = await axios.get(
-    `users/${userId}/memorooms/${memoroomId}/chats/${chatLastIndex}`,
-    {
-      withCredentials: true,
-    }
+    `users/${userId}/memorooms/${memoroomId}/chats/${chatLastIndex}`
   );
 
   return response.data;

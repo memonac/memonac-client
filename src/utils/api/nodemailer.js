@@ -7,9 +7,6 @@ nodemailerApi.postSendMail = async ({ userId, memoroomId, email }) => {
     `/users/${userId}/memorooms/${memoroomId}/invite`,
     {
       email,
-    },
-    {
-      withCredential: true,
     }
   );
 
@@ -17,15 +14,9 @@ nodemailerApi.postSendMail = async ({ userId, memoroomId, email }) => {
 };
 
 nodemailerApi.postVerifyToken = async ({ memoroomId, token }) => {
-  const response = await axios.post(
-    `users/${memoroomId}/invite`,
-    {
-      token,
-    },
-    {
-      withCredential: true,
-    }
-  );
+  const response = await axios.post(`users/${memoroomId}/invite`, {
+    token,
+  });
 
   return response.data;
 };

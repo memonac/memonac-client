@@ -7,7 +7,6 @@ userApi.getLogin = async (token) => {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    withCredentials: true,
   });
 
   return response.data;
@@ -24,7 +23,6 @@ userApi.postSignup = async ({ token, email, name }) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      withCredentials: true,
     }
   );
 
@@ -32,9 +30,7 @@ userApi.postSignup = async ({ token, email, name }) => {
 };
 
 userApi.getLogout = async () => {
-  const response = await axios.get("/logout", {
-    withCredentials: true,
-  });
+  const response = await axios.get("/logout");
 
   return response.data;
 };
