@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 
-import { loginRequest } from "../auth/authSlice";
+import { loginRequest, initiateErrorState } from "../auth/authSlice";
 
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
@@ -49,11 +49,13 @@ function Login() {
     }
 
     if (!userAuth && userError === ERROR_NAME.userNotFound) {
+      dispatch(initiateErrorState());
       setInvalidUserError(ERROR_MESSAGE.userNotFound);
       return;
     }
 
     if (!userAuth && userError === ERROR_NAME.wrongPassword) {
+      dispatch(initiateErrorState());
       setInvalidUserError(ERROR_MESSAGE.wrongPassword);
       return;
     }
