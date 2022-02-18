@@ -15,7 +15,6 @@ export const slice = createSlice({
     isChatLoading: false,
     chatLastIndex: null,
     chatError: "",
-    slackToken: "",
   },
   reducers: {
     memoInitializeState: (state) => {
@@ -31,27 +30,18 @@ export const slice = createSlice({
       state.isChatLoading = false;
       state.chatLastIndex = null;
       state.chatError = "";
-      state.slackToken = "";
     },
     getMemoListRequest: (state) => {
       state.isLoading = true;
     },
     getMemoListSuccess: (state, action) => {
-      const {
-        participants,
-        memos,
-        slackToken,
-        name,
-        chats,
-        chatLastIndex,
-        owner,
-      } = action.payload;
+      const { participants, memos, name, chats, chatLastIndex, owner } =
+        action.payload;
 
       state.name = name;
       state.owner = owner;
       state.participants = participants;
       state.memos = memos;
-      state.slackToken = slackToken;
       state.chats = chats;
       state.isLoading = false;
       state.chatLastIndex = chatLastIndex;
