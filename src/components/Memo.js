@@ -28,8 +28,8 @@ const MemoContainer = styled.div`
   height: ${(props) => props.height}px;
   min-width: 250px;
   min-height: 250px;
-  max-width: 500px;
-  max-height: 500px;
+  max-width: 1260px;
+  max-height: 460px;
   background-color: ${(props) => props.color};
   box-shadow: 10px 10px 24px 0px rgba(0, 0, 0, 0.25);
   resize: both;
@@ -52,7 +52,7 @@ const MemoContainer = styled.div`
     border: none;
     box-sizing: border-box;
     background-color: ${(props) => props.color};
-    font-size: 20px;
+    font-size: 35px;
     resize: none;
   }
 
@@ -75,7 +75,7 @@ const MemoContainer = styled.div`
     p {
       margin: 5px 0;
       padding: 0 10px;
-      font-size: 15px;
+      font-size: 25px;
       font-weight: 900;
     }
   }

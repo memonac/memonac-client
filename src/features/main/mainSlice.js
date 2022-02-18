@@ -28,6 +28,8 @@ export const slice = createSlice({
     getMemoRoomListRequest: (state) => {
       state.isLoading = true;
       state.newMemoRoomId = "";
+      state.tagInfo = {};
+      state.displayedTags = [];
     },
     getMemoRoomListSuccess: (state, action) => {
       const { memoRooms, tags } = action.payload;
