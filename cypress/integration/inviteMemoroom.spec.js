@@ -13,27 +13,29 @@ describe("Make a invite memo room test", () => {
 
   it("invites participant when a result is success", () => {
     cy.contains("New")
-    .click()
-    .get('input[name="name"]')
-    .type("New Memo Room{enter}");
+      .click()
+      .get('input[name="name"]')
+      .type("New Memo Room{enter}");
 
     cy.contains("Share")
       .click()
-      .get('input[name="email"]').type("suin0212@gmail.com{enter}");
-    
+      .get('input[name="email"]')
+      .type(`${Cypress.env("email")}{enter}`);
+
     cy.get(".message").should("have.text", "Success to send mail 👍🏻 ");
   });
 
   it("Not invites participant when a result is error", () => {
     cy.contains("New")
-    .click()
-    .get('input[name="name"]')
-    .type("New Memo Room{enter}");
+      .click()
+      .get('input[name="name"]')
+      .type("New Memo Room{enter}");
 
     cy.contains("Share")
       .click()
-      .get('input[name="email"]').type("error@gmail.com{enter}");
-    
+      .get('input[name="email"]')
+      .type("error@gmail.com{enter}");
+
     cy.get(".message").should("have.text", "❗️ Not Found User");
   });
 });
