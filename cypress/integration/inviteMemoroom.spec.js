@@ -21,6 +21,7 @@ describe("Make a invite memo room test", () => {
       .click()
       .get('input[name="email"]')
       .type(`${Cypress.env("email")}{enter}`);
+
     cy.get(".message").should("have.text", "Success to send mail 👍🏻 ");
   });
 
