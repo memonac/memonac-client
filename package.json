@@ -54,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/cypress": "^8.0.2",
     "chai": "^4.3.6",
     "cypress": "^9.5.2",
     "eslint": "^8.8.0",
