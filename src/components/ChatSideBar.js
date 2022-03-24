@@ -102,7 +102,7 @@ function ChatSideBar({
       </div>
       <div>
         <form onSubmit={onSubmitInputText}>
-          <TextInput typd="text" name="message" width={200} />
+          <TextInput type="text" name="message" width={200} />
           <Button text="SEND" />
         </form>
       </div>
