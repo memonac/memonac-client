@@ -19,7 +19,7 @@ describe("Make a invite memo room test", () => {
 
     cy.contains("Share")
       .click()
-      .get('input[name="email"]').type("suin0212@gmail.com{enter}")
+      .get('input[name="email"]').type("suin0212@gmail.com{enter}");
     
     cy.get(".message").should("have.text", "Success to send mail 👍🏻 ");
   });
@@ -32,7 +32,7 @@ describe("Make a invite memo room test", () => {
 
     cy.contains("Share")
       .click()
-      .get('input[name="email"]').type("error@gmail.com{enter}")
+      .get('input[name="email"]').type("error@gmail.com{enter}");
     
     cy.get(".message").should("have.text", "❗️ Not Found User");
   });
