@@ -9,6 +9,7 @@ module.exports = {
     "eslint:recommended",
     "eslint-config-prettier",
     "plugin:react/recommended",
+    "plugin:cypress/recommended",
   ],
   parserOptions: {
     ecmaFeatures: {
