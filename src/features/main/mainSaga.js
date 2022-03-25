@@ -101,6 +101,13 @@ function* watchRemoveMemoRoom() {
   yield takeLatest(removeMemoRoomRequest, removeMemoRoom);
 }
 
+export {
+  watchGetMemoList,
+  watchAddNewMemoRoom,
+  watchEditMemoRoomTitle,
+  watchRemoveMemoRoom,
+};
+
 export function* memoListSaga() {
   yield all([
     fork(watchGetMemoList),
