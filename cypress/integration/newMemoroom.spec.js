@@ -31,9 +31,9 @@ describe("Make a new memoroom test", () => {
   it("Delete an existed memoroom", () => {
     cy.contains("New Memo Room").get(".menu-bar").children().eq(1).click();
 
-    cy.get(".delete-button").click()
+    cy.get(".delete-button").click();
     cy.get("button").within(() => {
-      cy.contains("DELETE").click()
+      cy.contains("DELETE").click();
     });
 
     cy.get(".memoroom-content").should("have.length", 0);

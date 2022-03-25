@@ -71,7 +71,7 @@ function SendMailModal({ isOpen, setIsOpen }) {
         />
         <Button text="SEND" width={100} />
       </form>
-      <div>{message}</div>
+      <div className="message">{message}</div>
     </ModalContainer>
   );
 }

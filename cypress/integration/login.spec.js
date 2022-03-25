@@ -1,6 +1,6 @@
 describe("Login with mock user account", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:3000")
+    cy.visit("http://localhost:3000");
   });
 
   it("Display two input boxes for login page", () => {
@@ -11,7 +11,7 @@ describe("Login with mock user account", () => {
     const userAccount = {
       email: "test123123@naver.com",
       password: "12341234",
-    }
+    };
 
     cy.get('input[name="email"]').type(userAccount.email).should("have.value", userAccount.email);
     cy.get('input[name="password"]').type(`${userAccount.password}{enter}`);
