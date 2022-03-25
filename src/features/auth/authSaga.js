@@ -150,6 +150,8 @@ function* watchUserLogout() {
   yield takeLatest(logoutRequest, userLogout);
 }
 
+export { watchUserLogin, watchUserLogout };
+
 export function* userSaga() {
   yield all([fork(watchUserLogin), fork(watchUserLogout)]);
 }
