@@ -1,6 +1,11 @@
 import { expectSaga } from "redux-saga-test-plan";
 import { throwError } from "redux-saga-test-plan/providers";
 import { call } from "@redux-saga/core/effects";
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 
 import { watchUserLogin, watchUserLogout } from "../../features/auth/authSaga";
 import {
@@ -12,11 +17,6 @@ import {
   logoutFailure,
   logoutSuccess,
 } from "../../features/auth/authSlice";
-import {
-  signInWithPopup,
-  GoogleAuthProvider,
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
 import { authentication } from "../../configs/firebase";
 import userApi from "../../utils/api/user";
 
