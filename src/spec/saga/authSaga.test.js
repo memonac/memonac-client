@@ -1,5 +1,4 @@
 import { expectSaga } from "redux-saga-test-plan";
-import * as matchers from "redux-saga-test-plan/matchers";
 import { throwError } from "redux-saga-test-plan/providers";
 import { call } from "@redux-saga/core/effects";
 
@@ -13,72 +12,140 @@ import {
   logoutFailure,
   logoutSuccess,
 } from "../../features/auth/authSlice";
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
+import { authentication } from "../../configs/firebase";
 import userApi from "../../utils/api/user";
 
-describe.only("authSaga test", () => {
-  // it("should take success on the signupRequest", () => {
-  //   const mockUser = {
-  //     email: "test123123@gmail.com",
-  //     name: "mock user",
-  //     password: "12341234",
-  //   };
+describe("authSaga test", () => {
+  it("should take success on the signupRequest", () => {
+    const mockUser = {
+      email: "test123123@gmail.com",
+      name: "mock user",
+      password: "12341234",
+    };
 
-  //   const mockSuccessResponse = {
-  //     result: "success",
-  //     data: {
-  //       id: "mockId1234",
-  //       email: "test123123@gmail.com",
-  //       name: "mock user",
-  //     },
-  //   };
+    const mockSuccessResponse = {
+      result: "success",
+      data: {
+        email: "test123123@gmail.com",
+        name: "mock user",
+        userId: "mockId1234",
+      },
+    };
 
-  //   return expectSaga(watchUserLogin)
-  //     .provide([[matchers.call.fn(userApi.postSignup), mockSuccessResponse]])
-  //     .put(loginSuccess(mockSuccessResponse.data))
-  //     .dispatch(signupRequest(mockUser))
-  //     .silentRun();
-  // });
-  
-  // it("should take success on the loginRequest", () => {
-  //   const mockSuccessResponse = {
-  //     result: "success",
-  //     data: {
-  //       userId: "mockId1234",
-  //       email: "test123123@gmail.com",
-  //       name: "mock user",
-  //     },
-  //   };
+    const mockFirebaseResponse = {
+      user: {
+        accessToken: "accessToken",
+      },
+    };
 
-  //   return expectSaga(watchUserLogin)
-  //     .provide([[matchers.call.fn(userApi.getLogin), mockSuccessResponse]])
-  //     .put(loginSuccess(mockSuccessResponse.data))
-  //     .dispatch(loginRequest())
-  //     .silentRun();
-  // });
+    return expectSaga(watchUserLogin)
+      .provide([
+        [
+          call(
+            createUserWithEmailAndPassword,
+            authentication,
+            mockUser.email,
+            mockUser.password
+          ),
+          mockFirebaseResponse,
+        ],
+        [
+          call(userApi.postSignup, {
+            token: mockFirebaseResponse.user.accessToken,
+            email: mockUser.email,
+            name: mockUser.name,
+          }),
+          mockSuccessResponse,
+        ],
+      ])
+      .put(
+        loginSuccess({
+          email: mockUser.email,
+          name: mockUser.name,
+          id: mockSuccessResponse.data.userId,
+        })
+      )
+      .dispatch(signupRequest(mockUser))
+      .silentRun();
+  });
 
-  // it("should take fail on the loginRequest", () => {
-  //   const mockUser = {
-  //     email: "test123123@gmail.com",
-  //     name: "mock user",
-  //     password: "12341234",
-  //   };
+  it("should take success on the loginRequest", () => {
+    const mockSuccessResponse = {
+      result: "success",
+      data: {
+        userId: "mockId1234",
+        email: "test123123@gmail.com",
+        name: "mock user",
+      },
+    };
 
-  //   const mockfailureResponse = {
-  //     response: {
-  //       data: {
-  //         error: {
-  //           message: "test error",
-  //         },
-  //       },
-  //     },
-  //   };
+    const mockFirebaseResponse = {
+      user: {
+        email: "test123123@gmail.com",
+        displayName: "mock user",
+        accessToken: "accessToken",
+      },
+    };
 
-  //   return expectSaga(watchUserLogin)
-  //     .provide([[call(userApi.getLogin), throwError(mockfailureResponse)]])
-  //     .put(loginFailure(mockfailureResponse))
-  //     .dispatch(loginRequest(mockUser))
-  //     .silentRun();
-  // });
+    const provider = new GoogleAuthProvider();
+
+    return expectSaga(watchUserLogin)
+      .provide([
+        [call(signInWithPopup, authentication, provider), mockFirebaseResponse],
+        [
+          call(userApi.getLogin, mockFirebaseResponse.user.accessToken),
+          mockSuccessResponse,
+        ],
+      ])
+      .put(
+        loginSuccess({
+          email: mockSuccessResponse.data.email,
+          name: mockSuccessResponse.data.name,
+          id: mockSuccessResponse.data.userId,
+        })
+      )
+      .dispatch(loginRequest())
+      .silentRun();
+  });
+
+  it("should take fail on the loginRequest", () => {
+    const mockfailureResponse = {
+      response: {
+        data: {
+          error: {
+            message: "test error",
+          },
+        },
+      },
+    };
+
+    const mockFirebaseResponse = {
+      user: {
+        email: "test123123@gmail.com",
+        displayName: "mock user",
+        accessToken: "accessToken",
+      },
+    };
+
+    const provider = new GoogleAuthProvider();
+
+    return expectSaga(watchUserLogin)
+      .provide([
+        [call(signInWithPopup, authentication, provider), mockFirebaseResponse],
+        [
+          call(userApi.getLogin, mockFirebaseResponse.user.accessToken),
+          throwError(mockfailureResponse),
+        ],
+      ])
+      .put(loginFailure(mockfailureResponse))
+      .dispatch(loginRequest())
+      .silentRun();
+  });
 
   it("should take success on the logoutRequest", () => {
     const mockSuccessResponse = {

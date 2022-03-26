@@ -9,12 +9,9 @@ mainApi.getMemoRoomList = async (userId) => {
 };
 
 mainApi.postNewMemoRoom = async ({ userId, name }) => {
-  const response = await axios.post(
-    `/users/${userId}/memorooms/`,
-    {
-      name,
-    }
-  );
+  const response = await axios.post(`/users/${userId}/memorooms/`, {
+    name,
+  });
 
   return response.data;
 };

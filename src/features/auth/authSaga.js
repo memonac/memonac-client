@@ -11,7 +11,7 @@ import {
 } from "./authSlice";
 
 import userApi from "../../utils/api/user";
-import { authenication } from "../../configs/firebase";
+import { authentication } from "../../configs/firebase";
 import {
   signOut,
   signInWithPopup,
@@ -26,8 +26,14 @@ function* userLogin({ payload }) {
   try {
     if (payload) {
       const { email, name, password } = payload;
-      const firebaseResponse = yield signInWithEmailAndPassword(
-        authenication,
+      // const firebaseResponse = yield signInWithEmailAndPassword(
+      //   authentication,
+      //   email,
+      //   password
+      // );
+      const firebaseResponse = yield call(
+        signInWithEmailAndPassword,
+        authentication,
         email,
         password
       );
@@ -48,7 +54,12 @@ function* userLogin({ payload }) {
       }
     } else {
       const provider = new GoogleAuthProvider();
-      const firebaseResponse = yield signInWithPopup(authenication, provider);
+      // const firebaseResponse = yield signInWithPopup(authentication, provider);
+      const firebaseResponse = yield call(
+        signInWithPopup,
+        authentication,
+        provider
+      );
       const { accessToken: token } = firebaseResponse.user;
 
       const serverResponse = yield call(userApi.getLogin, token);
@@ -91,13 +102,21 @@ function* userSignup(action) {
   const { email, name, password } = action.payload;
 
   try {
-    const firebaseResponse = yield createUserWithEmailAndPassword(
-      authenication,
+    // const firebaseResponse = yield createUserWithEmailAndPassword(
+    //   authentication,
+    //   email,
+    //   password
+    // );
+
+    const firebaseResponse = yield call(
+      createUserWithEmailAndPassword,
+      authentication,
       email,
       password
     );
 
     const { accessToken: token } = firebaseResponse.user;
+
     const serverResponse = yield call(userApi.postSignup, {
       token,
       email,
@@ -127,7 +146,7 @@ function* userSignup(action) {
 
 function* userLogout() {
   try {
-    yield signOut(authenication);
+    yield signOut(authentication);
 
     const serverResponse = yield call(userApi.getLogout);
 
