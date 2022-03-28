@@ -24,7 +24,7 @@ import {
 } from "../../features/main/mainSlice";
 import mainApi from "../../utils/api/main";
 
-describe.only("mainSaga test", () => {
+describe.skip("mainSaga test", () => {
   it("should take success on the getMemoRoomListRequest action", () => {
     const fakeMemoRoomList = {
       data: {
