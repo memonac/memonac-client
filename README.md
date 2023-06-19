@@ -9,7 +9,7 @@
 그럴 땐, 🍋 **Memona-C** 🍋 를 이용해보세요<br>
 **실시간**으로 팀원들과 **메모를 공유**할 수 있고, **채팅**을 통해 의견을 나눌 수 있습니다!
 
-#### 🔗 **[MEMONA-C](https://www.memona-c.com/)**
+#### 🔗 **[MEMONA-C](https://www.memonac.com/)**
 
 <br>
 <br>
